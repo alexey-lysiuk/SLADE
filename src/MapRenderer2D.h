@@ -113,7 +113,6 @@ public:
 	// Paste
 	void	renderPasteThings(vector<MapThing*>& things, fpoint2_t pos);
 
-
 	// VBOs
 	void	updateVerticesVBO();
 	void	updateLinesVBO(bool show_direction, float alpha);

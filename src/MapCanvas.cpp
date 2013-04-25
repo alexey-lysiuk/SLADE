@@ -128,6 +128,7 @@ MapCanvas::MapCanvas(wxWindow *parent, int id, MapEditor* editor)
 	overlay_current = NULL;
 	mouse_locked = false;
 	mouse_warp = false;
+	current_cursor = wxCURSOR_ARROW;
 
 #ifdef USE_SFML_RENDERWINDOW
 #if SFML_VERSION_MAJOR < 2
@@ -398,6 +399,13 @@ void MapCanvas::set3dCameraThing(MapThing* thing) {
 	renderer_3d->cameraSet(pos, dir);
 }
 
+void MapCanvas::setCursor(int cursor) {
+	if (cursor != current_cursor) {
+		SetCursor(cursor);
+		current_cursor = cursor;
+	}
+}
+
 void MapCanvas::drawGrid() {
 	// Get grid size
 	int gridsize = editor->gridSize();
@@ -631,6 +639,25 @@ void MapCanvas::drawPasteLines() {
 	glEnd();
 }
 
+void MapCanvas::drawObjectEditBBox() {
+	// Set 'drawing' colour
+	ColourConfiguration::getColour("map_linedraw").set_gl();
+
+	// Setup
+	glDisable(GL_TEXTURE_2D);
+	glLineWidth(2.0f);
+
+	// Draw outline
+	bbox_t bbox = editor->objectEditBBox();
+	double ext = 4 / view_scale;
+	glBegin(GL_LINE_LOOP);
+	glVertex2d(bbox.min.x - ext, bbox.min.y - ext);
+	glVertex2d(bbox.min.x - ext, bbox.max.y + ext);
+	glVertex2d(bbox.max.x + ext, bbox.max.y + ext);
+	glVertex2d(bbox.max.x + ext, bbox.min.y - ext);
+	glEnd();
+}
+
 /* MapCanvas::draw
  * Draw the 2d map
  *******************************************************************/
@@ -686,6 +713,11 @@ void MapCanvas::drawMap2d() {
 	// Draw grid
 	drawGrid();
 
+	// Determine if selection should be shown
+	bool show_sel = false;
+	if (mouse_state != MSTATE_MOVE && mouse_state != MSTATE_EDIT && !overlayActive())
+		show_sel = true;
+
 	// --- Draw map (depending on mode) ---
 	if (editor->editMode() == MapEditor::MODE_VERTICES) {
 		// Vertices mode
@@ -699,7 +731,7 @@ void MapCanvas::drawMap2d() {
 			renderer_2d->renderVertices(fade_vertices);
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (show_sel)
 			renderer_2d->renderVertexSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -713,7 +745,7 @@ void MapCanvas::drawMap2d() {
 		renderer_2d->renderLines(true);				// Lines
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (show_sel)
 			renderer_2d->renderLineSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -727,7 +759,7 @@ void MapCanvas::drawMap2d() {
 		renderer_2d->renderLines(line_tabs_always, fade_lines);	// Lines
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (show_sel)
 			renderer_2d->renderFlatSelection(editor->getSelection(), anim_flash_level);
 
 		splitter.testRender();	// Testing
@@ -748,7 +780,7 @@ void MapCanvas::drawMap2d() {
 		renderer_2d->renderThings(fade_things, force_dir);		// Things
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (show_sel)
 			renderer_2d->renderThingSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -758,7 +790,7 @@ void MapCanvas::drawMap2d() {
 
 
 	// Draw tagged sectors/lines/things if needed
-	if (!overlayActive() && mouse_state == MSTATE_NORMAL || mouse_state == MSTATE_TAG_SECTORS || mouse_state == MSTATE_TAG_THINGS) {
+	if (!overlayActive() && (mouse_state == MSTATE_NORMAL || mouse_state == MSTATE_TAG_SECTORS || mouse_state == MSTATE_TAG_THINGS)) {
 		if (editor->taggedSectors().size() > 0)
 			renderer_2d->renderTaggedFlats(editor->taggedSectors(), anim_flash_level);
 		if (editor->taggedLines().size() > 0)
@@ -848,6 +880,10 @@ void MapCanvas::drawMap2d() {
 		default: break;
 		};
 	}
+
+	// Draw object edit stuff if needed
+	if (mouse_state == MSTATE_EDIT)
+		drawObjectEditBBox();
 }
 
 void MapCanvas::drawMap3d() {
@@ -2010,6 +2046,25 @@ void MapCanvas::keyBinds2d(string name) {
 		}
 	}
 
+	// --- Edit objects ---
+	else if (mouse_state == MSTATE_EDIT) {
+		// Accept
+		if (name == "map_edit_accept") {
+			editor->endObjectEdit(true);
+			mouse_state = MSTATE_NORMAL;
+			setCursor(wxCURSOR_ARROW);
+			renderer_2d->forceUpdate();
+		}
+
+		// Cancel
+		else if (name == "map_edit_cancel") {
+			editor->endObjectEdit(false);
+			mouse_state = MSTATE_NORMAL;
+			setCursor(wxCURSOR_ARROW);
+			renderer_2d->forceUpdate();
+		}
+	}
+
 	// --- Normal mouse state ---
 	else if (mouse_state == MSTATE_NORMAL) {
 
@@ -2116,6 +2171,11 @@ void MapCanvas::keyBinds2d(string name) {
 				mouse_state = MSTATE_PASTE;
 		}
 
+		// Edit object(s)
+		else if (name == "me2d_edit_object") {
+			if (editor->beginObjectEdit())
+				mouse_state = MSTATE_EDIT;
+		}
 
 		// --- Lines edit mode ---
 		if (editor->editMode() == MapEditor::MODE_LINES) {
@@ -2931,7 +2991,90 @@ void MapCanvas::onMouseMotion(wxMouseEvent& e) {
 	if (mouse_state == MSTATE_LINE_DRAW && draw_state == DSTATE_SHAPE_EDGE)
 		editor->updateShapeDraw(mouse_pos_m);
 
-	e.Skip();
+	// Object edit mode
+	if (mouse_state == MSTATE_EDIT) {
+		// Get mouse/bbox info
+		bbox_t bbox = editor->objectEditBBox();
+		int left = screenX(bbox.min.x) - 8;
+		int right = screenX(bbox.max.x) + 8;
+		int top = screenY(bbox.max.y) - 8;
+		int bottom = screenY(bbox.min.y) + 8;
+		int x = mouse_pos.x;
+		int y = mouse_pos.y;
+
+		if (e.LeftIsDown()) {
+		}
+		else {
+			// Set appropriate cursor/mode
+			if (x >= left && x <= right && y >= top && y <= bottom) {
+				// Left edge
+				if (x <= left + 8) {
+					// Top left
+					if (y <= top + 8) {
+						setCursor(wxCURSOR_SIZENWSE);
+						edit_state = ESTATE_SIZE_TL;
+					}
+
+					// Bottom left
+					else if (y >= bottom - 8) {
+						setCursor(wxCURSOR_SIZENESW);
+						edit_state = ESTATE_SIZE_BL;
+					}
+
+					// Left
+					else {
+						setCursor(wxCURSOR_SIZEWE);
+						edit_state = ESTATE_SIZE_L;
+					}
+				}
+
+				// Right edge
+				else if (x >= right - 8) {
+					// Top right
+					if (y <= top + 8) {
+						setCursor(wxCURSOR_SIZENESW);
+						edit_state = ESTATE_SIZE_TR;
+					}
+
+					// Bottom right
+					else if (y >= bottom - 8) {
+						setCursor(wxCURSOR_SIZENWSE);
+						edit_state = ESTATE_SIZE_BR;
+					}
+
+					// Right
+					else {
+						setCursor(wxCURSOR_SIZEWE);
+						edit_state = ESTATE_SIZE_R;
+					}
+				}
+
+				// Top edge
+				else if (y <= top + 8) {
+					setCursor(wxCURSOR_SIZENS);
+					edit_state = ESTATE_SIZE_T;
+				}
+
+				// Bottom edge
+				else if (y >= bottom - 8) {
+					setCursor(wxCURSOR_SIZENS);
+					edit_state = ESTATE_SIZE_B;
+				}
+
+				// Middle (move)
+				else {
+					setCursor(wxCURSOR_SIZING);
+					edit_state = ESTATE_MOVE;
+				}
+			}
+			else {
+				edit_state = ESTATE_NONE;
+				setCursor(wxCURSOR_ARROW);
+			}
+		}
+	}
+
+	//e.Skip();
 }
 
 void MapCanvas::onMouseWheel(wxMouseEvent& e) {

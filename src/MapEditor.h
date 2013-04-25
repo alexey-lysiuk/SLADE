@@ -68,6 +68,10 @@ private:
 	vector<fpoint2_t>	draw_points;
 	fpoint2_t			draw_origin;
 
+	// Object Edit
+	vector<MapObject*>	edit_objects;
+	bbox_t				edit_objects_bbox;
+
 	// Editor messages
 	struct editor_msg_t {
 		string	message;
@@ -85,8 +89,6 @@ private:
 
 	// Helper for autoAlignX3d
 	void doAlignX3d(MapSide* side, int offset, string tex, vector<selection_3d_t>& walls_done);
-
-        void mergeLines(long, vector<fpoint2_t>&);
 
 public:
 	enum {
@@ -199,6 +201,7 @@ public:
 	void	joinSectors(bool remove_lines);
 	void	changeThingType(int newtype);
 	void	thingQuickAngle(fpoint2_t mouse_pos);
+	void	mergeLines(long, vector<fpoint2_t>&);
 
 	// Tag edit
 	int		beginTagEdit();
@@ -224,6 +227,11 @@ public:
 	// Copy/paste
 	void	copy();
 	void	paste(fpoint2_t mouse_pos);
+
+	// Object edit
+	bbox_t	objectEditBBox() { return edit_objects_bbox; }
+	bool	beginObjectEdit();
+	void	endObjectEdit(bool accept = true);
 
 	// 3d mode
 	void	selectAdjacent3d(selection_3d_t item);

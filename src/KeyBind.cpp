@@ -438,6 +438,7 @@ void KeyBind::initBinds() {
 	addBind("me2d_delete_object", keypress_t("delete"), "Delete object", group);
 	addBind("me2d_copy_properties", keypress_t("C", KPM_CTRL|KPM_SHIFT), "Copy object properties", group);
 	addBind("me2d_paste_properties", keypress_t("V", KPM_CTRL|KPM_SHIFT), "Paste object properties", group);
+	addBind("me2d_edit_object", keypress_t("E"), "Edit Object(s)", group);
 
 	// Map Editor 2D Lines mode (me2d_line*)
 	group = "Map Editor 2D Lines Mode";
