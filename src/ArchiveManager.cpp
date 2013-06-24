@@ -564,6 +564,11 @@ string ArchiveManager::getArchiveExtensionsString()
 	string ext_grp = "*.grp;*.GRP;*.Grp;*.prg;*.PRG;*.Prg";		extensions += ext_grp + ";";
 	string ext_rff = "*.rff;*.RFF;*.Rff";						extensions += ext_rff + ";";
 	string ext_disk = "*.disk;*.DISK;*.Disk";					extensions += ext_disk+ ";";
+#ifdef __APPLE__
+	// Cocoa supports filters with file extensions only
+	string ext_wolf =	"*.wl1;*.wl3;*.wl6;"
+						"*.sd1;*.sd2;*.sd3;*.sod";				extensions += ext_wolf +";";
+#else // !__APPLE__
 	string ext_wolf =	"vswap.*;VSWAP.*Vswap.*;"
 	                    "audiot.*;AUDIOT.*;Audiot.*;"
 	                    "audiohed.*;AUDIOHED.*;Audiohed.*;"
@@ -572,6 +577,7 @@ string ArchiveManager::getArchiveExtensionsString()
 	                    "vgagraph.*;VGAGRAPH.*;Vgagraph.*"
 	                    "vgahead.*;VGAHEAD.*;Vgahead.*;"
 	                    "vgadict.*;VGADICT.*;Vgadict.*";		extensions += ext_wolf +";";
+#endif // __APPLE__
 
 	extensions += S_FMT("|Doom Wad files (*.wad)|%s",			CHR(ext_wad));
 	extensions += S_FMT("|Zip files (*.zip)|%s",				CHR(ext_zip));

@@ -376,13 +376,13 @@ void CSoundFile::ResetMidiCfg()
 //-----------------------------
 {
 	memset(&m_MidiCfg, 0, sizeof(m_MidiCfg));
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_START*32], L"FF");
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_STOP*32], L"FC");
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_NOTEON*32], L"9c n v");
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_NOTEOFF*32], L"9c n 0");
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_PROGRAM*32], L"Cc p");
-	lstrcpy((LPWSTR)&m_MidiCfg.szMidiSFXExt[0], L"F0F000z");
-	for (int iz=0; iz<16; iz++) wsprintf((LPWSTR)&m_MidiCfg.szMidiZXXExt[iz*32], L"F0F001%02X", iz*8);
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_START*32], "FF");
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_STOP*32], "FC");
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_NOTEON*32], "9c n v");
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_NOTEOFF*32], "9c n 0");
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiGlb[MIDIOUT_PROGRAM*32], "Cc p");
+	lstrcpy((LPWSTR)&m_MidiCfg.szMidiSFXExt[0], "F0F000z");
+	for (int iz=0; iz<16; iz++) wsprintf((LPWSTR)&m_MidiCfg.szMidiZXXExt[iz*32], "F0F001%02X", iz*8);
 }
 
 

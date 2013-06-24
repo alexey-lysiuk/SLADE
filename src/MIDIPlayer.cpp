@@ -62,7 +62,7 @@ MIDIPlayer::MIDIPlayer()
 	fs_soundfont_id = FLUID_FAILED;
 
 	// Set fluidsynth driver to alsa in linux (no idea why it defaults to jack)
-#ifndef __WXMSW__
+#if !defined __WXMSW__ && !defined __WXOSX__
 	if (fs_driver == "")
 		fs_driver = "alsa";
 #endif

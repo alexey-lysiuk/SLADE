@@ -57,6 +57,12 @@ inline void ProcessPlugins(int n) {}
 #include <malloc.h>
 #endif
 
+#ifdef __APPLE__
+#include <stdint.h>
+#define HAVE_SINF
+#define HAVE_SETENV
+#endif // __APPLE__
+
 typedef int8_t CHAR;
 typedef uint8_t UCHAR;
 typedef uint8_t* PUCHAR;
@@ -73,6 +79,7 @@ typedef uint8_t BYTE;
 typedef uint8_t* LPBYTE;
 typedef bool BOOL;
 typedef char* LPSTR;
+typedef char* LPWSTR;
 typedef void* LPVOID;
 typedef uint16_t* LPWORD;
 typedef const char* LPCSTR;
