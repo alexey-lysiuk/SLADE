@@ -24,7 +24,7 @@ ln -s /Applications ${DEPLOY_IMAGE_DIR}/Applications
 
 echo "Copying files..."
 cp -R DerivedData/Build/Products/Release/Slade.app ${DEPLOY_IMAGE_DIR}
-cp source/gpl-2.0.txt ${DEPLOY_IMAGE_DIR}
+cp gpl-2.0.txt ${DEPLOY_IMAGE_DIR}
 rm ${DEPLOY_IMAGE_DIR}/Slade.app/Contents/MacOS/slade3.log 2>/dev/null
 
 echo "Stripping executable..."
