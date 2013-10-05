@@ -32,6 +32,7 @@
 #include "Tokenizer.h"
 #include "CVar.h"
 #include <wx/log.h>
+#include <wx/utils.h>
 #include <algorithm>
 
 
@@ -288,7 +289,7 @@ void ConsoleCommand::execute(vector<string> args)
 	if (args.size() >= min_args)
 		commandFunc(args);
 	else
-		theConsole->logMessage("Missing command arguments");
+		theConsole->logMessage(S_FMT("Missing command arguments, type \"cmdhelp %s\" for more information", CHR(name)));
 }
 
 
@@ -314,8 +315,9 @@ CONSOLE_COMMAND (cmdlist, 0, true)
 
 	for (int a = 0; a < theConsole->numCommands(); a++)
 	{
-		if (theConsole->command(a).showInList() || Global::debug)
-			theConsole->logMessage(S_FMT("\"%s\"", theConsole->command(a).getName().c_str()));
+		ConsoleCommand& cmd = theConsole->command(a);
+		if (cmd.showInList() || Global::debug)
+			theConsole->logMessage(S_FMT("\"%s\" (%d args)", CHR(cmd.getName()), cmd.minArgs()));
 	}
 }
 
@@ -334,6 +336,26 @@ CONSOLE_COMMAND (cvarlist, 0, true)
 	// Write list to console
 	for (unsigned a = 0; a < list.size(); a++)
 		theConsole->logMessage(list[a]);
+}
+
+/* Console Command - "cmdhelp"
+* Opens the wiki page for a console command
+*******************************************************************/
+CONSOLE_COMMAND(cmdhelp, 1, true)
+{
+	// Check command exists
+	for (int a = 0; a < theConsole->numCommands(); a++)
+	{
+		if (theConsole->command(a).getName().Lower() == args[0].Lower())
+		{
+			string url = S_FMT("https://github.com/sirjuddington/SLADE/wiki/%s-Console-Command", CHR(args[0]));
+			wxLaunchDefaultBrowser(url);
+			return;
+		}
+	}
+
+	// No command found
+	theConsole->logMessage(S_FMT("No command \"%s\" exists", CHR(args[0])));
 }
 
 CONSOLE_COMMAND (testmatch, 0, false)

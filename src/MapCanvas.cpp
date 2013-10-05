@@ -90,6 +90,7 @@ EXTERN_CVAR(Int, render_3d_things)
 EXTERN_CVAR(Int, render_3d_things_style)
 EXTERN_CVAR(Int, render_3d_hilight)
 EXTERN_CVAR(Bool, map_animate_hilight)
+EXTERN_CVAR(Float, render_3d_brightness)
 
 
 /* MapCanvas::MapCanvas
@@ -1500,24 +1501,11 @@ void MapCanvas::lockMouse(bool lock)
 		img.SetMask(true);
 		img.SetMaskColour(0, 0, 0);
 		SetCursor(wxCursor(img));
-
-// TODO: check if sfml cursor show/hide is even really needed
-#ifndef __WXGTK__
-#ifdef USE_SFML_RENDERWINDOW
-		setMouseCursorVisible(false);
-#endif
-#endif
 	}
 	else
 	{
 		// Show cursor
 		SetCursor(wxNullCursor);
-
-#ifndef __WXGTK__
-#ifdef USE_SFML_RENDERWINDOW
-		setMouseCursorVisible(false);
-#endif
-#endif
 	}
 }
 
@@ -2388,6 +2376,17 @@ void MapCanvas::keyBinds3d(string name)
 			editor->addEditorMessage("Fullbright disabled");
 		else
 			editor->addEditorMessage("Fullbright enabled");
+	}
+
+	// Adjust brightness
+	else if (name == "me3d_adjust_brightness")
+	{
+		render_3d_brightness = render_3d_brightness + 0.1;
+		if (render_3d_brightness > 2.0)
+		{
+			render_3d_brightness = 1.0;
+		}
+		editor->addEditorMessage(S_FMT("Brightness set to %1.1f", (double)render_3d_brightness));
 	}
 
 	// Toggle gravity
