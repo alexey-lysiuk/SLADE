@@ -52,6 +52,17 @@ private:
 		DSTATE_LINE = 0,
 		DSTATE_SHAPE_ORIGIN,
 		DSTATE_SHAPE_EDGE,
+
+		ESTATE_NONE = 0,
+		ESTATE_MOVE,
+		ESTATE_SIZE_L,
+		ESTATE_SIZE_R,
+		ESTATE_SIZE_T,
+		ESTATE_SIZE_B,
+		ESTATE_SIZE_TL,
+		ESTATE_SIZE_BL,
+		ESTATE_SIZE_TR,
+		ESTATE_SIZE_BR,
 	};
 	point2_t	mouse_pos;			// 'Raw' mouse position
 	point2_t	mouse_downpos;
@@ -64,6 +75,8 @@ private:
 	int			draw_state;
 	bool		mouse_locked;
 	bool		mouse_warp;
+	int			edit_state;
+	bool		edit_rotate;
 
 	// Info overlays
 	int					last_hilight;
@@ -97,12 +110,17 @@ private:
 	float	fade_things;
 	float	fade_flats;
 	float	fade_lines;
+	float	anim_help_fade;
+
+	// Feature help text
+	vector<string>	feature_help_lines;
 
 public:
 	MapCanvas(wxWindow* parent, int id, MapEditor* editor);
 	~MapCanvas();
 
 	bool	overlayActive();
+	bool	helpActive();
 
 	double	translateX(double x, bool inter = false);
 	double	translateY(double y, bool inter = false);
@@ -120,10 +138,12 @@ public:
 	// Drawing
 	void	drawGrid();
 	void	drawEditorMessages();
+	void	drawFeatureHelpText();
 	void	drawSelectionNumbers();
 	void	drawThingQuickAngleLines();
 	void	drawLineDrawLines();
 	void	drawPasteLines();
+	void	drawObjectEdit();
 	void	drawMap2d();
 	void	drawMap3d();
 	void	draw();
@@ -136,6 +156,7 @@ public:
 	// Mouse
 	void	mouseToCenter();
 	void	lockMouse(bool lock);
+	void	determineObjectEditState();
 
 	void	itemSelected(int index, bool selected = true);
 	void	itemsSelected(vector<int>& items, bool selected = true);

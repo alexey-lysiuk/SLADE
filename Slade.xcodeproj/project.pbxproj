@@ -183,6 +183,9 @@
 		8AAD207C1839282B00E1C89E /* libwxscintilla-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */; };
 		8AAD207D1839282B00E1C89E /* libwxtiff-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */; };
 		8AAD208B18392A1300E1C89E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD208A18392A1300E1C89E /* QTKit.framework */; };
+		8AAD20D8183931E800E1C89E /* ObjectEdit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */; };
+		8AAD20D9183931E800E1C89E /* ObjectEditPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */; };
+		8AAD20DE183933B800E1C89E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20DD183933B800E1C89E /* WebKit.framework */; };
 		8AD18A56154A8A7000AB9C07 /* SLADE-osx.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8AD18A54154A8A7000AB9C07 /* SLADE-osx.icns */; };
 		8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18D9D154A8A9A00AB9C07 /* cl_aui_notebook_art.cpp */; };
 		8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18E89154A8A9B00AB9C07 /* mus2mid.cpp */; };
@@ -556,6 +559,11 @@
 		8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxscintilla-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxscintilla-3.0.a"; sourceTree = "<group>"; };
 		8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxtiff-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxtiff-3.0.a"; sourceTree = "<group>"; };
 		8AAD208A18392A1300E1C89E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectEdit.cpp; sourceTree = "<group>"; };
+		8AAD20D5183931E800E1C89E /* ObjectEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectEdit.h; sourceTree = "<group>"; };
+		8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectEditPanel.cpp; sourceTree = "<group>"; };
+		8AAD20D7183931E800E1C89E /* ObjectEditPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectEditPanel.h; sourceTree = "<group>"; };
+		8AAD20DD183933B800E1C89E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		8AD18A54154A8A7000AB9C07 /* SLADE-osx.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "SLADE-osx.icns"; sourceTree = "<group>"; };
 		8AD18D9D154A8A9A00AB9C07 /* cl_aui_notebook_art.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cl_aui_notebook_art.cpp; sourceTree = "<group>"; };
 		8AD18D9E154A8A9A00AB9C07 /* cl_aui_notebook_art.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cl_aui_notebook_art.h; sourceTree = "<group>"; };
@@ -809,7 +817,7 @@
 		8AD5EC791778510400ADDE06 /* Lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lua.h; sourceTree = "<group>"; };
 		8AD5EC7A1778510400ADDE06 /* LumpFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LumpFormats.h; sourceTree = "<group>"; };
 		8AD5EC7B1778510400ADDE06 /* Main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
-		8AD5EC7C1778510400ADDE06 /* MainApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainApp.cpp; sourceTree = "<group>"; };
+		8AD5EC7C1778510400ADDE06 /* MainApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = MainApp.cpp; sourceTree = "<group>"; };
 		8AD5EC7D1778510400ADDE06 /* MainApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApp.h; sourceTree = "<group>"; };
 		8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindow.cpp; sourceTree = "<group>"; };
 		8AD5EC7F1778510400ADDE06 /* MainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
@@ -1115,6 +1123,7 @@
 				8AAD207C1839282B00E1C89E /* libwxscintilla-3.0.a in Frameworks */,
 				8AAD207D1839282B00E1C89E /* libwxtiff-3.0.a in Frameworks */,
 				8AAD208B18392A1300E1C89E /* QTKit.framework in Frameworks */,
+				8AAD20DE183933B800E1C89E /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1388,6 +1397,10 @@
 				8AD5ECBC1778510500ADDE06 /* NodeBuilders.h */,
 				8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */,
 				8AD5ECBE1778510500ADDE06 /* NodesPrefsPanel.h */,
+				8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */,
+				8AAD20D5183931E800E1C89E /* ObjectEdit.h */,
+				8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */,
+				8AAD20D7183931E800E1C89E /* ObjectEditPanel.h */,
 				8AD5ECBF1778510500ADDE06 /* OGLCanvas.cpp */,
 				8AD5ECC01778510500ADDE06 /* OGLCanvas.h */,
 				8AD5ECC11778510500ADDE06 /* OpenGL.cpp */,
@@ -1573,6 +1586,7 @@
 				8A26CD56154BDE880079A63E /* OpenAL.framework */,
 				8A26CD41154BDE470079A63E /* OpenGL.framework */,
 				8AAD208A18392A1300E1C89E /* QTKit.framework */,
+				8AAD20DD183933B800E1C89E /* WebKit.framework */,
 				8A26CD66154BDF3B0079A63E /* libbz2.dylib */,
 				8A21BD6A154BFD5100EDF9F0 /* libiconv.dylib */,
 				8AE371E9154D581E00D88A7F /* libFLAC.a */,
@@ -2288,6 +2302,8 @@
 				8AD5EDCB1778510600ADDE06 /* MOPGProperty.cpp in Sources */,
 				8AD5EDCC1778510600ADDE06 /* NodeBuilders.cpp in Sources */,
 				8AD5EDCD1778510600ADDE06 /* NodesPrefsPanel.cpp in Sources */,
+				8AAD20D8183931E800E1C89E /* ObjectEdit.cpp in Sources */,
+				8AAD20D9183931E800E1C89E /* ObjectEditPanel.cpp in Sources */,
 				8AD5EDCE1778510600ADDE06 /* OGLCanvas.cpp in Sources */,
 				8AD5EDCF1778510600ADDE06 /* OpenGL.cpp in Sources */,
 				8AD5EDD01778510600ADDE06 /* PakArchive.cpp in Sources */,

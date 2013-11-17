@@ -43,6 +43,7 @@
 #include "NodeBuilders.h"
 #include "ShapeDrawPanel.h"
 #include "ScriptEditorPanel.h"
+#include "ObjectEditPanel.h"
 #include <wx/aui/aui.h>
 
 
@@ -149,11 +150,6 @@ void MapEditorWindow::saveLayout()
 	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("item_props"));
 	file.Write(S_FMT("\"%s\"\n", CHR(pinf)));
 
-	// Shape drawing pane
-	file.Write("\"shape_draw\" ");
-	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("shape_draw"));
-	file.Write(S_FMT("\"%s\"\n", CHR(pinf)));
-
 	// Script editor pane
 	file.Write("\"script_editor\" ");
 	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("script_editor"));
@@ -200,7 +196,6 @@ void MapEditorWindow::setupLayout()
 	wxMenu* menu_view = new wxMenu("");
 	theApp->getAction("mapw_showproperties")->addToMenu(menu_view);
 	theApp->getAction("mapw_showconsole")->addToMenu(menu_view);
-	theApp->getAction("mapw_showdrawoptions")->addToMenu(menu_view);
 	theApp->getAction("mapw_showscripteditor")->addToMenu(menu_view);
 	menu->Append(menu_view, "View");
 
@@ -290,7 +285,13 @@ void MapEditorWindow::setupLayout()
 
 	// Setup panel info & add panel
 	wxSize msize = panel_shapedraw->GetMinSize();
-	p_inf.Float();
+	p_inf.DefaultPane();
+	p_inf.Bottom();
+	p_inf.Dock();
+	p_inf.CloseButton(false);
+	p_inf.CaptionVisible(false);
+	p_inf.Resizable(false);
+	p_inf.Layer(2);
 	p_inf.BestSize(msize.x, msize.y);
 	p_inf.FloatingSize(msize.x, msize.y);
 	p_inf.FloatingPosition(140, 140);
@@ -314,6 +315,28 @@ void MapEditorWindow::setupLayout()
 	p_inf.Caption("Script Editor");
 	p_inf.Name("script_editor");
 	m_mgr->AddPane(panel_script_editor, p_inf);
+
+
+	// --- Object Edit Panel ---
+	panel_obj_edit = new ObjectEditPanel(this);
+
+	// Setup panel info & add panel
+	msize = panel_obj_edit->GetBestSize();
+	p_inf.DefaultPane();
+	p_inf.Bottom();
+	p_inf.Dock();
+	p_inf.CloseButton(false);
+	p_inf.CaptionVisible(false);
+	p_inf.Resizable(false);
+	p_inf.Layer(2);
+	p_inf.BestSize(msize.x, msize.y);
+	p_inf.FloatingSize(msize.x, msize.y);
+	p_inf.FloatingPosition(140, 140);
+	p_inf.MinSize(msize.x, msize.y);
+	p_inf.Show(false);
+	p_inf.Caption("Object Edit");
+	p_inf.Name("object_edit");
+	m_mgr->AddPane(panel_obj_edit, p_inf);
 
 
 	// Load previously saved window layout
@@ -646,6 +669,55 @@ void MapEditorWindow::refreshToolBar()
 	toolbar->Refresh();
 }
 
+void MapEditorWindow::showObjectEditPanel(ObjectEditGroup* group)
+{
+	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+	wxAuiPaneInfo& p_inf = m_mgr->GetPane("object_edit");
+
+	panel_obj_edit->init(group);
+	p_inf.Show(true);
+	map_canvas->SetFocus();
+
+	//p_inf.MinSize(200, 128);
+	m_mgr->Update();
+}
+
+void MapEditorWindow::hideObjectEditPanel()
+{
+	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+	wxAuiPaneInfo& p_inf = m_mgr->GetPane("object_edit");
+
+	p_inf.Show(false);
+	map_canvas->SetFocus();
+
+	//p_inf.MinSize(200, 128);
+	m_mgr->Update();
+}
+
+void MapEditorWindow::showShapeDrawPanel(bool show)
+{
+	if (show)
+	{
+		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+		wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
+
+		p_inf.Show(true);
+		map_canvas->SetFocus();
+
+		m_mgr->Update();
+	}
+	else
+	{
+		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+		wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
+
+		p_inf.Show(false);
+		map_canvas->SetFocus();
+
+		m_mgr->Update();
+	}
+}
+
 /* MapEditorWindow::handleAction
  * Handles the action [id]. Returns true if the action was handled,
  * false otherwise
@@ -756,19 +828,19 @@ bool MapEditorWindow::handleAction(string id)
 		return true;
 	}
 
-	// View->Shape Draw Options
-	else if (id == "mapw_showdrawoptions")
-	{
-		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
-		wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
+	//// View->Shape Draw Options
+	//else if (id == "mapw_showdrawoptions")
+	//{
+	//	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+	//	wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
 
-		// Toggle window and focus
-		p_inf.Show(!p_inf.IsShown());
-		map_canvas->SetFocus();
+	//	// Toggle window and focus
+	//	p_inf.Show(!p_inf.IsShown());
+	//	map_canvas->SetFocus();
 
-		m_mgr->Update();
-		return true;
-	}
+	//	m_mgr->Update();
+	//	return true;
+	//}
 
 	// View->Script Editor
 	else if (id == "mapw_showscripteditor")

@@ -188,8 +188,13 @@ TextureXPanel::TextureXPanel(wxWindow* parent, TextureXEditor* tx_editor) : wxPa
 	// Add textures list
 	wxStaticBox* frame = new wxStaticBox(this, -1, "Textures");
 	wxStaticBoxSizer* framesizer = new wxStaticBoxSizer(frame, wxVERTICAL);
+	wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
 	label_tx_format = new wxStaticText(this, -1, "Format:");
-	framesizer->Add(label_tx_format, 0, wxEXPAND|wxALL, 4);
+	hbox->Add(label_tx_format, 0, wxALIGN_BOTTOM|wxRIGHT, 4);
+	btn_save = new wxButton(this, -1, "Save");
+	hbox->AddStretchSpacer();
+	hbox->Add(btn_save, 0, wxEXPAND);
+	framesizer->Add(hbox, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 4);
 	list_textures = new TextureXListView(this, &texturex);
 	framesizer->Add(list_textures, 1, wxEXPAND|wxALL, 4);
 	sizer->Add(framesizer, 0, wxEXPAND|wxALL, 4);
@@ -226,6 +231,7 @@ TextureXPanel::TextureXPanel(wxWindow* parent, TextureXEditor* tx_editor) : wxPa
 	btn_remove_texture->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXPanel::onBtnRemoveTexture, this);
 	btn_move_up->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXPanel::onBtnMoveUp, this);
 	btn_move_down->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXPanel::onBtnMoveDown, this);
+	btn_save->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXPanel::onBtnSave, this);
 	Bind(wxEVT_SHOW, &TextureXPanel::onShow, this);
 }
 
@@ -1161,15 +1167,16 @@ void TextureXPanel::onTextureListSelect(wxListEvent& e)
 void TextureXPanel::onTextureListRightClick(wxListEvent& e)
 {
 	// Create context menu
-	wxMenu context, texport;
+	wxMenu context;
+	wxMenu* texport = new wxMenu();
 	theApp->getAction("txed_delete")->addToMenu(&context);
 	context.AppendSeparator();
 	theApp->getAction("txed_rename")->addToMenu(&context);
 	if (texturex.getFormat() == TXF_TEXTURES)
 		theApp->getAction("txed_offsets")->addToMenu(&context);
-	theApp->getAction("txed_export")->addToMenu(&texport, "Archive (as image)");
-	theApp->getAction("txed_extract")->addToMenu(&texport, "File");
-	context.AppendSubMenu(&texport, "&Export To");
+	theApp->getAction("txed_export")->addToMenu(texport, "Archive (as image)");
+	theApp->getAction("txed_extract")->addToMenu(texport, "File");
+	context.AppendSubMenu(texport, "&Export To");
 	context.AppendSeparator();
 	theApp->getAction("txed_copy")->addToMenu(&context);
 	theApp->getAction("txed_cut")->addToMenu(&context);
@@ -1349,4 +1356,12 @@ void TextureXPanel::onBtnPaste(wxCommandEvent& e)
 void TextureXPanel::onShow(wxShowEvent& e)
 {
 	tx_editor->showTextureMenu(e.IsShown());
+}
+
+/* TextureXPanel::onBtnSave
+* Called when the 'Save' button is clicked
+*******************************************************************/
+void TextureXPanel::onBtnSave(wxCommandEvent& e)
+{
+	tx_editor->saveChanges();
 }

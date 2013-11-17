@@ -53,6 +53,7 @@
 #include "SectorSpecialDialog.h"
 #include "UndoRedo.h"
 #include "QuickTextureOverlay3d.h"
+#include "ObjectEditPanel.h"
 
 
 /*******************************************************************
@@ -74,6 +75,7 @@ CVAR(Bool, camera_3d_show_distance, false, CVAR_SAVE)
 CVAR(Int, map_bg_ms, 15, CVAR_SAVE)
 CVAR(Bool, info_overlay_3d, true, CVAR_SAVE)
 CVAR(Bool, hilight_smooth, true, CVAR_SAVE)
+CVAR(Bool, map_show_help, true, CVAR_SAVE)
 
 // for testing
 PolygonSplitter splitter;
@@ -130,6 +132,9 @@ MapCanvas::MapCanvas(wxWindow* parent, int id, MapEditor* editor)
 	overlay_current = NULL;
 	mouse_locked = false;
 	mouse_warp = false;
+	edit_state = 0;
+	edit_rotate = false;
+	anim_help_fade = 0;
 
 #ifdef USE_SFML_RENDERWINDOW
 	setVerticalSyncEnabled(false);
@@ -182,6 +187,19 @@ bool MapCanvas::overlayActive()
 		return false;
 	else
 		return overlay_current->isActive();
+}
+
+bool MapCanvas::helpActive()
+{
+	// Disable if no help
+	if (feature_help_lines.empty())
+		return false;
+
+	// Enable depending on current state
+	if (mouse_state == MSTATE_EDIT || mouse_state == MSTATE_LINE_DRAW)
+		return true;
+
+	return false;
 }
 
 /* MapCanvas::translateX
@@ -536,6 +554,42 @@ void MapCanvas::drawEditorMessages()
 	}
 }
 
+void MapCanvas::drawFeatureHelpText()
+{
+	// Check if any text
+	if (feature_help_lines.empty())
+		return;
+
+	// Draw title
+	frect_t bounds;
+	rgba_t col = ColourConfiguration::getColour("map_editor_message");
+	col.a = col.a * anim_help_fade;
+	Drawing::drawText(feature_help_lines[0], GetSize().x - 1, 3, rgba_t(0, 0, 0, 200 * anim_help_fade), Drawing::FONT_BOLD, Drawing::ALIGN_RIGHT);
+	Drawing::drawText(feature_help_lines[0], GetSize().x - 2, 2, col, Drawing::FONT_BOLD, Drawing::ALIGN_RIGHT, &bounds);
+
+	// Draw underline
+	glDisable(GL_TEXTURE_2D);
+	glLineWidth(1.0f);
+	col.set_gl();
+	glBegin(GL_LINES);
+	glVertex2d(bounds.right() + 8, bounds.bottom() + 1);
+	glVertex2d(bounds.left() + 16, bounds.bottom() + 1);
+	glVertex2d(bounds.left() + 16, bounds.bottom() + 1);
+	glColor4f(col.fr(), col.fg(), col.fb(), 0.0f);
+	glVertex2d(bounds.left() - 48, bounds.bottom() + 1);
+	glEnd();
+
+	// Draw help text
+	int yoff = 22;
+	for (unsigned a = 1; a < feature_help_lines.size(); a++)
+	{
+		Drawing::drawText(feature_help_lines[a], GetSize().x - 1, yoff + 1, rgba_t(0, 0, 0, 200 * anim_help_fade), Drawing::FONT_BOLD, Drawing::ALIGN_RIGHT);
+		Drawing::drawText(feature_help_lines[a], GetSize().x - 2, yoff, col, Drawing::FONT_BOLD, Drawing::ALIGN_RIGHT);
+
+		yoff += 16;
+	}
+}
+
 void MapCanvas::drawSelectionNumbers()
 {
 	// Check if any selection exists
@@ -679,6 +733,99 @@ void MapCanvas::drawPasteLines()
 	glEnd();
 }
 
+void MapCanvas::drawObjectEdit()
+{
+	ObjectEditGroup* group = editor->getObjectEditGroup();
+
+	// Map objects
+	renderer_2d->renderObjectEditGroup(group);
+
+	// Bounding box
+	COL_WHITE.set_gl();
+	rgba_t col = ColourConfiguration::getColour("map_object_edit");
+	glColor4f(col.fr(), col.fg(), col.fb(), 1.0f);
+	bbox_t bbox = group->getBBox();
+	bbox.min.x -= 4 / view_scale_inter;
+	bbox.min.y -= 4 / view_scale_inter;
+	bbox.max.x += 4 / view_scale_inter;
+	bbox.max.y += 4 / view_scale_inter;
+
+	if (edit_rotate)
+	{
+		// Rotate
+
+		// Bbox
+		fpoint2_t mid(bbox.min.x + bbox.width() * 0.5, bbox.min.y + bbox.height() * 0.5);
+		fpoint2_t bl = MathStuff::rotatePoint(mid, bbox.min, group->getRotation());
+		fpoint2_t tl = MathStuff::rotatePoint(mid, fpoint2_t(bbox.min.x, bbox.max.y), group->getRotation());
+		fpoint2_t tr = MathStuff::rotatePoint(mid, bbox.max, group->getRotation());
+		fpoint2_t br = MathStuff::rotatePoint(mid, fpoint2_t(bbox.max.x, bbox.min.y), group->getRotation());
+		glLineWidth(2.0f);
+		Drawing::drawLine(tl, bl);
+		Drawing::drawLine(bl, br);
+		Drawing::drawLine(br, tr);
+		Drawing::drawLine(tr, tl);
+
+		// Top Left
+		double rad = 4 / view_scale_inter;
+		glLineWidth(1.0f);
+		if (edit_state == ESTATE_SIZE_TL)
+			Drawing::drawFilledRect(tl.x - rad, tl.y - rad, tl.x + rad, tl.y + rad);
+		else
+			Drawing::drawRect(tl.x - rad, tl.y - rad, tl.x + rad, tl.y + rad);
+
+		// Bottom Left
+		if (edit_state == ESTATE_SIZE_BL)
+			Drawing::drawFilledRect(bl.x - rad, bl.y - rad, bl.x + rad, bl.y + rad);
+		else
+			Drawing::drawRect(bl.x - rad, bl.y - rad, bl.x + rad, bl.y + rad);
+
+		// Top Right
+		if (edit_state == ESTATE_SIZE_TR)
+			Drawing::drawFilledRect(tr.x - rad, tr.y - rad, tr.x + rad, tr.y + rad);
+		else
+			Drawing::drawRect(tr.x - rad, tr.y - rad, tr.x + rad, tr.y + rad);
+
+		// Bottom Right
+		if (edit_state == ESTATE_SIZE_BR)
+			Drawing::drawFilledRect(br.x - rad, br.y - rad, br.x + rad, br.y + rad);
+		else
+			Drawing::drawRect(br.x - rad, br.y - rad, br.x + rad, br.y + rad);
+	}
+	else
+	{
+		// Move/scale
+
+		// Left
+		if (edit_state == ESTATE_MOVE || edit_state == ESTATE_SIZE_L || edit_state == ESTATE_SIZE_TL || edit_state == ESTATE_SIZE_BL)
+			glLineWidth(4.0f);
+		else
+			glLineWidth(2.0f);
+		Drawing::drawLine(bbox.min.x, bbox.min.y, bbox.min.x, bbox.max.y);
+
+		// Bottom
+		if (edit_state == ESTATE_MOVE || edit_state == ESTATE_SIZE_B || edit_state == ESTATE_SIZE_BL || edit_state == ESTATE_SIZE_BR)
+			glLineWidth(4.0f);
+		else
+			glLineWidth(2.0f);
+		Drawing::drawLine(bbox.min.x, bbox.min.y, bbox.max.x, bbox.min.y);
+
+		// Right
+		if (edit_state == ESTATE_MOVE || edit_state == ESTATE_SIZE_R || edit_state == ESTATE_SIZE_TR || edit_state == ESTATE_SIZE_BR)
+			glLineWidth(4.0f);
+		else
+			glLineWidth(2.0f);
+		Drawing::drawLine(bbox.max.x, bbox.max.y, bbox.max.x, bbox.min.y);
+
+		// Top
+		if (edit_state == ESTATE_MOVE || edit_state == ESTATE_SIZE_T || edit_state == ESTATE_SIZE_TL || edit_state == ESTATE_SIZE_TR)
+			glLineWidth(4.0f);
+		else
+			glLineWidth(2.0f);
+		Drawing::drawLine(bbox.max.x, bbox.max.y, bbox.min.x, bbox.max.y);
+	}
+}
+
 /* MapCanvas::draw
  * Draw the 2d map
  *******************************************************************/
@@ -751,7 +898,7 @@ void MapCanvas::drawMap2d()
 			renderer_2d->renderVertices(fade_vertices);
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (mouse_state != MSTATE_MOVE && !overlayActive() && mouse_state != MSTATE_EDIT)
 			renderer_2d->renderVertexSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -766,7 +913,7 @@ void MapCanvas::drawMap2d()
 		renderer_2d->renderLines(true);				// Lines
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (mouse_state != MSTATE_MOVE && !overlayActive() && mouse_state != MSTATE_EDIT)
 			renderer_2d->renderLineSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -781,7 +928,7 @@ void MapCanvas::drawMap2d()
 		renderer_2d->renderLines(line_tabs_always, fade_lines);	// Lines
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (mouse_state != MSTATE_MOVE && !overlayActive() && mouse_state != MSTATE_EDIT)
 			renderer_2d->renderFlatSelection(editor->getSelection(), anim_flash_level);
 
 		splitter.testRender();	// Testing
@@ -803,7 +950,7 @@ void MapCanvas::drawMap2d()
 		renderer_2d->renderThings(fade_things, force_dir);		// Things
 
 		// Selection if needed
-		if (mouse_state != MSTATE_MOVE && !overlayActive())
+		if (mouse_state != MSTATE_MOVE && !overlayActive() && mouse_state != MSTATE_EDIT)
 			renderer_2d->renderThingSelection(editor->getSelection(), anim_flash_level);
 
 		// Hilight if needed
@@ -838,6 +985,10 @@ void MapCanvas::drawMap2d()
 	// Draw line drawing lines if needed
 	if (mouse_state == MSTATE_LINE_DRAW)
 		drawLineDrawLines();
+
+	// Draw object edit objects if needed
+	if (mouse_state == MSTATE_EDIT)
+		drawObjectEdit();
 
 	// Draw sectorbuilder test stuff
 	//sbuilder.drawResult();
@@ -1109,6 +1260,9 @@ void MapCanvas::draw()
 	// Editor messages
 	drawEditorMessages();
 
+	// Help text
+	drawFeatureHelpText();
+
 	SwapBuffers();
 }
 
@@ -1304,60 +1458,62 @@ bool MapCanvas::update3d(double mult)
 
 	// --- Check for held-down keys ---
 	bool moving = false;
+	bool fast = (modifiers_current & wxMOD_SHIFT) > 0;
+	double speed = fast ? mult * 8 : mult * 4;
 
 	// Camera forward
 	if (KeyBind::isPressed("me3d_camera_forward"))
 	{
-		renderer_3d->cameraMove(mult*4, !camera_3d_gravity);
+		renderer_3d->cameraMove(speed, !camera_3d_gravity);
 		moving = true;
 	}
 
 	// Camera backward
 	if (KeyBind::isPressed("me3d_camera_back"))
 	{
-		renderer_3d->cameraMove(-mult*4, !camera_3d_gravity);
+		renderer_3d->cameraMove(-speed, !camera_3d_gravity);
 		moving = true;
 	}
 
 	// Camera left (strafe)
 	if (KeyBind::isPressed("me3d_camera_left"))
 	{
-		renderer_3d->cameraStrafe(-mult*4);
+		renderer_3d->cameraStrafe(-speed);
 		moving = true;
 	}
 
 	// Camera right (strafe)
 	if (KeyBind::isPressed("me3d_camera_right"))
 	{
-		renderer_3d->cameraStrafe(mult*4);
+		renderer_3d->cameraStrafe(speed);
 		moving = true;
 	}
 
 	// Camera up
 	if (KeyBind::isPressed("me3d_camera_up"))
 	{
-		renderer_3d->cameraMoveUp(mult*4);
+		renderer_3d->cameraMoveUp(speed);
 		moving = true;
 	}
 
 	// Camera down
 	if (KeyBind::isPressed("me3d_camera_down"))
 	{
-		renderer_3d->cameraMoveUp(-mult*4);
+		renderer_3d->cameraMoveUp(-speed);
 		moving = true;
 	}
 
 	// Camera turn left
 	if (KeyBind::isPressed("me3d_camera_turn_left"))
 	{
-		renderer_3d->cameraTurn(-mult);
+		renderer_3d->cameraTurn(fast ? mult*2 : mult);
 		moving = true;
 	}
 
 	// Camera turn right
 	if (KeyBind::isPressed("me3d_camera_turn_right"))
 	{
-		renderer_3d->cameraTurn(mult);
+		renderer_3d->cameraTurn(fast ? -mult*2 : -mult);
 		moving = true;
 	}
 
@@ -1446,6 +1602,27 @@ void MapCanvas::update(long frametime)
 		}
 	}
 
+	// Fader for help text
+	bool help_fade_anim = true;
+	if (helpActive())
+	{
+		anim_help_fade += 0.07f*mult;
+		if (anim_help_fade > 1.0f)
+		{
+			anim_help_fade = 1.0f;
+			help_fade_anim = false;
+		}
+	}
+	else
+	{
+		anim_help_fade -= 0.05f*mult;
+		if (anim_help_fade < 0.0f)
+		{
+			anim_help_fade = 0.0f;
+			help_fade_anim = false;
+		}
+	}
+
 	// Update overlay animation (if active)
 	if (overlayActive())
 		overlay_current->update(frametime);
@@ -1468,12 +1645,12 @@ void MapCanvas::update(long frametime)
 	// Determine the framerate limit
 #ifdef USE_SFML_RENDERWINDOW
 	// SFML RenderWindow can handle high framerates better than wxGLCanvas, or something like that
-	if (mode_anim || fade_anim || overlay_fade_anim || anim_running)
+	if (mode_anim || fade_anim || overlay_fade_anim || help_fade_anim || anim_running)
 		fr_idle = 2;
 	else	// No high-priority animations running, throttle framerate
 		fr_idle = map_bg_ms;
 #else
-	if (mode_anim || fade_anim || overlay_fade_anim || anim_running)
+	if (mode_anim || fade_anim || overlay_fade_anim || help_fade_anim || anim_running)
 		fr_idle = 5;
 	else	// No high-priority animations running, throttle framerate
 		fr_idle = map_bg_ms;
@@ -1506,6 +1683,92 @@ void MapCanvas::lockMouse(bool lock)
 	{
 		// Show cursor
 		SetCursor(wxNullCursor);
+	}
+}
+
+void MapCanvas::determineObjectEditState()
+{
+	// Get object edit bbox
+	bbox_t bbox = editor->getObjectEditGroup()->getBBox();
+	int bbox_pad = 8;
+	int left = screenX(bbox.min.x) - bbox_pad;
+	int right = screenX(bbox.max.x) + bbox_pad;
+	int top = screenY(bbox.max.y) - bbox_pad;
+	int bottom = screenY(bbox.min.y) + bbox_pad;
+	edit_rotate = ((modifiers_current & wxMOD_CONTROL) > 0);
+
+	// Check mouse position relative to bbox
+	if (mouse_pos.x < left || mouse_pos.x > right || mouse_pos.y < top || mouse_pos.y > bottom)
+	{
+		// Outside bbox
+		this->SetCursor(wxNullCursor);
+		edit_state = ESTATE_NONE;
+	}
+	else
+	{
+		// Inside bbox
+		if (mouse_pos.x < left + bbox_pad && bbox.width() > 0)
+		{
+			// Left side
+			if (mouse_pos.y < top + bbox_pad && bbox.height() > 0)
+			{
+				// Top left
+				this->SetCursor(wxCursor(edit_rotate ? wxCURSOR_CROSS : wxCURSOR_SIZENWSE));
+				edit_state = ESTATE_SIZE_TL;
+			}
+			else if (mouse_pos.y > bottom - bbox_pad && bbox.height() > 0)
+			{
+				// Bottom left
+				this->SetCursor(wxCursor(edit_rotate ? wxCURSOR_CROSS : wxCURSOR_SIZENESW));
+				edit_state = ESTATE_SIZE_BL;
+			}
+			else if (!edit_rotate)
+			{
+				// Left
+				this->SetCursor(wxCursor(wxCURSOR_SIZEWE));
+				edit_state = ESTATE_SIZE_L;
+			}
+		}
+		else if (mouse_pos.x > right - bbox_pad && bbox.width() > 0)
+		{
+			// Right side
+			if (mouse_pos.y < top + bbox_pad && bbox.height() > 0)
+			{
+				// Top right
+				this->SetCursor(wxCursor(edit_rotate ? wxCURSOR_CROSS : wxCURSOR_SIZENESW));
+				edit_state = ESTATE_SIZE_TR;
+			}
+			else if (mouse_pos.y > bottom - bbox_pad && bbox.height() > 0)
+			{
+				// Bottom right
+				this->SetCursor(wxCursor(edit_rotate ? wxCURSOR_CROSS : wxCURSOR_SIZENWSE));
+				edit_state = ESTATE_SIZE_BR;
+			}
+			else if (!edit_rotate)
+			{
+				// Right
+				this->SetCursor(wxCursor(wxCURSOR_SIZEWE));
+				edit_state = ESTATE_SIZE_R;
+			}
+		}
+		else if (mouse_pos.y < top + bbox_pad && bbox.height() > 0 && !edit_rotate)
+		{
+			// Top
+			this->SetCursor(wxCursor(wxCURSOR_SIZENS));
+			edit_state = ESTATE_SIZE_T;
+		}
+		else if (mouse_pos.y > bottom - bbox_pad && bbox.height() > 0 && !edit_rotate)
+		{
+			// Bottom
+			this->SetCursor(wxCursor(wxCURSOR_SIZENS));
+			edit_state = ESTATE_SIZE_B;
+		}
+		else
+		{
+			// Middle
+			this->SetCursor(edit_rotate ? wxNullCursor : wxCursor(wxCURSOR_SIZING));
+			edit_state = edit_rotate ? ESTATE_NONE : ESTATE_MOVE;
+		}
 	}
 }
 
@@ -1998,8 +2261,11 @@ void MapCanvas::onKeyBindPress(string name)
 #endif
 
 	// Send to editor first
-	if (editor->handleKeyBind(name, mouse_pos_m))
-		return;
+	if (mouse_state == MSTATE_NORMAL)
+	{
+		if (editor->handleKeyBind(name, mouse_pos_m))
+			return;
+	}
 
 	// Handle keybinds depending on mode
 	if (editor->editMode() == MapEditor::MODE_3D)
@@ -2079,6 +2345,7 @@ void MapCanvas::keyBinds2d(string name)
 		{
 			mouse_state = MSTATE_NORMAL;
 			editor->endLineDraw();
+			theMapEditor->showShapeDrawPanel(false);
 		}
 
 		// Cancel line draw
@@ -2086,6 +2353,7 @@ void MapCanvas::keyBinds2d(string name)
 		{
 			mouse_state = MSTATE_NORMAL;
 			editor->endLineDraw(false);
+			theMapEditor->showShapeDrawPanel(false);
 		}
 	}
 
@@ -2167,6 +2435,28 @@ void MapCanvas::keyBinds2d(string name)
 		}
 	}
 
+	// --- Object Edit ---
+	else if (mouse_state == MSTATE_EDIT)
+	{
+		// Accept edit
+		if (name == "map_edit_accept")
+		{
+			editor->endObjectEdit(true);
+			mouse_state = MSTATE_NORMAL;
+			renderer_2d->forceUpdate();
+			this->SetCursor(wxNullCursor);
+		}
+
+		// Cancel edit
+		else if (name == "map_edit_cancel" || name == "me2d_begin_object_edit")
+		{
+			editor->endObjectEdit(false);
+			mouse_state = MSTATE_NORMAL;
+			renderer_2d->forceUpdate();
+			this->SetCursor(wxNullCursor);
+		}
+	}
+
 	// --- Normal mouse state ---
 	else if (mouse_state == MSTATE_NORMAL)
 	{
@@ -2222,6 +2512,27 @@ void MapCanvas::keyBinds2d(string name)
 			}
 		}
 
+		// Edit items
+		else if (name == "me2d_begin_object_edit")
+		{
+			if (editor->beginObjectEdit())
+			{
+				mouse_state = MSTATE_EDIT;
+				renderer_2d->forceUpdate();
+
+				// Setup help text
+				string key_accept = KeyBind::getBind("map_edit_accept").keysAsString();
+				string key_cancel = KeyBind::getBind("map_edit_cancel").keysAsString();
+				string key_toggle = KeyBind::getBind("me2d_begin_object_edit").keysAsString();
+				feature_help_lines.clear();
+				feature_help_lines.push_back("Object Edit");
+				feature_help_lines.push_back(S_FMT("%s = Accept", CHR(key_accept)));
+				feature_help_lines.push_back(S_FMT("%s or %s = Cancel", CHR(key_cancel), CHR(key_toggle)));
+				feature_help_lines.push_back("Shift = Disable grid snapping");
+				feature_help_lines.push_back("Ctrl = Rotate");
+			}
+		}
+
 		// Split line
 		else if (name == "me2d_split_line")
 			editor->splitLine(mouse_pos_m.x, mouse_pos_m.y, 16/view_scale);
@@ -2231,6 +2542,17 @@ void MapCanvas::keyBinds2d(string name)
 		{
 			draw_state = DSTATE_LINE;
 			mouse_state = MSTATE_LINE_DRAW;
+
+			// Setup help text
+			string key_accept = KeyBind::getBind("map_edit_accept").keysAsString();
+			string key_cancel = KeyBind::getBind("map_edit_cancel").keysAsString();
+			feature_help_lines.clear();
+			feature_help_lines.push_back("Line Drawing");
+			feature_help_lines.push_back(S_FMT("%s = Accept", CHR(key_accept)));
+			feature_help_lines.push_back(S_FMT("%s = Cancel", CHR(key_cancel)));
+			feature_help_lines.push_back("Left Click = Draw point");
+			feature_help_lines.push_back("Right Click = Undo previous point");
+			feature_help_lines.push_back("Shift = Snap to nearest vertex");
 		}
 
 		// Begin shape drawing
@@ -2238,6 +2560,17 @@ void MapCanvas::keyBinds2d(string name)
 		{
 			draw_state = DSTATE_SHAPE_ORIGIN;
 			mouse_state = MSTATE_LINE_DRAW;
+			theMapEditor->showShapeDrawPanel();
+
+			// Setup help text
+			string key_accept = KeyBind::getBind("map_edit_accept").keysAsString();
+			string key_cancel = KeyBind::getBind("map_edit_cancel").keysAsString();
+			feature_help_lines.clear();
+			feature_help_lines.push_back("Shape Drawing");
+			feature_help_lines.push_back(S_FMT("%s = Accept", CHR(key_accept)));
+			feature_help_lines.push_back(S_FMT("%s = Cancel", CHR(key_cancel)));
+			feature_help_lines.push_back("Left Click = Draw point");
+			feature_help_lines.push_back("Right Click = Undo previous point");
 		}
 
 		// Create object
@@ -2464,38 +2797,6 @@ void MapCanvas::keyBinds3d(string name)
 		if (overlay_current) delete overlay_current;
 		QuickTextureOverlay3d* qto = new QuickTextureOverlay3d(editor);
 		overlay_current = qto;
-
-		/*
-				// Get hilight or first selected wall/flat
-				selection_3d_t item = editor->hilightItem3d();
-				if (item.index < 0 || item.type == MapEditor::SEL_THING) {
-					vector<selection_3d_t>& sel = editor->get3dSelection();
-					for (unsigned a = 0; a < sel.size(); a++) {
-						if (sel[a].index >= 0 && sel[a].type != MapEditor::SEL_THING) {
-							item = sel[a];
-							break;
-						}
-					}
-				}
-
-				// Get initial texture
-				if (item.index >= 0 && item.type != MapEditor::SEL_THING) {
-					string init_tex;
-
-					if (item.type == MapEditor::SEL_FLOOR)
-						init_tex = editor->getMap().getSector(item.index)->floorTexture();
-					else if (item.type == MapEditor::SEL_CEILING)
-						init_tex = editor->getMap().getSector(item.index)->ceilingTexture();
-					else if (item.type == MapEditor::SEL_SIDE_BOTTOM)
-						init_tex = editor->getMap().getSide(item.index)->stringProperty("texturebottom");
-					else if (item.type == MapEditor::SEL_SIDE_MIDDLE)
-						init_tex = editor->getMap().getSide(item.index)->stringProperty("texturemiddle");
-					else
-						init_tex = editor->getMap().getSide(item.index)->stringProperty("texturetop");
-
-					qto->setTexture(init_tex);
-				}
-		*/
 
 		renderer_3d->enableHilight(false);
 		renderer_3d->enableSelection(false);
@@ -2862,6 +3163,10 @@ void MapCanvas::onKeyDown(wxKeyEvent& e)
 		splitter.doSplitting(&temp);
 	}
 
+	// Update cursor in object edit mode
+	//if (mouse_state == MSTATE_EDIT)
+	//	determineObjectEditState();
+
 	e.Skip();
 }
 
@@ -2872,6 +3177,10 @@ void MapCanvas::onKeyUp(wxKeyEvent& e)
 
 	// Let keybind system handle it
 	KeyBind::keyReleased(KeyBind::keyName(e.GetKeyCode()));
+
+	// Update cursor in object edit mode
+	//if (mouse_state == MSTATE_EDIT)
+	//	determineObjectEditState();
 
 	e.Skip();
 }
@@ -2950,6 +3259,7 @@ void MapCanvas::onMouseDown(wxMouseEvent& e)
 				{
 					// Finish shape draw
 					editor->endLineDraw(true);
+					theMapEditor->showShapeDrawPanel(false);
 					mouse_state = MSTATE_NORMAL;
 				}
 			}
@@ -3062,6 +3372,10 @@ void MapCanvas::onMouseUp(wxMouseEvent& e)
 			// Begin selection box fade animation
 			animations.push_back(new MCASelboxFader(theApp->runTimer(), mouse_downpos_m, mouse_pos_m));
 		}
+
+		// If we're in object edit mode
+		if (mouse_state == MSTATE_EDIT)
+			editor->getObjectEditGroup()->resetPositions();
 	}
 
 	// Right button
@@ -3154,7 +3468,7 @@ void MapCanvas::onMouseMotion(wxMouseEvent& e)
 			double xrel = e.GetX() - int(GetSize().x * 0.5);
 			double yrel = e.GetY() - int(GetSize().y * 0.5);
 
-			renderer_3d->cameraTurn(xrel*0.1);
+			renderer_3d->cameraTurn(-xrel*0.1);
 			renderer_3d->cameraPitch(-yrel*0.003);
 
 			mouseToCenter();
@@ -3177,6 +3491,57 @@ void MapCanvas::onMouseMotion(wxMouseEvent& e)
 	// Update mouse variables
 	mouse_pos.set(e.GetX(), e.GetY());
 	mouse_pos_m.set(translateX(e.GetX()), translateY(e.GetY()));
+
+	// Object edit
+	if (mouse_state == MSTATE_EDIT)
+	{
+		// Do dragging if left mouse is down
+		if (e.LeftIsDown() && edit_state != ESTATE_NONE)
+		{
+			if (edit_rotate)
+			{
+				// Rotate
+				editor->getObjectEditGroup()->doRotate(mouse_downpos_m, mouse_pos_m, !e.ShiftDown());
+				theMapEditor->objectEditPanel()->update(editor->getObjectEditGroup(), true);
+			}
+			else
+			{
+				// Get dragged offsets
+				double xoff = mouse_pos_m.x - mouse_downpos_m.x;
+				double yoff = mouse_pos_m.y - mouse_downpos_m.y;
+
+				// Snap to grid if shift not held down
+				if (!e.ShiftDown())
+				{
+					xoff = editor->snapToGrid(xoff);
+					yoff = editor->snapToGrid(yoff);
+				}
+
+				if (edit_state == ESTATE_MOVE)
+				{
+					// Move objects
+					editor->getObjectEditGroup()->doMove(xoff, yoff);
+					theMapEditor->objectEditPanel()->update(editor->getObjectEditGroup());
+				}
+				else
+				{
+					// Scale objects
+					editor->getObjectEditGroup()->doScale(xoff, yoff,
+						(edit_state == ESTATE_SIZE_L || edit_state == ESTATE_SIZE_TL || edit_state == ESTATE_SIZE_BL),	// Left?
+						(edit_state == ESTATE_SIZE_T || edit_state == ESTATE_SIZE_TL || edit_state == ESTATE_SIZE_TR),	// Top?
+						(edit_state == ESTATE_SIZE_R || edit_state == ESTATE_SIZE_TR || edit_state == ESTATE_SIZE_BR),	// Right?
+						(edit_state == ESTATE_SIZE_B || edit_state == ESTATE_SIZE_BL || edit_state == ESTATE_SIZE_BR));	// Bottom?
+					theMapEditor->objectEditPanel()->update(editor->getObjectEditGroup());
+				}
+			}
+		}
+		else
+		{
+			determineObjectEditState();
+		}
+
+		return;
+	}
 
 	// Check if we want to start a selection box
 	if (mouse_selbegin && fpoint2_t(mouse_pos.x - mouse_downpos.x, mouse_pos.y - mouse_downpos.y).magnitude() > 16)

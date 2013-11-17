@@ -2244,6 +2244,7 @@ bool MapEditor::addLineDrawPoint(fpoint2_t point, bool nearest)
 	{
 		// End line drawing
 		endLineDraw(true);
+		theMapEditor->showShapeDrawPanel(false);
 		return true;
 	}
 
@@ -2254,6 +2255,7 @@ bool MapEditor::addLineDrawPoint(fpoint2_t point, bool nearest)
 	if (draw_points.size() > 1 && point.x == draw_points[0].x && point.y == draw_points[0].y)
 	{
 		endLineDraw(true);
+		theMapEditor->showShapeDrawPanel(false);
 		return true;
 	}
 
@@ -2265,6 +2267,7 @@ void MapEditor::removeLineDrawPoint()
 	if(draw_points.empty())
 	{
 		endLineDraw(false);
+		theMapEditor->showShapeDrawPanel(false);
 	}
 	else
 	{
@@ -2606,6 +2609,91 @@ void MapEditor::endLineDraw(bool apply)
 
 	// Clear draw points
 	draw_points.clear();
+}
+
+#pragma endregion
+
+#pragma region OBJECT EDIT
+
+bool MapEditor::beginObjectEdit()
+{
+	vector<MapObject*> edit_objects;
+
+	// Things mode
+	if (edit_mode == MODE_THINGS)
+	{
+		// Get selected things
+		getSelectedObjects(edit_objects);
+
+		// Setup object group
+		edit_object_group.clear();
+		for (unsigned a = 0; a < edit_objects.size(); a++)
+			edit_object_group.addThing((MapThing*)edit_objects[a]);
+
+		// Filter objects
+		edit_object_group.filterObjects(true);
+	}
+	else
+	{
+		// Vertices mode
+		if (edit_mode == MODE_VERTICES)
+		{
+			// Get selected vertices
+			getSelectedObjects(edit_objects);
+		}
+
+		// Lines mode
+		else if (edit_mode == MODE_LINES)
+		{
+			// Get vertices of selected lines
+			vector<MapLine*> lines;
+			getSelectedLines(lines);
+			for (unsigned a = 0; a < lines.size(); a++)
+			{
+				VECTOR_ADD_UNIQUE(edit_objects, lines[a]->v1());
+				VECTOR_ADD_UNIQUE(edit_objects, lines[a]->v2());
+			}
+		}
+
+		// Sectors mode
+		else if (edit_mode == MODE_SECTORS)
+		{
+			// Get vertices of selected sectors
+			vector<MapSector*> sectors;
+			getSelectedSectors(sectors);
+			for (unsigned a = 0; a < sectors.size(); a++)
+				sectors[a]->getVertices(edit_objects);
+		}
+
+		// Setup object group
+		edit_object_group.clear();
+		for (unsigned a = 0; a < edit_objects.size(); a++)
+			edit_object_group.addVertex((MapVertex*)edit_objects[a]);
+		edit_object_group.addConnectedLines();
+
+		// Filter objects
+		edit_object_group.filterObjects(true);
+	}
+
+	theMapEditor->showObjectEditPanel(&edit_object_group);
+
+	return true;
+}
+
+void MapEditor::endObjectEdit(bool accept)
+{
+	// Apply change if accepted
+	if (accept)
+	{
+		beginUndoRecord("Object Edit", true, false, false);
+		edit_object_group.applyEdit();
+		endUndoRecord();
+	}
+
+	// Un-filter objects
+	edit_object_group.filterObjects(false);
+
+	theMapEditor->hideObjectEditPanel();
 }
 
 #pragma endregion
