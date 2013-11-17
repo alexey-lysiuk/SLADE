@@ -1,4 +1,7 @@
 /.deploy_image/
+build/
 xcuserdata/
 DerivedData/
+*.mode1v3
+*.pbxuser
 *.xccheckout
