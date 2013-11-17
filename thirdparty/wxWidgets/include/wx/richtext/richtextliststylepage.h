@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/18/2006 11:36:37 AM
-// RCS-ID:      $Id: richtextliststylepage.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

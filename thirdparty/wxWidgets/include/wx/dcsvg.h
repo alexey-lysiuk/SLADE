@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Chris Elliott
-// RCS-ID:      $Id: dcsvg.h 73382 2013-01-18 17:27:51Z PC $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

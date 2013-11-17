@@ -3,7 +3,6 @@
 // Purpose:     wxTreeListCtrl class declaration.
 // Author:      Vadim Zeitlin
 // Created:     2011-08-17
-// RCS-ID:      $Id: treelist.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

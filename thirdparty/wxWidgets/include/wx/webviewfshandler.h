@@ -2,7 +2,6 @@
 // Name:        webviewfshandler.h
 // Purpose:     Custom webview handler for virtual file system
 // Author:      Nick Matthews
-// Id:          $Id: webviewfshandler.h 73453 2013-02-01 09:38:53Z SJL $
 // Copyright:   (c) 2012 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

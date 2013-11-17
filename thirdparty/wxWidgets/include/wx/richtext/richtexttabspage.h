@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 8:03:20 AM
-// RCS-ID:      $Id: richtexttabspage.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

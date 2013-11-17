@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 10:32:31 AM
-// RCS-ID:      $Id: richtextbulletspage.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

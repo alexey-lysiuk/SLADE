@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.12.99
-// RCS-ID:      $Id: listbase.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -415,7 +414,7 @@ public:
     //
     // Returns the index of the newly inserted column or -1 on error.
     long AppendColumn(const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
+                      wxListColumnFormat format = wxLIST_FORMAT_LEFT,
                       int width = -1);
 
     // Add a new column to the control at the position "col".
@@ -511,7 +510,7 @@ public:
     const wxString& GetLabel() const { return m_item.m_text; }
     const wxString& GetText() const { return m_item.m_text; }
     int GetImage() const { return m_item.m_image; }
-    long GetData() const { return static_cast<long>(m_item.m_data); }
+    wxUIntPtr GetData() const { return m_item.m_data; }
     long GetMask() const { return m_item.m_mask; }
     const wxListItem& GetItem() const { return m_item; }
 

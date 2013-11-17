@@ -3,7 +3,6 @@
 // Purpose:     wxBookCtrlBase-derived class without any controller.
 // Author:      Vadim Zeitlin
 // Created:     2012-08-21
-// RCS-ID:      $Id: simplebook.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,8 +155,15 @@ protected:
 
     virtual wxWindow *DoRemovePage(size_t page)
     {
-        m_pageTexts.erase(m_pageTexts.begin() + page);
-        return wxBookCtrlBase::DoRemovePage(page);
+        wxWindow* const win = wxBookCtrlBase::DoRemovePage(page);
+        if ( win )
+        {
+            m_pageTexts.erase(m_pageTexts.begin() + page);
+
+            DoSetSelectionAfterRemoval(page);
+        }
+
+        return win;
     }
 
     virtual void DoSize()

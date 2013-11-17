@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05/25/99
-// RCS-ID:      $Id: dc.h 73382 2013-01-18 17:27:51Z PC $
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -521,6 +520,8 @@ public:
 
     // this needs to overidden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+    
+    virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
@@ -747,6 +748,8 @@ protected:
     double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
 
     int m_signX, m_signY;  // Used by SetAxisOrientation() to invert the axes
+    
+    double m_contentScaleFactor; // used by high resolution displays (retina)
 
     // what is a mm on a screen you don't know the size of?
     double       m_mm_to_pix_x,
@@ -829,6 +832,9 @@ public:
 
     virtual int GetResolution() const
         { return m_pimpl->GetResolution(); }
+
+    double GetContentScaleFactor() const
+        { return m_pimpl->GetContentScaleFactor(); }
 
     // Right-To-Left (RTL) modes
 

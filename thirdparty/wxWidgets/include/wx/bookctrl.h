@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.08.03
-// RCS-ID:      $Id: bookctrl.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,6 +255,10 @@ protected:
     // false otherwise.
     bool DoSetSelectionAfterInsertion(size_t n, bool bSelect);
 
+    // Update the selection after removing the page at the given index,
+    // typically called from the derived class overridden DoRemovePage().
+    void DoSetSelectionAfterRemoval(size_t n);
+
     // set the selection to the given page, sending the events (which can
     // possibly prevent the page change from taking place) if SendEvent flag is
     // included
@@ -292,7 +295,11 @@ protected:
     // having nodes without any associated page)
     virtual bool AllowNullPage() const { return false; }
 
-    // remove the page and return a pointer to it
+    // Remove the page and return a pointer to it.
+    //
+    // It also needs to update the current selection if necessary, i.e. if the
+    // page being removed comes before the selected one and the helper method
+    // DoSetSelectionAfterRemoval() can be used for this.
     virtual wxWindow *DoRemovePage(size_t page) = 0;
 
     // our best size is the size which fits all our pages

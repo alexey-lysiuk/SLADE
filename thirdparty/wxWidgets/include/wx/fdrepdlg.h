@@ -4,7 +4,6 @@
 // Author:      Markus Greither and Vadim Zeitlin
 // Modified by:
 // Created:     23/03/2001
-// RCS-ID:      $Id: fdrepdlg.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) Markus Greither
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

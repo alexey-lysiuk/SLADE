@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id: event.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -986,6 +985,9 @@ public:
         m_propagationLevel = propagationLevel;
     }
 
+    // This method is for internal use only and allows to get the object that
+    // is propagating this event upwards the window hierarchy, if any.
+    wxEvtHandler* GetPropagatedFrom() const { return m_propagatedFrom; }
 
     // This is for internal use only and is only called by
     // wxEvtHandler::ProcessEvent() to check whether it's the first time this
@@ -996,6 +998,24 @@ public:
             return true;
 
         m_wasProcessed = true;
+
+        return false;
+    }
+
+    // This is for internal use only and is used for setting, testing and
+    // resetting of m_willBeProcessedAgain flag.
+    void SetWillBeProcessedAgain()
+    {
+        m_willBeProcessedAgain = true;
+    }
+
+    bool WillBeProcessedAgain()
+    {
+        if ( m_willBeProcessedAgain )
+        {
+            m_willBeProcessedAgain = false;
+            return true;
+        }
 
         return false;
     }
@@ -1038,6 +1058,10 @@ protected:
     // the parent window (if any)
     int               m_propagationLevel;
 
+    // The object that the event is being propagated from, initially NULL and
+    // only set by wxPropagateOnce.
+    wxEvtHandler*     m_propagatedFrom;
+
     bool              m_skipped;
     bool              m_isCommandEvent;
 
@@ -1047,12 +1071,17 @@ protected:
     // once for this event
     bool m_wasProcessed;
 
+    // This one is initially false too, but can be set to true to indicate that
+    // the event will be passed to another handler if it's not processed in
+    // this one.
+    bool m_willBeProcessedAgain;
+
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()
     wxEvent& operator=(const wxEvent&); // for derived classes operator=()
 
 private:
-    // it needs to access our m_propagationLevel
+    // It needs to access our m_propagationLevel and m_propagatedFrom fields.
     friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
 
     // and this one needs to access our m_handlerToProcessOnlyIn
@@ -1086,26 +1115,35 @@ private:
 };
 
 /*
- * Another one to temporarily lower propagation level.
+ * Helper used to indicate that an event is propagated upwards the window
+ * hierarchy by the given window.
  */
 class WXDLLIMPEXP_BASE wxPropagateOnce
 {
 public:
-    wxPropagateOnce(wxEvent& event) : m_event(event)
+    // The handler argument should normally be non-NULL to allow the parent
+    // event handler to know that it's being used to process an event coming
+    // from the child, it's only NULL by default for backwards compatibility.
+    wxPropagateOnce(wxEvent& event, wxEvtHandler* handler = NULL)
+        : m_event(event),
+          m_propagatedFromOld(event.m_propagatedFrom)
     {
         wxASSERT_MSG( m_event.m_propagationLevel > 0,
                         wxT("shouldn't be used unless ShouldPropagate()!") );
 
         m_event.m_propagationLevel--;
+        m_event.m_propagatedFrom = handler;
     }
 
     ~wxPropagateOnce()
     {
+        m_event.m_propagatedFrom = m_propagatedFromOld;
         m_event.m_propagationLevel++;
     }
 
 private:
     wxEvent& m_event;
+    wxEvtHandler* const m_propagatedFromOld;
 
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
@@ -1431,6 +1469,39 @@ private:
     const ParamType2 m_param2;
 };
 
+// This is a version for calling any functors
+template <typename T>
+class wxAsyncMethodCallEventFunctor : public wxAsyncMethodCallEvent
+{
+public:
+    typedef T FunctorType;
+
+    wxAsyncMethodCallEventFunctor(wxObject *object, const FunctorType& fn)
+        : wxAsyncMethodCallEvent(object),
+          m_fn(fn)
+    {
+    }
+
+    wxAsyncMethodCallEventFunctor(const wxAsyncMethodCallEventFunctor& other)
+        : wxAsyncMethodCallEvent(other),
+          m_fn(other.m_fn)
+    {
+    }
+
+    virtual wxEvent *Clone() const
+    {
+        return new wxAsyncMethodCallEventFunctor(*this);
+    }
+
+    virtual void Execute()
+    {
+        m_fn();
+    }
+
+private:
+    FunctorType m_fn;
+};
+
 #endif // wxHAS_CALL_AFTER
 
 
@@ -1724,8 +1795,12 @@ public:
     wxMouseWheelAxis GetWheelAxis() const { return m_wheelAxis; }
 
     // Returns the configured number of lines (or whatever) to be scrolled per
-    // wheel action.  Defaults to one.
+    // wheel action. Defaults to three.
     int GetLinesPerAction() const { return m_linesPerAction; }
+
+    // Returns the configured number of columns (or whatever) to be scrolled per
+    // wheel action. Defaults to three.
+    int GetColumnsPerAction() const { return m_columnsPerAction; }
 
     // Is the system set to do page scrolling?
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
@@ -1747,6 +1822,7 @@ public:
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;
+    int           m_columnsPerAction;
 
 protected:
     void Assign(const wxMouseEvent& evt);
@@ -2199,19 +2275,36 @@ private:
 class WXDLLIMPEXP_CORE wxActivateEvent : public wxEvent
 {
 public:
-    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true, int Id = 0)
-        : wxEvent(Id, type)
-        { m_active = active; }
+    // Type of activation. For now we can only detect if it was by mouse or by
+    // some other method and even this is only available under wxMSW.
+    enum Reason
+    {
+        Reason_Mouse,
+        Reason_Unknown
+    };
+
+    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true,
+                    int Id = 0, Reason activationReason = Reason_Unknown)
+        : wxEvent(Id, type),
+        m_activationReason(activationReason)
+    {
+        m_active = active;
+    }
     wxActivateEvent(const wxActivateEvent& event)
         : wxEvent(event)
-    { m_active = event.m_active; }
+    {
+        m_active = event.m_active;
+        m_activationReason = event.m_activationReason;
+    }
 
     bool GetActive() const { return m_active; }
+    Reason GetActivationReason() const { return m_activationReason;}
 
     virtual wxEvent *Clone() const { return new wxActivateEvent(*this); }
 
 private:
     bool m_active;
+    Reason m_activationReason;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxActivateEvent)
@@ -3349,6 +3442,12 @@ public:
             new wxAsyncMethodCallEvent2<T, T1, T2>(
                 static_cast<T*>(this), method, x1, x2)
         );
+    }
+
+    template <typename T>
+    void CallAfter(const T& fn)
+    {
+        QueueEvent(new wxAsyncMethodCallEventFunctor<T>(this, fn));
     }
 #endif // wxHAS_CALL_AFTER
 

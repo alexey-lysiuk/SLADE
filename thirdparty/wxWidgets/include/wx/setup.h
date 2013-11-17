@@ -1,4 +1,4 @@
-/* lib/wx/include/osx_cocoa-unicode-static-2.9/wx/setup.h.  Generated from setup.h.in by configure.  */
+/* lib/wx/include/osx_cocoa-unicode-static-3.0/wx/setup.h.  Generated from setup.h.in by configure.  */
 /* This define (__WX_SETUP_H__) is used both to ensure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
@@ -19,7 +19,7 @@
 #define WXWIN_OS_DESCRIPTION "Darwin 10.8.0 i386"
 
 /* the installation location prefix from configure */
-#define wxINSTALL_PREFIX "/Volumes/Storage/Work/wxWidgets/_inst"
+#define wxINSTALL_PREFIX "/Volumes/Storage/Work/wxWidgets-install"
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 /* #undef gid_t */
@@ -475,6 +475,8 @@
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+#define wxUSE_PREFERENCES_EDITOR 1
+
 #define wxUSE_RICHTOOLTIP 1
 
 #define wxUSE_SASH 1
@@ -713,6 +715,12 @@
 #define HAVE_VARIADIC_MACROS 1
 
 /*
+ * Define if you don't want variadic macros to be used even if they are
+ * supported by the compiler.
+ */
+/* #undef wxNO_VARIADIC_MACROS */
+
+/*
  * Define if your compiler has std::wstring
  */
 #define HAVE_STD_WSTRING 1
@@ -804,13 +812,9 @@
 #define wxUSE_PLUGINS 0
 
 /*
- * Use GTK print for printing under GTK+ 2.0
+ * Use GTK print for printing under GTK+ 2.10+
  */
 #define wxUSE_GTKPRINT 0
-/*
- * Use GNOME print for printing under GTK+ 2.0
- */
-#define wxUSE_LIBGNOMEPRINT 0
 /*
  * Use GNOME VFS for MIME types
  */
@@ -1186,12 +1190,6 @@
 
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1
-
-/* Define this if you have strcasecmp() function in <string.h> */
-#define HAVE_STRCASECMP_IN_STRING_H 1
-
-/* Define this if you have strcasecmp() function in <strings.h> */
-/* #undef HAVE_STRCASECMP_IN_STRINGS_H */
 
 /* Define this if you have wprintf() and related functions */
 #define HAVE_WPRINTF 1

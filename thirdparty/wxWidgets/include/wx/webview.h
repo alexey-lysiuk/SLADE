@@ -2,7 +2,6 @@
 // Name:        webview.h
 // Purpose:     Common interface and events for web view component
 // Author:      Marianne Gagnon
-// Id:          $Id: webview.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) 2010 Marianne Gagnon, 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,6 @@
 // Author:      Robert Roebling, Harm van der Heijden, Julian Smart et al
 // Modified by:
 // Created:     21/3/2000
-// RCS-ID:      $Id: dirctrlg.h 73850 2013-04-25 10:11:03Z VZ $
 // Copyright:   (c) Robert Roebling, Harm van der Heijden, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -110,6 +109,7 @@ public:
     void OnBeginEditItem(wxTreeEvent &event );
     void OnEndEditItem(wxTreeEvent &event );
     void OnTreeSelChange(wxTreeEvent &event);
+    void OnItemActivated(wxTreeEvent &event);
     void OnSize(wxSizeEvent &event );
 
     // Try to expand as much of the given path as possible.
@@ -209,10 +209,14 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_CHANGED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
-#define EVT_DIRCTRL_CHANGED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_DIRCTRL_CHANGED, id, wxTreeEventHandler(fn))
+#define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
+
+#define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(SELECTIONCHANGED, id, fn)
+#define EVT_DIRCTRL_FILEACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(FILEACTIVATED, id, fn)
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -307,7 +311,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG || wxUSE_FILECTRL
 
 // old wxEVT_COMMAND_* constants
-#define wxEVT_COMMAND_DIRCTRL_CHANGED   wxEVT_DIRCTRL_CHANGED
+#define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED wxEVT_DIRCTRL_SELECTIONCHANGED
+#define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED   wxEVT_DIRCTRL_FILEACTIVATED
 
 #endif
     // _WX_DIRCTRLG_H_

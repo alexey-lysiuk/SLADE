@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2010-11-14
-// RCS-ID:      $Id: richtextdialogpage.h 73643 2013-03-11 18:02:11Z JS $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

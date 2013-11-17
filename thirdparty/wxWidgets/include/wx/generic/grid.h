@@ -4,7 +4,6 @@
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by: Santiago Palacios
 // Created:     1/08/1999
-// RCS-ID:      $Id: grid.h 73789 2013-04-05 21:11:59Z VZ $
 // Copyright:   (c) Michael Bedward
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -192,11 +191,11 @@ class WXDLLIMPEXP_ADV wxGridCellEditor : public wxGridCellWorker
 public:
     wxGridCellEditor();
 
-    bool IsCreated() { return m_control != NULL; }
-    wxControl* GetControl() { return m_control; }
+    bool IsCreated() const { return m_control != NULL; }
+    wxControl* GetControl() const { return m_control; }
     void SetControl(wxControl* control) { m_control = control; }
 
-    wxGridCellAttr* GetCellAttr() { return m_attr; }
+    wxGridCellAttr* GetCellAttr() const { return m_attr; }
     void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
 
     // Creates the actual edit control
@@ -2128,6 +2127,7 @@ protected:
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
+    void OnHideEditor( wxCommandEvent& );
 
 
     bool SetCurrentCell( const wxGridCellCoords& coords );

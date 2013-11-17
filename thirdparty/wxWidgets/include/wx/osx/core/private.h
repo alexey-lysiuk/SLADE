@@ -6,7 +6,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id: private.h 73598 2013-03-03 22:44:14Z VZ $
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -122,7 +121,9 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+
+WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
 class wxWindowMac;
 // to
@@ -259,7 +260,7 @@ public :
     virtual void        GetPosition( int &x, int &y ) const = 0;
     virtual void        GetSize( int &width, int &height ) const = 0;
     virtual void        SetControlSize( wxWindowVariant variant ) = 0;
-    virtual float       GetContentScaleFactor() const 
+    virtual double      GetContentScaleFactor() const
     {
         return 1.0;
     }
@@ -341,9 +342,16 @@ public :
 
     // static methods for associating native controls and their implementations
 
+    // finds the impl associated with this native control
     static wxWidgetImpl*
                         FindFromWXWidget(WXWidget control);
 
+    // finds the impl associated with this native control, if the native control itself is not known
+    // also checks whether its parent is eg a registered scrollview, ie whether the control is a native subpart
+    // of a known control
+    static wxWidgetImpl*
+                        FindBestFromWXWidget(WXWidget control);
+    
     static void         RemoveAssociations( wxWidgetImpl* impl);
 
     static void         Associate( WXWidget control, wxWidgetImpl *impl );
@@ -866,7 +874,7 @@ public :
     virtual void ScreenToWindow( int *x, int *y ) = 0;
 
     virtual void WindowToScreen( int *x, int *y ) = 0;
-
+    
     virtual bool IsActive() = 0;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }

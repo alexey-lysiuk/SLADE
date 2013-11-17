@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2010-11-14
-// RCS-ID:      $Id: richtextuicustomization.h 73645 2013-03-12 13:33:36Z JS $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

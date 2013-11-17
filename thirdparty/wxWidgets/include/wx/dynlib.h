@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux, Vadim Zeitlin, Vaclav Slavik
 // Modified by:
 // Created:     20/07/98
-// RCS-ID:      $Id: dynlib.h 73792 2013-04-08 14:15:31Z VZ $
 // Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -232,7 +231,7 @@ public:
     static wxDllType         GetProgramHandle();
 
     // return the platform standard DLL extension (with leading dot)
-    static const wxString& GetDllExt() { return ms_dllext; }
+    static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
     wxDynamicLibrary() : m_handle(0) { }
     wxDynamicLibrary(const wxString& libname, int flags = wxDL_DEFAULT)
@@ -371,9 +370,6 @@ protected:
     static void Error();
 #endif // wxHAVE_DYNLIB_ERROR
 
-
-    // platform specific shared lib suffix.
-    static const wxString ms_dllext;
 
     // the handle to DLL or NULL
     wxDllType m_handle;
