@@ -12,8 +12,8 @@ private:
 	wxCheckBox*	cb_list_monospace;
 	wxCheckBox*	cb_start_page;
 	wxCheckBox*	cb_context_submenus;
-	wxCheckBox*	cb_swap_epanel_bars;
 	wxCheckBox*	cb_elist_bgcol;
+	wxChoice*	choice_toolbar_size;
 
 public:
 	InterfacePrefsPanel(wxWindow* parent);

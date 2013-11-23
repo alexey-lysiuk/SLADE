@@ -118,6 +118,10 @@
 		8A3DC32E15DFBBE000E0AE2F /* lvm.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A3DC2F515DFBBE000E0AE2F /* lvm.h */; };
 		8A3DC32F15DFBBE000E0AE2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DC2F615DFBBE000E0AE2F /* lzio.c */; };
 		8A3DC33015DFBBE000E0AE2F /* lzio.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A3DC2F715DFBBE000E0AE2F /* lzio.h */; };
+		8A4078651840F29300843BD8 /* BaseResourceWizardPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A40785C1840F29300843BD8 /* BaseResourceWizardPage.cpp */; };
+		8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A40785E1840F29300843BD8 /* NodeBuildersWizardPage.cpp */; };
+		8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4078601840F29300843BD8 /* SetupWizardDialog.cpp */; };
+		8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4078621840F29300843BD8 /* TempFolderWizardPage.cpp */; };
 		8A5692FE154EE501000DF3CE /* fastmix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A5692D3154EE501000DF3CE /* fastmix.cpp */; };
 		8A5692FF154EE501000DF3CE /* it_defs.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692D4154EE501000DF3CE /* it_defs.h */; };
 		8A569300154EE501000DF3CE /* sndfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692D6154EE501000DF3CE /* sndfile.h */; };
@@ -494,6 +498,15 @@
 		8A3DC2F515DFBBE000E0AE2F /* lvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lvm.h; sourceTree = "<group>"; };
 		8A3DC2F615DFBBE000E0AE2F /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
 		8A3DC2F715DFBBE000E0AE2F /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
+		8A40785C1840F29300843BD8 /* BaseResourceWizardPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseResourceWizardPage.cpp; sourceTree = "<group>"; };
+		8A40785D1840F29300843BD8 /* BaseResourceWizardPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseResourceWizardPage.h; sourceTree = "<group>"; };
+		8A40785E1840F29300843BD8 /* NodeBuildersWizardPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodeBuildersWizardPage.cpp; sourceTree = "<group>"; };
+		8A40785F1840F29300843BD8 /* NodeBuildersWizardPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeBuildersWizardPage.h; sourceTree = "<group>"; };
+		8A4078601840F29300843BD8 /* SetupWizardDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SetupWizardDialog.cpp; sourceTree = "<group>"; };
+		8A4078611840F29300843BD8 /* SetupWizardDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupWizardDialog.h; sourceTree = "<group>"; };
+		8A4078621840F29300843BD8 /* TempFolderWizardPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TempFolderWizardPage.cpp; sourceTree = "<group>"; };
+		8A4078631840F29300843BD8 /* TempFolderWizardPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempFolderWizardPage.h; sourceTree = "<group>"; };
+		8A4078641840F29300843BD8 /* WizardPageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WizardPageBase.h; sourceTree = "<group>"; };
 		8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmodplug_slade.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A5692D3154EE501000DF3CE /* fastmix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fastmix.cpp; sourceTree = "<group>"; };
 		8A5692D4154EE501000DF3CE /* it_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = it_defs.h; sourceTree = "<group>"; };
@@ -1156,6 +1169,7 @@
 			isa = PBXGroup;
 			children = (
 				8AD18D9C154A8A9A00AB9C07 /* cl_notebook_art */,
+				8A40785A1840F29300843BD8 /* Dialogs */,
 				8AD18DD9154A8A9A00AB9C07 /* glew */,
 				8A5692D2154EE501000DF3CE /* libmodplug */,
 				8A3DC2BE15DFBBE000E0AE2F /* lua */,
@@ -1695,6 +1709,30 @@
 			path = lua;
 			sourceTree = "<group>";
 		};
+		8A40785A1840F29300843BD8 /* Dialogs */ = {
+			isa = PBXGroup;
+			children = (
+				8A40785B1840F29300843BD8 /* SetupWizard */,
+			);
+			path = Dialogs;
+			sourceTree = "<group>";
+		};
+		8A40785B1840F29300843BD8 /* SetupWizard */ = {
+			isa = PBXGroup;
+			children = (
+				8A40785C1840F29300843BD8 /* BaseResourceWizardPage.cpp */,
+				8A40785D1840F29300843BD8 /* BaseResourceWizardPage.h */,
+				8A40785E1840F29300843BD8 /* NodeBuildersWizardPage.cpp */,
+				8A40785F1840F29300843BD8 /* NodeBuildersWizardPage.h */,
+				8A4078601840F29300843BD8 /* SetupWizardDialog.cpp */,
+				8A4078611840F29300843BD8 /* SetupWizardDialog.h */,
+				8A4078621840F29300843BD8 /* TempFolderWizardPage.cpp */,
+				8A4078631840F29300843BD8 /* TempFolderWizardPage.h */,
+				8A4078641840F29300843BD8 /* WizardPageBase.h */,
+			);
+			path = SetupWizard;
+			sourceTree = "<group>";
+		};
 		8A5692D2154EE501000DF3CE /* libmodplug */ = {
 			isa = PBXGroup;
 			children = (
@@ -2009,6 +2047,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Slade" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -2234,6 +2274,7 @@
 				8AD5ED871778510600ADDE06 /* DatArchive.cpp in Sources */,
 				8AD5ED881778510600ADDE06 /* DefaultEntryPanel.cpp in Sources */,
 				8AD5ED891778510600ADDE06 /* DiskArchive.cpp in Sources */,
+				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
 				8AD5ED8A1778510600ADDE06 /* DockPanel.cpp in Sources */,
 				8AD5ED8B1778510600ADDE06 /* Drawing.cpp in Sources */,
 				8AD5ED8C1778510600ADDE06 /* EditingPrefsPanel.cpp in Sources */,
@@ -2254,6 +2295,7 @@
 				8AD5ED9B1778510600ADDE06 /* GobArchive.cpp in Sources */,
 				8AD5ED9C1778510600ADDE06 /* GraphicsPrefsPanel.cpp in Sources */,
 				8AD5ED9D1778510600ADDE06 /* GrpArchive.cpp in Sources */,
+				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
 				8AD5ED9E1778510600ADDE06 /* GZipArchive.cpp in Sources */,
 				8AD5ED9F1778510600ADDE06 /* HexEditorPanel.cpp in Sources */,
 				8AD5EDA01778510600ADDE06 /* HexEntryPanel.cpp in Sources */,
@@ -2287,6 +2329,7 @@
 				8AD5EDBC1778510600ADDE06 /* MapRenderer2D.cpp in Sources */,
 				8AD5EDBD1778510600ADDE06 /* MapRenderer3D.cpp in Sources */,
 				8AD5EDBE1778510600ADDE06 /* MapReplaceDialog.cpp in Sources */,
+				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
 				8AD5EDBF1778510600ADDE06 /* MapSector.cpp in Sources */,
 				8AD5EDC01778510600ADDE06 /* MapSide.cpp in Sources */,
 				8AD5EDC11778510600ADDE06 /* MapTextureBrowser.cpp in Sources */,
@@ -2344,6 +2387,7 @@
 				8AD5EDF31778510600ADDE06 /* SLADEMap.cpp in Sources */,
 				8AD5EDF41778510600ADDE06 /* SplashWindow.cpp in Sources */,
 				8AD5EDF51778510600ADDE06 /* SToolBar.cpp in Sources */,
+				8A4078651840F29300843BD8 /* BaseResourceWizardPage.cpp in Sources */,
 				8AD5EDF61778510600ADDE06 /* SToolBarButton.cpp in Sources */,
 				8AD5EDF71778510600ADDE06 /* STopWindow.cpp in Sources */,
 				8AD5EDF81778510600ADDE06 /* SwitchesEntryPanel.cpp in Sources */,

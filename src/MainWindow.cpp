@@ -198,6 +198,9 @@ void MainWindow::setupLayout()
 	// Create Start Page (temporary)
 	html_startpage = wxWebView::New(notebook_tabs, -1, wxEmptyString);
 	html_startpage->SetName("startpage");
+#ifndef __WXMAC__
+	html_startpage->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
+#endif // !__WXMAC__
 	if (show_start_page)
 	{
 		notebook_tabs->AddPage(html_startpage,"Start Page");
@@ -353,7 +356,7 @@ void MainWindow::setupLayout()
 	toolbar->enableGroup("_entry", false);
 
 	// Add toolbar
-	m_mgr->AddPane(toolbar, wxAuiPaneInfo().Top().CaptionVisible(false).MinSize(-1, 30).Resizable(false).PaneBorder(false).Name("toolbar"));
+	m_mgr->AddPane(toolbar, wxAuiPaneInfo().Top().CaptionVisible(false).MinSize(-1, SToolBar::getBarHeight()).Resizable(false).PaneBorder(false).Name("toolbar"));
 
 
 	// -- Status Bar --
@@ -424,7 +427,7 @@ void MainWindow::createStartPage()
 
 	// Generate recent files string
 	string recent;
-	for (unsigned a = 0; a < 10; a++)
+	for (unsigned a = 0; a < 11; a++)
 	{
 		if (a >= theArchiveManager->numRecentFiles())
 			break;	// No more recent files

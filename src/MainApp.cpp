@@ -47,6 +47,7 @@
 #include "GameConfiguration.h"
 #include "NodeBuilders.h"
 #include "Lua.h"
+#include "Dialogs/SetupWizard/SetupWizardDialog.h"
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 #include <wx/ffile.h>
@@ -90,9 +91,11 @@ string	dir_user = "";
 string	dir_app = "";
 bool	exiting = false;
 string	current_action = "";
-CVAR(Bool, temp_use_appdir, false, CVAR_SAVE)
 CVAR(String, dir_last, "", CVAR_SAVE)
 CVAR(Int, log_verbosity, 1, CVAR_SAVE)
+CVAR(Int, temp_location, 0, CVAR_SAVE)
+CVAR(String, temp_location_custom, "", CVAR_SAVE)
+CVAR(Bool, setup_wizard_run, false, CVAR_SAVE)
 
 
 /*******************************************************************
@@ -226,7 +229,6 @@ string appPath(string filename, int dir)
 	string sep = "\\";
 #else
 	string sep = "/";
-	temp_use_appdir = false;
 #endif
 
 	if (dir == DIR_DATA)
@@ -239,10 +241,12 @@ string appPath(string filename, int dir)
 	{
 		// Get temp path
 		string dir_temp;
-		if (temp_use_appdir)
-			dir_temp = dir_app + sep + "temp";
-		else
+		if (temp_location == 0)
 			dir_temp = wxStandardPaths::Get().GetTempDir().Append(sep).Append("SLADE3");
+		else if (temp_location == 1)
+			dir_temp = dir_temp = dir_app + sep + "temp";
+		else
+			dir_temp = temp_location_custom;
 
 		// Create folder if necessary
 		if (!wxDirExists(dir_temp) && temp_fail_count < 2)
@@ -250,7 +254,6 @@ string appPath(string filename, int dir)
 			if (!wxMkdir(dir_temp))
 			{
 				wxLogMessage("Unable to create temp directory \"%s\"", CHR(dir_temp));
-				temp_use_appdir = !temp_use_appdir;
 				temp_fail_count++;
 				return appPath(filename, dir);
 			}
@@ -500,6 +503,7 @@ void MainApp::initActions()
 	new SAction("pgfx_trns", "tRNS Chunk", "", "Add/Remove tRNS chunk to/from the PNG", "", SAction::CHECK);
 	new SAction("pgfx_extract", "Extract All", "", "Extract all images in this entry to separate PNGs");
 	new SAction("pgfx_crop", "Crop", "t_settings", "Crop the graphic");
+	new SAction("pgfx_convert", "Convert to...", "t_convert", "Open the Gfx Conversion Dialog for the entry");
 
 	// ArchiveEntryList
 	new SAction("aelt_sizecol", "Size", "", "Show the size column", "", SAction::CHECK);
@@ -557,6 +561,9 @@ void MainApp::initActions()
 	new SAction("ppal_report", "Write Report", "e_text", "Write an info report on this palette");
 	new SAction("ppal_generate", "Generate Palettes", "e_palette", "Generate full range of palettes from the first");
 	new SAction("ppal_colormap", "Generate Colormaps", "e_colormap", "Generate colormap lump from the first palette");
+
+	// MapEntryPanel
+	new SAction("pmap_open_text", "Edit Level Script", "e_text", "Open the map header as text (to edit fragglescript, etc.)");
 
 	// Map Editor Window
 	new SAction("mapw_save", "&Save Map Changes", "t_save", "Save any changes to the current map", "Ctrl+S");
@@ -729,6 +736,14 @@ bool MainApp::OnInit()
 
 	// Init game configuration
 	theGameConfiguration->init();
+
+	// Show Setup Wizard if needed
+	if (!setup_wizard_run)
+	{
+		SetupWizardDialog dlg(theMainWindow);
+		dlg.ShowModal();
+		setup_wizard_run = true;
+	}
 
 	// Bind events
 	Bind(wxEVT_COMMAND_MENU_SELECTED, &MainApp::onMenu, this);
@@ -1029,4 +1044,10 @@ CONSOLE_COMMAND (crash, 0, false)
 		uint8_t* test = NULL;
 		test[123] = 5;
 	}
+}
+
+CONSOLE_COMMAND(setup_wizard, 0, false)
+{
+	SetupWizardDialog dlg(theMainWindow);
+	dlg.ShowModal();
 }
