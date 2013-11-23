@@ -454,7 +454,9 @@ void MainWindow::createStartPage()
 	// Load page
 	html_startpage->ClearHistory();
 	html_startpage->LoadURL(html_file);
+#ifndef __WXMAC__
 	html_startpage->Reload();
+#endif // !__WXMAC__
 
 	// Clean up
 	//wxRemoveFile(html_file);
