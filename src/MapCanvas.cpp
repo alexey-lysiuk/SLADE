@@ -135,6 +135,7 @@ MapCanvas::MapCanvas(wxWindow* parent, int id, MapEditor* editor)
 	edit_state = 0;
 	edit_rotate = false;
 	anim_help_fade = 0;
+	panning = false;
 
 #ifdef USE_SFML_RENDERWINDOW
 	setVerticalSyncEnabled(false);
@@ -234,6 +235,13 @@ int MapCanvas::screenX(double x)
 int MapCanvas::screenY(double y)
 {
 	return MathStuff::round((GetSize().y * 0.5) - ((y - view_yoff_inter) * view_scale_inter));
+}
+
+void MapCanvas::setTopY(double y)
+{
+	double top_y = translateY(0);
+	setView(view_xoff, view_yoff - (top_y - y));
+	view_yoff_inter = view_yoff;
 }
 
 void MapCanvas::setView(double x, double y)
@@ -1120,6 +1128,9 @@ void MapCanvas::drawMap3d()
  *******************************************************************/
 void MapCanvas::draw()
 {
+	if (!IsEnabled())
+		return;
+
 	// Setup the viewport
 	glViewport(0, 0, GetSize().x, GetSize().y);
 
@@ -1444,7 +1455,7 @@ bool MapCanvas::update2d(double mult)
 	renderer_2d->setScale(view_scale_inter);
 
 	// Check if framerate shouldn't be throttled
-	if (mouse_state == MSTATE_SELECTION || mouse_state == MSTATE_PANNING || view_anim || anim_mode_crossfade)
+	if (mouse_state == MSTATE_SELECTION || panning || view_anim || anim_mode_crossfade)
 		return true;
 	else
 		return false;
@@ -1520,6 +1531,10 @@ bool MapCanvas::update3d(double mult)
 	// Apply gravity to camera if needed
 	if (camera_3d_gravity)
 		renderer_3d->cameraApplyGravity(mult);
+
+	// Update status bar
+	fpoint3_t pos = renderer_3d->camPosition();
+	theMapEditor->SetStatusText(S_FMT("Position: (%d, %d, %d)", (int)pos.x, (int)pos.y, (int)pos.z), 3);
 
 	return moving;
 }
@@ -2326,10 +2341,10 @@ void MapCanvas::keyBinds2dView(string name)
 		viewFitToMap();
 
 	// Pan view
-	else if (name == "me2d_pan_view" && mouse_state == MSTATE_NORMAL)
+	else if (name == "me2d_pan_view")
 	{
 		mouse_downpos.set(mouse_pos);
-		mouse_state = MSTATE_PANNING;
+		panning = true;
 		editor->clearHilight();
 		SetCursor(wxCURSOR_SIZING);
 	}
@@ -2810,9 +2825,9 @@ void MapCanvas::keyBinds3d(string name)
 
 void MapCanvas::onKeyBindRelease(string name)
 {
-	if (name == "me2d_pan_view" && mouse_state == MSTATE_PANNING)
+	if (name == "me2d_pan_view" && panning)
 	{
-		mouse_state = MSTATE_NORMAL;
+		panning = false;
 		editor->updateHilight(mouse_pos_m);
 		SetCursor(wxNullCursor);
 	}
@@ -3334,7 +3349,7 @@ void MapCanvas::onMouseDown(wxMouseEvent& e)
 	}
 
 	// Any other mouse button (let keybind system handle it)
-	else if (mouse_state == MSTATE_NORMAL)
+	else// if (mouse_state == MSTATE_NORMAL)
 		KeyBind::keyPressed(keypress_t(KeyBind::mbName(e.GetButton()), e.AltDown(), e.CmdDown(), e.ShiftDown()));
 
 	// Set focus
@@ -3473,6 +3488,7 @@ void MapCanvas::onMouseMotion(wxMouseEvent& e)
 
 			mouseToCenter();
 			fr_idle = 0;
+
 			return;
 		}
 	}
@@ -3485,12 +3501,25 @@ void MapCanvas::onMouseMotion(wxMouseEvent& e)
 	}
 
 	// Panning
-	if (mouse_state == MSTATE_PANNING)
+	if (panning)
 		pan((mouse_pos.x - e.GetX()) / view_scale, -((mouse_pos.y - e.GetY()) / view_scale));
 
 	// Update mouse variables
 	mouse_pos.set(e.GetX(), e.GetY());
 	mouse_pos_m.set(translateX(e.GetX()), translateY(e.GetY()));
+
+	// Update coordinates on status bar
+	double mx = mouse_pos_m.x;
+	double my = mouse_pos_m.y;
+	if (editor->gridSnap())
+	{
+		mx = editor->snapToGrid(mx);
+		my = editor->snapToGrid(my);
+	}
+	if (theMapEditor->currentMapDesc().format == MAP_UDMF)
+		theMapEditor->SetStatusText(S_FMT("Position: (%1.3f, %1.3f)", mx, my), 3);
+	else
+		theMapEditor->SetStatusText(S_FMT("Position: (%d, %d)", (int)mx, (int)my), 3);
 
 	// Object edit
 	if (mouse_state == MSTATE_EDIT)
@@ -3594,9 +3623,9 @@ void MapCanvas::onMouseWheel(wxMouseEvent& e)
 void MapCanvas::onMouseLeave(wxMouseEvent& e)
 {
 	// Stop panning
-	if (mouse_state == MSTATE_PANNING)
+	if (panning)
 	{
-		mouse_state = MSTATE_NORMAL;
+		panning = false;
 		SetCursor(wxNullCursor);
 	}
 

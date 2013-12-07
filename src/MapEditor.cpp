@@ -13,8 +13,11 @@
 #include "SectorBuilder.h"
 #include "Clipboard.h"
 #include "UndoRedo.h"
+#include "MapChecks.h"
 
 double grid_sizes[] = { 0.05, 0.1, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536 };
+CVAR(Bool, map_merge_undo_step, true, CVAR_SAVE);
+
 
 EXTERN_CVAR(Int, shapedraw_sides)
 EXTERN_CVAR(Int, shapedraw_shape)
@@ -67,37 +70,51 @@ public:
 	}
 };
 
-class MapObjectDeleteUS : public UndoStep
+class MapObjectCreateDeleteUS : public UndoStep
 {
 private:
-	vector<unsigned>	object_ids;
+	vector<mobj_cd_t>	objects;
 
 public:
-	MapObjectDeleteUS()
+	MapObjectCreateDeleteUS()
 	{
-		// Get recently deleted object ids from map
-		vector<unsigned>& deleted_objects = UndoRedo::currentMap()->deletedObjectIds();
-		for (unsigned a = 0; a < deleted_objects.size(); a++)
-			object_ids.push_back(deleted_objects[a]);
+		// Get recently created and deleted object ids from map
+		// (in the order they were created/deleted)
+		vector<mobj_cd_t>& cd_objects = UndoRedo::currentMap()->createdDeletedObjectIds();
+		for (unsigned a = 0; a < cd_objects.size(); a++)
+			objects.push_back(cd_objects[a]);
 
-		if (Global::log_verbosity >= 2)
+		if (Global::log_verbosity >= 4)
 		{
-			string msg = "Deleted ids: ";
-			for (unsigned a = 0; a < object_ids.size(); a++)
-				msg += S_FMT("%d, ", object_ids[a]);
-			wxLogMessage(msg);
+			string ids;
+			for (unsigned a = 0; a < cd_objects.size(); a++)
+			{
+				if (cd_objects[a].created)
+					ids += S_FMT("%d, ", cd_objects[a].id);
+			}
+			LOG_MESSAGE(4, "Created: %s", CHR(ids));
+
+			ids = "";
+			for (unsigned a = 0; a < cd_objects.size(); a++)
+			{
+				if (!cd_objects[a].created)
+					ids += S_FMT("%d, ", cd_objects[a].id);
+			}
+			LOG_MESSAGE(4, "Deleted: %s", CHR(ids));
 		}
 	}
 
-	~MapObjectDeleteUS() {}
+	~MapObjectCreateDeleteUS() {}
 
 	bool doUndo()
 	{
-		// Restore deleted objects
-		for (unsigned a = 0; a < object_ids.size(); a++)
+		// Undo creation/deletion
+		for (int a = objects.size() - 1; a >= 0; a--)
 		{
-			UndoRedo::currentMap()->restoreObjectById(object_ids[a]);
-			//wxLogMessage("Restored object id %d (%s)", object_ids[a], CHR(UndoRedo::currentMap()->getObjectById(object_ids[a])->getTypeName()));
+			if (objects[a].created)
+				UndoRedo::currentMap()->removeObjectById(objects[a].id);
+			else
+				UndoRedo::currentMap()->restoreObjectById(objects[a].id);
 		}
 
 		return true;
@@ -105,61 +122,21 @@ public:
 
 	bool doRedo()
 	{
-		// Remove objects
-		for (unsigned a = 0; a < object_ids.size(); a++)
+		// Redo creation/deletion
+		for (unsigned a = 0; a < objects.size(); a++)
 		{
-			UndoRedo::currentMap()->removeObjectById(object_ids[a]);
-			//wxLogMessage("Removed object id %d (%s)", object_ids[a], CHR(UndoRedo::currentMap()->getObjectById(object_ids[a])->getTypeName()));
-		}
-
-		return true;
-	}
-};
-
-class MapObjectCreateUS : public UndoStep
-{
-private:
-	vector<unsigned>	object_ids;
-
-public:
-	MapObjectCreateUS()
-	{
-		// Get recently created object ids from map
-		vector<unsigned>& created_objects = UndoRedo::currentMap()->createdObjectIds();
-		for (unsigned a = 0; a < created_objects.size(); a++)
-			object_ids.push_back(created_objects[a]);
-
-		if (Global::log_verbosity >= 2)
-		{
-			string msg = "Created ids: ";
-			for (unsigned a = 0; a < object_ids.size(); a++)
-				msg += S_FMT("%d, ", object_ids[a]);
-			wxLogMessage(msg);
-		}
-	}
-
-	~MapObjectCreateUS() {}
-
-	bool doUndo()
-	{
-		// Remove objects
-		for (unsigned a = 0; a < object_ids.size(); a++)
-		{
-			UndoRedo::currentMap()->removeObjectById(object_ids[a]);
+			if (!objects[a].created)
+				UndoRedo::currentMap()->removeObjectById(objects[a].id);
+			else
+				UndoRedo::currentMap()->restoreObjectById(objects[a].id);
 		}
 
 		return true;
 	}
 
-	bool doRedo()
+	bool isOk()
 	{
-		// Restore objects
-		for (unsigned a = 0; a < object_ids.size(); a++)
-		{
-			UndoRedo::currentMap()->restoreObjectById(object_ids[a]);
-		}
-
-		return true;
+		return !objects.empty();
 	}
 };
 
@@ -220,7 +197,7 @@ public:
 
 	bool doRedo()
 	{
-		LOG_MESSAGE(2, S_FMT("Restore %d objects", backups.size()));
+		//LOG_MESSAGE(2, S_FMT("Restore %d objects", backups.size()));
 		for (unsigned a = 0; a < backups.size(); a++)
 		{
 			MapObject* obj = UndoRedo::currentMap()->getObjectById(backups[a]->id);
@@ -228,6 +205,11 @@ public:
 		}
 
 		return true;
+	}
+
+	bool isOk()
+	{
+		return !backups.empty();
 	}
 };
 
@@ -315,6 +297,8 @@ void MapEditor::setEditMode(int mode)
 	case MODE_3D:		addEditorMessage("3d mode"); break;
 	default: break;
 	};
+
+	updateStatusText();
 }
 
 void MapEditor::setSectorEditMode(int mode)
@@ -331,6 +315,8 @@ void MapEditor::setSectorEditMode(int mode)
 		addEditorMessage("Sectors mode (Floors)");
 	else
 		addEditorMessage("Sectors mode (Ceilings)");
+
+	updateStatusText();
 }
 
 bool MapEditor::openMap(Archive::mapdesc_t map)
@@ -368,6 +354,8 @@ bool MapEditor::openMap(Archive::mapdesc_t map)
 
 	link_3d_light = true;
 	link_3d_offset = true;
+
+	updateStatusText();
 
 	return true;
 }
@@ -756,16 +744,16 @@ void MapEditor::selectionUpdated()
 	last_undo_level = "";
 }
 
-void MapEditor::clearSelection()
+void MapEditor::clearSelection(bool animate)
 {
 	if (edit_mode == MODE_3D)
 	{
-		if (canvas) canvas->itemsSelected3d(selection_3d, false);
+		if (animate && canvas) canvas->itemsSelected3d(selection_3d, false);
 		selection_3d.clear();
 	}
 	else
 	{
-		if (canvas) canvas->itemsSelected(selection, false);
+		if (animate && canvas) canvas->itemsSelected(selection, false);
 		selection.clear();
 		theMapEditor->propsPanel()->openObject(NULL);
 	}
@@ -1245,15 +1233,18 @@ void MapEditor::incrementGrid()
 		gridsize = 20;
 
 	addEditorMessage(S_FMT("Grid Size: %dx%d", (int)gridSize(), (int)gridSize()));
+	updateStatusText();
 }
 
 void MapEditor::decrementGrid()
 {
 	gridsize--;
-	if (gridsize < 0)
-		gridsize = 0;
+	int mingrid = (map.currentFormat() == MAP_UDMF) ? 0 : 4;
+	if (gridsize < mingrid)
+		gridsize = mingrid;
 
 	addEditorMessage(S_FMT("Grid Size: %dx%d", (int)gridSize(), (int)gridSize()));
+	updateStatusText();
 }
 
 double MapEditor::snapToGrid(double position)
@@ -1342,8 +1333,13 @@ void MapEditor::doMove(fpoint2_t mouse_pos)
 	if (move_items.size() == 1 && (edit_mode == MODE_VERTICES || edit_mode == MODE_THINGS))
 	{
 		// Get new position
-		double nx = snapToGrid(mouse_pos.x);
-		double ny = snapToGrid(mouse_pos.y);
+		double nx = mouse_pos.x;
+		double ny = mouse_pos.y;
+		if (grid_snap)
+		{
+			nx = snapToGrid(nx);
+			ny = snapToGrid(ny);
+		}
 
 		// Update move vector
 		if (edit_mode == MODE_VERTICES)
@@ -1359,12 +1355,21 @@ void MapEditor::doMove(fpoint2_t mouse_pos)
 	double dy = mouse_pos.y - move_origin.y;
 
 	// Update move vector
-	move_vec.set(snapToGrid(dx), snapToGrid(dy));
+	if (grid_snap)
+		move_vec.set(snapToGrid(dx), snapToGrid(dy));
+	else
+		move_vec.set(dx, dy);
 }
 
 void MapEditor::endMove(bool accept)
 {
 	long move_time = theApp->runTimer();
+
+	// Un-filter objects
+	for (unsigned a = 0; a < map.nLines(); a++)
+		map.getLine(a)->filter(false);
+	for (unsigned a = 0; a < map.nThings(); a++)
+		map.getThing(a)->filter(false);
 
 	// Move depending on edit mode
 	if (edit_mode == MODE_THINGS && accept)
@@ -1382,7 +1387,7 @@ void MapEditor::endMove(bool accept)
 	else if (accept)
 	{
 		// Any other edit mode we're technically moving vertices
-		beginUndoRecord("Move Vertices");//, true, false, false);
+		beginUndoRecord(S_FMT("Move %s", CHR(getModeString())));
 
 		// Get list of vertices being moved
 		bool* move_verts = new bool[map.nVertices()];
@@ -1398,8 +1403,8 @@ void MapEditor::endMove(bool accept)
 			for (unsigned a = 0; a < move_items.size(); a++)
 			{
 				MapLine* line = map.getLine(move_items[a]);
-				if (line->v1()) move_verts[map.vertexIndex(line->v1())] = true;
-				if (line->v2()) move_verts[map.vertexIndex(line->v2())] = true;
+				if (line->v1()) move_verts[line->v1()->getIndex()] = true;
+				if (line->v2()) move_verts[line->v2()->getIndex()] = true;
 			}
 		}
 		else if (edit_mode == MODE_SECTORS)
@@ -1409,34 +1414,36 @@ void MapEditor::endMove(bool accept)
 				map.getSector(move_items[a])->getVertices(sv);
 
 			for (unsigned a = 0; a < sv.size(); a++)
-				move_verts[map.vertexIndex(sv[a])] = true;
+				move_verts[sv[a]->getIndex()] = true;
 		}
 
 		// Move vertices
-		vector<fpoint2_t> merge_points;
-		vector<unsigned> moved_lines;
+		vector<MapVertex*> moved_verts;
 		for (unsigned a = 0; a < map.nVertices(); a++)
 		{
 			if (!move_verts[a])
 				continue;
 			fpoint2_t np(map.getVertex(a)->xPos() + move_vec.x, map.getVertex(a)->yPos() + move_vec.y);
 			map.moveVertex(a, np.x, np.y);
-			merge_points.push_back(np);
+			moved_verts.push_back(map.getVertex(a));
 		}
 
-		//endUndoRecord(true);
-		//beginUndoRecord("Stitch And Merge");
+		// Begin extra 'Merge' undo step if wanted
+		bool merge = true;
+		if (map_merge_undo_step)
+		{
+			endUndoRecord(true);
+			beginUndoRecord("Merge");
+		}
 
-		mergeLines(move_time, merge_points);
+		merge = map.mergeArch(moved_verts);
 
-		endUndoRecord(true);
+		endUndoRecord(merge || !map_merge_undo_step);
 	}
 
-	// Un-filter objects
-	for (unsigned a = 0; a < map.nLines(); a++)
-		map.getLine(a)->filter(false);
-	for (unsigned a = 0; a < map.nThings(); a++)
-		map.getThing(a)->filter(false);
+	// Clear selection
+	if (accept)
+		clearSelection(false);
 
 	// Clear moving items
 	move_items.clear();
@@ -1510,10 +1517,9 @@ void MapEditor::splitLine(double x, double y, double min_dist)
 
 	// Create vertex there
 	MapVertex* vertex = map.createVertex(closest.x, closest.y);
-	int vindex = map.vertexIndex(vertex);
 
 	// Do line split
-	map.splitLine(lindex, vindex);
+	map.splitLine(lindex, vertex->getIndex());
 
 	// Finish recording undo level
 	endUndoRecord();
@@ -1997,7 +2003,7 @@ void MapEditor::createThing(double x, double y)
 		thing->setFloatProperty("y", y);
 	}
 	else
-		theGameConfiguration->applyDefaults(thing);	// No thing properties to copy, get defaults from game configuration
+		theGameConfiguration->applyDefaults(thing, map.currentFormat() == MAP_UDMF);	// No thing properties to copy, get defaults from game configuration
 
 	// End undo step
 	endUndoRecord(true);
@@ -2041,7 +2047,7 @@ void MapEditor::createSector(double x, double y)
 	{
 		MapSector* n_sector = map.getSector(map.nSectors()-1);
 		if (n_sector->getCeilingTex().IsEmpty())
-			theGameConfiguration->applyDefaults(n_sector);
+			theGameConfiguration->applyDefaults(n_sector, map.currentFormat() == MAP_UDMF);
 	}
 
 	// Editor message
@@ -2445,165 +2451,13 @@ void MapEditor::endLineDraw(bool apply)
 			}
 		}
 
-		// Create a list of line sides (edges) to perform sector creation with
-		vector<me_ls_t> edges;
+		// Build new sectors
+		vector<MapLine*> new_lines;
 		for (unsigned a = nl_start; a < map.nLines(); a++)
-		{
-			edges.push_back(me_ls_t(map.getLine(a), true));
-			fpoint2_t mid = map.getLine(a)->midPoint();
-			if (map.sectorAt(mid.x, mid.y) >= 0)
-				edges.push_back(me_ls_t(map.getLine(a), false));
-		}
-
-		// Build sectors
-		SectorBuilder builder;
-		int runs = 0;
-		unsigned ns_start = map.nSectors();
-		unsigned nsd_start = map.nSides();
-		vector<MapSector*> sectors_reused;
-		for (unsigned a = 0; a < edges.size(); a++)
-		{
-			// Skip if edge is ignored
-			if (edges[a].ignore)
-				continue;
-
-			// Run sector builder on current edge
-			bool ok = builder.traceSector(&map, edges[a].line, edges[a].front);
-			runs++;
-
-			// Ignore any subsequent edges that were part of the sector created
-			for (unsigned e = a; e < edges.size(); e++)
-			{
-				if (edges[e].ignore)
-					continue;
-
-				for (unsigned b = 0; b < builder.nEdges(); b++)
-				{
-					if (edges[e].line == builder.getEdgeLine(b) &&
-							edges[e].front == builder.edgeIsFront(b))
-						edges[e].ignore = true;
-				}
-			}
-
-			// Don't create sector if trace failed
-			if (!ok)
-				continue;
-
-			// Check if we traced over an existing sector (or part of one)
-			MapSector* sector = builder.findExistingSector();
-			if (sector)
-			{
-				// Check if it's already been (re)used
-				bool reused = false;
-				for (unsigned s = 0; s < sectors_reused.size(); s++)
-				{
-					if (sectors_reused[s] == sector)
-					{
-						reused = true;
-						break;
-					}
-				}
-
-				// If we can reuse the sector, do so
-				if (!reused)
-					sectors_reused.push_back(sector);
-				else
-					sector = NULL;
-			}
-
-			// Create sector
-			builder.createSector(sector);
-		}
-
-		//wxLogMessage("Ran sector builder %d times", runs);
-
-		// Check if any new lines need to be flipped
-		for (unsigned a = nl_start; a < map.nLines(); a++)
-		{
-			MapLine* line = map.getLine(a);
-			if (line->backSector() && !line->frontSector())
-				line->flip(true);
-		}
-
-		// Find an adjacent sector to copy properties from
-		MapSector* sector_copy = NULL;
-		for (unsigned a = nl_start; a < map.nLines(); a++)
-		{
-			// Check front sector
-			MapSector* sector = map.getLine(a)->frontSector();
-			if (sector && sector->getIndex() < ns_start)
-			{
-				// Copy this sector if it isn't newly created
-				sector_copy = sector;
-				break;
-			}
-
-			// Check back sector
-			sector = map.getLine(a)->backSector();
-			if (sector && sector->getIndex() < ns_start)
-			{
-				// Copy this sector if it isn't newly created
-				sector_copy = sector;
-				break;
-			}
-		}
-
-		// Go through newly created sectors
-		for (unsigned a = ns_start; a < map.nSectors(); a++)
-		{
-			MapSector* sector = map.getSector(a);
-
-			// Skip if sector already has properties
-			if (!sector->getCeilingTex().IsEmpty())
-				continue;
-
-			// Copy from adjacent sector if any
-			if (sector_copy)
-			{
-				sector->copy(sector_copy);
-				continue;
-			}
-
-			// Otherwise, use defaults from game configuration
-			theGameConfiguration->applyDefaults(sector);
-		}
-
-		// Update line textures
-		for (unsigned a = nsd_start; a < map.nSides(); a++)
-		{
-			MapSide* side = map.getSide(a);
-
-			// Clear any unneeded textures
-			MapLine* line = side->getParentLine();
-			line->clearUnneededTextures();
-
-			// Set middle texture if needed
-			if (side == line->s1() && !line->s2() && side->stringProperty("texturemiddle") == "-")
-			{
-				//wxLogMessage("midtex");
-				// Find adjacent texture (any)
-				string tex = map.getAdjacentLineTexture(line->v1());
-				if (tex == "-")
-					tex = map.getAdjacentLineTexture(line->v2());
-
-				// If no adjacent texture, get default from game configuration
-				if (tex == "-")
-					tex = theGameConfiguration->getDefaultString(MOBJ_SIDE, "texturemiddle");
-
-				// Set texture
-				side->setStringProperty("texturemiddle", tex);
-			}
-		}
-
-		// Remove any extra sectors
-		map.removeDetachedSectors();
+			new_lines.push_back(map.getLine(a));
+		map.correctSectors(new_lines);
 
 		// End recording undo level
-		/*MapObject::beginPropBackup(-1);
-		undo_manager->recordUndoStep(new MapObjectCreateUS());
-		undo_manager->recordUndoStep(new MapObjectDeleteUS());
-		undo_manager->recordUndoStep(new MultiMapObjectPropertyChangeUS());
-		undo_manager->endRecord(true);*/
 		endUndoRecord(true);
 	}
 
@@ -2675,25 +2529,48 @@ bool MapEditor::beginObjectEdit()
 		edit_object_group.filterObjects(true);
 	}
 
-	theMapEditor->showObjectEditPanel(&edit_object_group);
+	theMapEditor->showObjectEditPanel(true, &edit_object_group);
 
 	return true;
 }
 
 void MapEditor::endObjectEdit(bool accept)
 {
-	// Apply change if accepted
-	if (accept)
-	{
-		beginUndoRecord("Object Edit", true, false, false);
-		edit_object_group.applyEdit();
-		endUndoRecord();
-	}
-
 	// Un-filter objects
 	edit_object_group.filterObjects(false);
 
-	theMapEditor->hideObjectEditPanel();
+	// Apply change if accepted
+	if (accept)
+	{
+		// Begin recording undo level
+		beginUndoRecord(S_FMT("Edit %s", CHR(getModeString())));
+
+		// Apply changes
+		edit_object_group.applyEdit();
+
+		// Do merge
+		bool merge = true;
+		if (edit_mode != MODE_THINGS)
+		{
+			// Begin extra 'Merge' undo step if wanted
+			if (map_merge_undo_step)
+			{
+				endUndoRecord(true);
+				beginUndoRecord("Merge");
+			}
+
+			vector<MapVertex*> vertices;
+			edit_object_group.getVertices(vertices);
+			merge = map.mergeArch(vertices);
+		}
+
+		// Clear selection
+		clearSelection(false);
+
+		endUndoRecord(merge || !map_merge_undo_step);
+	}
+
+	theMapEditor->showObjectEditPanel(false, NULL);
 }
 
 #pragma endregion
@@ -2913,13 +2790,8 @@ void MapEditor::paste(fpoint2_t mouse_pos)
 			beginUndoRecord("Paste Map Architecture");
 			long move_time = theApp->runTimer();
 			MapArchClipboardItem* p = (MapArchClipboardItem*)theClipboard->getItem(a);
-			vector<MapVertex*> newVerts = p->pasteToMap(&map, mouse_pos);
-			vector<fpoint2_t> merge_points;
-			for (unsigned a = 0; a < newVerts.size(); a++)
-			{
-				merge_points.push_back(fpoint2_t(newVerts[a]->xPos(), newVerts[a]->yPos()));
-			}
-			mergeLines(move_time, merge_points);
+			vector<MapVertex*> new_verts = p->pasteToMap(&map, mouse_pos);
+			map.mergeArch(new_verts);
 			addEditorMessage(S_FMT("Pasted %s", CHR(p->getInfo())));
 			endUndoRecord(true);
 		}
@@ -4079,6 +3951,17 @@ bool MapEditor::handleKeyBind(string key, fpoint2_t position)
 		else if (key == "me2d_grid_dec")
 			decrementGrid();
 
+		// Toggle grid snap
+		else if (key == "me2d_grid_toggle_snap")
+		{
+			grid_snap = !grid_snap;
+			if (grid_snap)
+				addEditorMessage("Grid Snapping On");
+			else
+				addEditorMessage("Grid Snapping Off");
+			updateStatusText();
+		}
+
 		// Select all
 		else if (key == "select_all")
 			selectAll();
@@ -4272,6 +4155,46 @@ void MapEditor::updateDisplay()
 	}
 }
 
+void MapEditor::updateStatusText()
+{
+	// Edit mode
+	string mode = "Mode: ";
+	switch (edit_mode)
+	{
+	case MODE_VERTICES: mode += "Vertices"; break;
+	case MODE_LINES: mode += "Lines"; break;
+	case MODE_SECTORS: mode += "Sectors"; break;
+	case MODE_THINGS: mode += "Things"; break;
+	case MODE_3D: mode += "3D"; break;
+	}
+
+	if (edit_mode == MODE_SECTORS)
+	{
+		switch (sector_mode)
+		{
+		case SECTOR_BOTH: mode += " (Normal)"; break;
+		case SECTOR_FLOOR: mode += " (Floors)"; break;
+		case SECTOR_CEILING: mode += " (Ceilings)"; break;
+		}
+	}
+
+	theMapEditor->SetStatusText(mode, 1);
+
+	// Grid
+	string grid;
+	if (gridSize() < 1)
+		grid = S_FMT("Grid: %1.2fx%1.2f", gridSize(), gridSize());
+	else
+		grid = S_FMT("Grid: %dx%d", (int)gridSize(), (int)gridSize());
+
+	if (grid_snap)
+		grid += " (Snapping ON)";
+	else
+		grid += " (Snapping OFF)";
+
+	theMapEditor->SetStatusText(grid, 2);
+}
+
 #pragma region UNDO / REDO
 
 void MapEditor::beginUndoRecord(string name, bool mod, bool create, bool del)
@@ -4288,10 +4211,8 @@ void MapEditor::beginUndoRecord(string name, bool mod, bool create, bool del)
 	// Init map/objects for recording
 	if (undo_modified)
 		MapObject::beginPropBackup(theApp->runTimer());
-	if (undo_deleted)
-		map.clearDeletedObjectIds();
-	if (undo_created)
-		map.clearCreatedObjectIds();
+	if (undo_deleted || undo_created)
+		map.clearCreatedDeletedOjbectIds();
 
 	last_undo_level = "";
 }
@@ -4313,15 +4234,15 @@ void MapEditor::endUndoRecord(bool success)
 	{
 		// Record necessary undo steps
 		MapObject::beginPropBackup(-1);
-		if (undo_created)
-			manager->recordUndoStep(new MapObjectCreateUS());
-		if (undo_deleted)
-			manager->recordUndoStep(new MapObjectDeleteUS());
+		bool modified = false;
+		bool created_deleted = false;
 		if (undo_modified)
-			manager->recordUndoStep(new MultiMapObjectPropertyChangeUS());
+			modified = manager->recordUndoStep(new MultiMapObjectPropertyChangeUS());
+		if (undo_created || undo_deleted)
+			created_deleted = manager->recordUndoStep(new MapObjectCreateDeleteUS());
 
 		// End recording
-		manager->endRecord(success);
+		manager->endRecord(success && (modified || created_deleted));
 	}
 }
 
@@ -4345,6 +4266,7 @@ void MapEditor::doUndo()
 
 		// Refresh stuff
 		//updateTagged();
+		map.rebuildConnectedLines();
 		map.geometry_updated = theApp->runTimer();
 		map.updateGeometryInfo(time);
 		last_undo_level = "";
@@ -4365,6 +4287,7 @@ void MapEditor::doRedo()
 
 		// Refresh stuff
 		//updateTagged();
+		map.rebuildConnectedLines();
 		map.geometry_updated = theApp->runTimer();
 		map.updateGeometryInfo(time);
 		last_undo_level = "";
@@ -4379,6 +4302,76 @@ CONSOLE_COMMAND(m_show_item, 1, true)
 {
 	int index = atoi(CHR(args[0]));
 	theMapEditor->mapEditor().showItem(index);
+}
+
+CONSOLE_COMMAND(m_check_missing_tex, 0, true)
+{
+	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
+	vector<MapChecks::missing_tex_t> missing = MapChecks::checkMissingTextures(map);
+
+	theConsole->logMessage(S_FMT("%d missing textures", missing.size()));
+
+	for (unsigned a = 0; a < missing.size(); a++)
+	{
+		string line = S_FMT("Line %d missing ", missing[a].line->getIndex());
+		switch (missing[a].part)
+		{
+		case TEX_FRONT_UPPER: line += "front upper texture"; break;
+		case TEX_FRONT_MIDDLE: line += "front middle texture"; break;
+		case TEX_FRONT_LOWER: line += "front lower texture"; break;
+		case TEX_BACK_UPPER: line += "back upper texture"; break;
+		case TEX_BACK_MIDDLE: line += "back middle texture"; break;
+		case TEX_BACK_LOWER: line += "back lower texture"; break;
+		default: break;
+		}
+
+		theConsole->logMessage(line);
+	}
+}
+
+CONSOLE_COMMAND(m_check_special_tags, 0, true)
+{
+	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
+	vector<MapLine*> lines = MapChecks::checkSpecialTags(map);
+
+	theConsole->logMessage(S_FMT("%d Line(s) missing tags", lines.size()));
+
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		int special = lines[a]->getSpecial();
+		ActionSpecial* as = theGameConfiguration->actionSpecial(special);
+		theConsole->logMessage(S_FMT("Line %d: Special %d (%s) requires a tag", lines[a]->getIndex(), special, as->getName()));
+	}
+}
+
+CONSOLE_COMMAND(m_check_intersecting_lines, 0, true)
+{
+	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
+	vector<MapChecks::intersect_line_t> lines = MapChecks::checkIntersectingLines(map);
+
+	theConsole->logMessage(S_FMT("%d Line(s) intersecting", lines.size()));
+
+	for (unsigned a = 0; a < lines.size(); a++)
+		theConsole->logMessage(S_FMT("Lines %d and %d are intersecting", lines[a].line1->getIndex(), lines[a].line2->getIndex()));
+}
+
+CONSOLE_COMMAND(m_check_overlapping_lines, 0, true)
+{
+	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
+	vector<MapChecks::intersect_line_t> lines = MapChecks::checkOverlappingLines(map);
+
+	theConsole->logMessage(S_FMT("%d Line(s) overlapping", lines.size()));
+
+	for (unsigned a = 0; a < lines.size(); a++)
+		theConsole->logMessage(S_FMT("Lines %d and %d are overlapping", lines[a].line1->getIndex(), lines[a].line2->getIndex()));
+}
+
+CONSOLE_COMMAND(m_check_all, 0, true)
+{
+	theConsole->execute("m_check_missing_tex");
+	theConsole->execute("m_check_special_tags");
+	theConsole->execute("m_check_intersecting_lines");
+	theConsole->execute("m_check_overlapping_lines");
 }
 
 #pragma endregion

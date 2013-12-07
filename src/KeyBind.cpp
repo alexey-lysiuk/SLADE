@@ -349,6 +349,21 @@ bool KeyBind::keyReleased(string key)
 	return released;
 }
 
+void KeyBind::pressBind(string name)
+{
+	for (unsigned a = 0; a < keybinds.size(); a++)
+	{
+		if (keybinds[a].name == name)
+		{
+			// Send key pressed event to keybind handlers
+			for (unsigned b = 0; b < kb_handlers.size(); b++)
+				kb_handlers[b]->onKeyBindPress(name);
+
+			return;
+		}
+	}
+}
+
 keypress_t KeyBind::asKeyPress(int keycode, int modifiers)
 {
 	return keypress_t(keyName(keycode),
@@ -460,6 +475,7 @@ void KeyBind::initBinds()
 	addBind("me2d_down", keypress_t("down"), "Scroll down", group);
 	addBind("me2d_grid_inc", keypress_t("["), "Increment grid level", group);
 	addBind("me2d_grid_dec", keypress_t("]"), "Decrement grid level", group);
+	addBind("me2d_grid_toggle_snap", keypress_t("G", KPM_SHIFT), "Toggle Grid Snap", group);
 	addBind("me2d_mode_vertices", keypress_t("V"), "Vertices mode", group);
 	addBind("me2d_mode_lines", keypress_t("L"), "Lines mode", group);
 	addBind("me2d_mode_sectors", keypress_t("S"), "Sectors mode", group);

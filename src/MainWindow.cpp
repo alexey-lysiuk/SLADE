@@ -198,9 +198,7 @@ void MainWindow::setupLayout()
 	// Create Start Page (temporary)
 	html_startpage = wxWebView::New(notebook_tabs, -1, wxEmptyString);
 	html_startpage->SetName("startpage");
-#ifndef __WXMAC__
 	html_startpage->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
-#endif // !__WXMAC__
 	if (show_start_page)
 	{
 		notebook_tabs->AddPage(html_startpage,"Start Page");
@@ -261,6 +259,7 @@ void MainWindow::setupLayout()
 	wxMenu* fileNewMenu = new wxMenu("");
 	theApp->getAction("aman_newwad")->addToMenu(fileNewMenu, "&Wad Archive");
 	theApp->getAction("aman_newzip")->addToMenu(fileNewMenu, "&Zip Archive");
+	theApp->getAction("aman_newmap")->addToMenu(fileNewMenu, "&Map");
 	wxMenu* fileMenu = new wxMenu("");
 	fileMenu->AppendSubMenu(fileNewMenu, "&New", "Create a new Archive");
 	theApp->getAction("aman_open")->addToMenu(fileMenu);
@@ -325,6 +324,7 @@ void MainWindow::setupLayout()
 	tbg_archive->addActionButton("arch_importfiles");
 	tbg_archive->addActionButton("arch_texeditor");
 	tbg_archive->addActionButton("arch_mapeditor");
+	tbg_archive->addActionButton("arch_run");
 	toolbar->addGroup(tbg_archive);
 
 	// Create Entry toolbar
@@ -430,7 +430,11 @@ void MainWindow::createStartPage()
 	for (unsigned a = 0; a < 11; a++)
 	{
 		if (a >= theArchiveManager->numRecentFiles())
-			break;	// No more recent files
+		{
+			recent += "<br/>\n";
+			continue;
+		}
+			//break;	// No more recent files
 
 		// Add line break if needed
 		if (a > 0) recent += "<br/>\n";
@@ -457,9 +461,7 @@ void MainWindow::createStartPage()
 	// Load page
 	html_startpage->ClearHistory();
 	html_startpage->LoadURL(html_file);
-#ifndef __WXMAC__
 	html_startpage->Reload();
-#endif // !__WXMAC__
 
 	// Clean up
 	//wxRemoveFile(html_file);
@@ -729,6 +731,11 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 			theApp->doAction("aman_newwad");
 		else if (href.EndsWith("newzip"))
 			theApp->doAction("aman_newzip");
+		else if (href.EndsWith("newmap"))
+		{
+			theApp->doAction("aman_newmap");
+			return;
+		}
 		else if (href.EndsWith("reloadstartpage"))
 			createStartPage();
 		html_startpage->Reload();

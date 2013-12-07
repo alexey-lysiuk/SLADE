@@ -40,7 +40,7 @@ private:
 	{
 		MSTATE_NORMAL = 0,
 		MSTATE_SELECTION,
-		MSTATE_PANNING,
+		//MSTATE_PANNING,
 		MSTATE_MOVE,
 		MSTATE_THING_ANGLE,
 		MSTATE_LINE_DRAW,
@@ -77,6 +77,7 @@ private:
 	bool		mouse_warp;
 	int			edit_state;
 	bool		edit_rotate;
+	bool		panning;
 
 	// Info overlays
 	int					last_hilight;
@@ -126,6 +127,7 @@ public:
 	double	translateY(double y, bool inter = false);
 	int		screenX(double x);
 	int		screenY(double y);
+	void	setTopY(double y);
 
 	void	setView(double x, double y);
 	void	pan(double x, double y);

@@ -2,7 +2,6 @@
 #ifndef __MAPEDITORWINDOW_H__
 #define __MAPEDITORWINDOW_H__
 
-#include "MapCanvas.h"
 #include "MapEditor.h"
 #include "MapTextureManager.h"
 #include "MainApp.h"
@@ -14,6 +13,8 @@ class SToolBar;
 class ScriptEditorPanel;
 class ObjectEditPanel;
 class ObjectEditGroup;
+class WadArchive;
+class MapCanvas;
 class MapEditorWindow : public STopWindow, public SActionHandler
 {
 private:
@@ -52,20 +53,21 @@ public:
 	void	loadLayout();
 	void	saveLayout();
 
-	void	setupLayout();
-	bool	openMap(Archive::mapdesc_t map);
-	void	loadMapScripts(Archive::mapdesc_t map);
-	bool	saveMap();
-	bool	saveMapAs();
-	void	closeMap();
-	void	forceRefresh(bool renderer = false);
-	void	refreshToolBar();
+	void		setupLayout();
+	bool		createMap();
+	bool		openMap(Archive::mapdesc_t map);
+	void		loadMapScripts(Archive::mapdesc_t map);
+	WadArchive*	writeMap();
+	bool		saveMap();
+	bool		saveMapAs();
+	void		closeMap();
+	void		forceRefresh(bool renderer = false);
+	void		refreshToolBar();
 
 	MapObjectPropsPanel*	propsPanel() { return panel_obj_props; }
 	ObjectEditPanel*		objectEditPanel() { return panel_obj_edit; }
 	
-	void	showObjectEditPanel(ObjectEditGroup* group);
-	void	hideObjectEditPanel();
+	void	showObjectEditPanel(bool show, ObjectEditGroup* group);
 	void	showShapeDrawPanel(bool show = true);
 
 	// SAction handler

@@ -62,6 +62,7 @@
 #include "MapEditorConfigDialog.h"
 #include "PaletteManager.h"
 #include "MapReplaceDialog.h"
+#include "Dialogs/RunDialog.h"
 #include <wx/aui/auibook.h>
 #include <wx/aui/auibar.h>
 #include <wx/filename.h>
@@ -241,6 +242,7 @@ ArchivePanel::ArchivePanel(wxWindow* parent, Archive* archive)
 	entry_list = new ArchiveEntryList(this);
 	entry_list->setArchive(archive);
 	entry_list->SetDropTarget(new APEntryListDropTarget(this, entry_list));
+	entry_list->setUndoManager(undo_manager);
 	framesizer->Add(entry_list, 1, wxEXPAND | wxLEFT|wxRIGHT|wxBOTTOM, 4);
 
 
@@ -630,7 +632,9 @@ bool ArchivePanel::newDirectory()
 	name = fn.GetFullName();
 
 	// Add the directory to the archive
+	undo_manager->beginRecord("Create Directory");
 	ArchiveTreeNode* dir = archive->createDir(name, entry_list->getCurrentDir());
+	undo_manager->endRecord(!!dir);
 
 	// Return whether the directory was created ok
 	return !!dir;
@@ -2217,6 +2221,30 @@ bool ArchivePanel::handleAction(string id)
 
 		// Open in text editor
 		openEntryAsText(entry);
+	}
+
+	// Run archive
+	else if (id == "arch_run")
+	{
+		RunDialog dlg(this, archive);
+		if (dlg.ShowModal() == wxID_OK)
+		{
+			string command = dlg.getSelectedCommandLine(archive, "");
+			if (!command.IsEmpty())
+			{
+				// Set working directory
+				string wd = wxGetCwd();
+				wxSetWorkingDirectory(dlg.getSelectedExeDir());
+
+				// Run
+				wxExecute(command, wxEXEC_ASYNC);
+
+				// Restore working directory
+				wxSetWorkingDirectory(wd);
+			}
+		}
+
+		return true;
 	}
 
 	// Unknown action

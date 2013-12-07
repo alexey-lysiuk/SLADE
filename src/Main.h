@@ -43,6 +43,9 @@ using std::vector;
 // A macro to remove an item with a given value from a vector
 #define VECTOR_REMOVE(vec, val) vec.erase(find(vec.begin(), vec.end(), val))
 
+// A macro to remove an item at the given index from a vector
+#define VECTOR_REMOVE_AT(vec, index) vec.erase(vec.begin() + index)
+
 // Template function to find something in an associative map.
 // M::mapped_type should be default constructible, or just provide
 // a value for the third argument (the default value if not found).
@@ -105,6 +108,7 @@ namespace Global
 	extern string version;
 	extern int log_verbosity;
 	extern bool debug;
+	extern double ppi_scale;
 };
 
 

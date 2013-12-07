@@ -7,10 +7,6 @@
 TODO List ---------------------------------------------------------------
 
 --- Bugs ---
-- Wall/flat scale not working in 3d mode
-- Undo/redo only works in WADs (no effect on ZIP entries)
-- Editing raw vertex position in properties dialog doesn't update flats correctly
-- Can hilight floors/ceilings from the wrong side in 3d mode
 - Modifying map architecture doesn't affect things in 3d mode (heights stay the same)
 
 
@@ -19,7 +15,6 @@ TODO List ---------------------------------------------------------------
 - Incorrect ctrl+tab behaviour with tabs
 - Focus find+replace window on opening it
 - Esc to close find+replace window
-- Shape draw and object edit bars cause the view offset to change
 
 
 --- Map Editor 3.1 ---
@@ -31,24 +26,15 @@ TODO List ---------------------------------------------------------------
 	- Invalid sector references (maybe not, shouldn't really happen)
 	- Intersecting lines
 	- Overlapping lines
-- Editing:
-	- Proper split/merge checks on paste lines / object edit
+	- Stuck things
+	- Unknown textures/specials/things
 - Better UDMF property handling, proper support for unknown properties read with the map
 - Tag edit mode for TIDs/LineIDs(?)
-- Need to separate editor defaults from udmf defaults (eg. thing skill flags are all false by default in udmf)
-- Run map (possibly 'run archive' for something more general also)
 
 
 --- Other 3.1 ---
 - Look into using wxWebView to show documentation in a tab
-- Change start page to use wxWebView
-- Create simple 'first-time-setup' wizard to set up settings that are important
-	- Temp folder
-	- Base resource archives
-	- External exe paths (node builders, acc, etc.)
-	- Soundfont
 - Automatically email stack trace on crash (if possible)
-- Entry list submenus could do with cleaning up
 
 
 --- Map Editor post-3.1 ---
@@ -61,6 +47,7 @@ TODO List ---------------------------------------------------------------
 	- Better vis checking
 	- 3d floors preview
 	- Portals preview
+	- Aspect ratio correction
 - Script editor
 	- Compiler output pane
 	- Error pane rather than just displaying error output
@@ -86,6 +73,14 @@ TODO List ---------------------------------------------------------------
 
 --- Text Editor ---
 - 'Tabs as Spaces' option
+- Better Find+Replace
+	- Make it a bar rather than popup
+	- Enter to find next
+	- Esc to cancel
+
+--- Texture Editor ---
+- Make 'grid' size optional
+- Snap to grid for dragging patches
 
 --- Gfx Editor ---
 - Basic pixel-drawing tools
@@ -113,6 +108,7 @@ TODO List ---------------------------------------------------------------
 - Better backup system
 - More drag-and-drop support
 - Rewrite VirtualListView with item filtering/sorting in mind
+- Need to do something with folder order - either always order alphabetically, or allow reordering
 
 
 --- Internal / Dev ---

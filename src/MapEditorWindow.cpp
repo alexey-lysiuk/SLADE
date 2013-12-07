@@ -29,6 +29,7 @@
  *******************************************************************/
 #include "Main.h"
 #include "WxStuff.h"
+#include "MapCanvas.h"
 #include "MapEditorWindow.h"
 #include "MainApp.h"
 #include "ConsolePanel.h"
@@ -44,6 +45,8 @@
 #include "ShapeDrawPanel.h"
 #include "ScriptEditorPanel.h"
 #include "ObjectEditPanel.h"
+#include "Dialogs/RunDialog.h"
+#include "MapEditorConfigDialog.h"
 #include <wx/aui/aui.h>
 
 
@@ -181,6 +184,7 @@ void MapEditorWindow::setupLayout()
 	theApp->getAction("mapw_save")->addToMenu(menu_map);
 	theApp->getAction("mapw_saveas")->addToMenu(menu_map);
 	theApp->getAction("mapw_rename")->addToMenu(menu_map);
+	theApp->getAction("mapw_run_map")->addToMenu(menu_map);
 	menu->Append(menu_map, "&Map");
 
 	// Edit menu
@@ -241,12 +245,19 @@ void MapEditorWindow::setupLayout()
 	else if (flat_drawtype == 1) theApp->toggleAction("mapw_flat_untextured");
 	else theApp->toggleAction("mapw_flat_textured");
 
+	// Extra toolbar
+	SToolBarGroup* tbg_misc = new SToolBarGroup(toolbar, "_Misc");
+	tbg_misc->addActionButton("mapw_run_map");
+	toolbar->addGroup(tbg_misc);
+
 	// Add toolbar
 	m_mgr->AddPane(toolbar, wxAuiPaneInfo().Top().CaptionVisible(false).MinSize(-1, SToolBar::getBarHeight()).Resizable(false).PaneBorder(false).Name("toolbar"));
 
 
 	// Status bar
-	CreateStatusBar();
+	CreateStatusBar(4);
+	int status_widths[4] = { -1, 160, 180, 160 };
+	SetStatusWidths(4, status_widths);
 
 	// -- Console Panel --
 	ConsolePanel* panel_console = new ConsolePanel(this, -1);
@@ -311,7 +322,7 @@ void MapEditorWindow::setupLayout()
 	p_inf.FloatingSize(500, 400);
 	p_inf.FloatingPosition(150, 150);
 	p_inf.MinSize(300, 300);
-	p_inf.Show(true);
+	p_inf.Show(false);
 	p_inf.Caption("Script Editor");
 	p_inf.Name("script_editor");
 	m_mgr->AddPane(panel_script_editor, p_inf);
@@ -364,10 +375,24 @@ void MapEditorWindow::lockMapEntries(bool lock)
 	}
 }
 
+bool MapEditorWindow::createMap()
+{
+	MapEditorConfigDialog dialog(this, NULL, false, true);
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		theGameConfiguration->openConfig(dialog.selectedGame(), dialog.selectedPort());
+		return openMap(dialog.selectedMap());
+	}
+
+	return false;
+}
+
 bool MapEditorWindow::openMap(Archive::mapdesc_t map)
 {
 	// Get map parent archive
-	Archive* archive = map.head->getParent();
+	Archive* archive = NULL;
+	if (map.head)
+		archive = map.head->getParent();
 
 	// Set texture manager archive
 	tex_man.setArchive(archive);
@@ -397,7 +422,10 @@ bool MapEditorWindow::openMap(Archive::mapdesc_t map)
 		map_canvas->Refresh();
 
 		// Set window title
-		SetTitle(S_FMT("SLADE - %s of %s", CHR(map.name), CHR(archive->getFilename(false))));
+		if (archive)
+			SetTitle(S_FMT("SLADE - %s of %s", CHR(map.name), CHR(archive->getFilename(false))));
+		else
+			SetTitle(S_FMT("SLADE - %s (UNSAVED)", CHR(map.name)));
 	}
 
 	return ok;
@@ -407,6 +435,10 @@ void MapEditorWindow::loadMapScripts(Archive::mapdesc_t map)
 {
 	// Don't bother if no scripting language specified
 	if (theGameConfiguration->scriptLanguage().IsEmpty())
+		return;
+
+	// Don't bother if new map
+	if (!map.head)
 		return;
 
 	// Check for pk3 map
@@ -513,7 +545,7 @@ void MapEditorWindow::buildNodes(Archive* wad)
 		wxLogMessage("Nodebuilder path not set up, no nodes were built");
 }
 
-bool MapEditorWindow::saveMap()
+WadArchive* MapEditorWindow::writeMap()
 {
 	// Get map data entries
 	vector<ArchiveEntry*> map_data;
@@ -528,12 +560,12 @@ bool MapEditorWindow::saveMap()
 		map_data.push_back(udmf);
 	}
 	else // TODO: doom64
-		return false;
+		return NULL;
 
 	// Check script language
 	bool acs = false;
 	if (theGameConfiguration->scriptLanguage() == "acs_hexen" ||
-	        theGameConfiguration->scriptLanguage() == "acs_zdoom")
+		theGameConfiguration->scriptLanguage() == "acs_zdoom")
 		acs = true;
 
 	// Add map data to temporary wad
@@ -548,6 +580,23 @@ bool MapEditorWindow::saveMap()
 	if (mdesc_current.format == MAP_UDMF)
 		wad->addNewEntry("ENDMAP");
 
+	// Build nodes
+	buildNodes(wad);
+
+	return wad;
+}
+
+bool MapEditorWindow::saveMap()
+{
+	// Check for newly created map
+	if (!mdesc_current.head)
+		return saveMapAs();
+
+	// Write map to temp wad
+	WadArchive* wad = writeMap();
+	if (!wad)
+		return false;
+
 	// Check for map archive
 	Archive* tempwad = NULL;
 	Archive::mapdesc_t map = mdesc_current;
@@ -561,9 +610,6 @@ bool MapEditorWindow::saveMap()
 		else
 			return false;
 	}
-
-	// Build nodes
-	buildNodes(wad);
 
 	// Unlock current map entries
 	lockMapEntries(false);
@@ -669,53 +715,49 @@ void MapEditorWindow::refreshToolBar()
 	toolbar->Refresh();
 }
 
-void MapEditorWindow::showObjectEditPanel(ObjectEditGroup* group)
+void MapEditorWindow::showObjectEditPanel(bool show, ObjectEditGroup* group)
 {
+	// Get panel
 	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
 	wxAuiPaneInfo& p_inf = m_mgr->GetPane("object_edit");
 
-	panel_obj_edit->init(group);
-	p_inf.Show(true);
-	map_canvas->SetFocus();
+	// Save current y offset
+	double top = map_canvas->translateY(0);
 
-	//p_inf.MinSize(200, 128);
+	// Enable/disable panel
+	if (show) panel_obj_edit->init(group);
+	p_inf.Show(show);
+
+	// Update layout
+	map_canvas->Enable(false);
 	m_mgr->Update();
-}
 
-void MapEditorWindow::hideObjectEditPanel()
-{
-	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
-	wxAuiPaneInfo& p_inf = m_mgr->GetPane("object_edit");
-
-	p_inf.Show(false);
+	// Restore y offset
+	map_canvas->setTopY(top);
+	map_canvas->Enable(true);
 	map_canvas->SetFocus();
-
-	//p_inf.MinSize(200, 128);
-	m_mgr->Update();
 }
 
 void MapEditorWindow::showShapeDrawPanel(bool show)
 {
-	if (show)
-	{
-		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
-		wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
+	// Get panel
+	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+	wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
 
-		p_inf.Show(true);
-		map_canvas->SetFocus();
+	// Save current y offset
+	double top = map_canvas->translateY(0);
 
-		m_mgr->Update();
-	}
-	else
-	{
-		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
-		wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
+	// Enable/disable panel
+	p_inf.Show(show);
 
-		p_inf.Show(false);
-		map_canvas->SetFocus();
+	// Update layout
+	map_canvas->Enable(false);
+	m_mgr->Update();
 
-		m_mgr->Update();
-	}
+	// Restore y offset
+	map_canvas->setTopY(top);
+	map_canvas->Enable(true);
+	map_canvas->SetFocus();
 }
 
 /* MapEditorWindow::handleAction
@@ -865,6 +907,35 @@ bool MapEditorWindow::handleAction(string id)
 		return true;
 	}
 
+	// Run Map
+	else if (id == "mapw_run_map")
+	{
+		Archive* archive = mdesc_current.head->getParent();
+		RunDialog dlg(this, archive);
+		if (dlg.ShowModal() == wxID_OK)
+		{
+			WadArchive* wad = writeMap();
+			if (wad)
+				wad->save(appPath("sladetemp_run.wad", DIR_TEMP));
+
+			string command = dlg.getSelectedCommandLine(archive, mdesc_current.name, wad->getFilename());
+			if (!command.IsEmpty())
+			{
+				// Set working directory
+				string wd = wxGetCwd();
+				wxSetWorkingDirectory(dlg.getSelectedExeDir());
+
+				// Run
+				wxExecute(command, wxEXEC_ASYNC);
+
+				// Restore working directory
+				wxSetWorkingDirectory(wd);
+			}
+		}
+
+		return true;
+	}
+	
 	return false;
 }
 

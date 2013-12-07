@@ -48,6 +48,7 @@
 #include "NodeBuilders.h"
 #include "Lua.h"
 #include "Dialogs/SetupWizard/SetupWizardDialog.h"
+#include "Executables.h"
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 #include <wx/ffile.h>
@@ -71,7 +72,7 @@ namespace Global
 {
 	string error = "";
 
-	string version = "3.1.0 beta 1"
+	string version = "3.1.0 beta 2"
 #ifdef SVN_REVISION_STRING
 	                 " (r" SVN_REVISION_STRING ")"
 #endif
@@ -84,6 +85,8 @@ namespace Global
 #else
 	bool debug = false;
 #endif
+
+	double ppi_scale = 1.0;
 }
 
 string	dir_data = "";
@@ -420,6 +423,7 @@ void MainApp::initActions()
 	// ArchiveManagerPanel
 	new SAction("aman_newwad", "New Wad Archive", "t_newarchive", "Create a new Doom Wad Archive", "Ctrl+Shift+W");
 	new SAction("aman_newzip", "New Zip Archive", "t_newzip", "Create a new Zip Archive", "Ctrl+Shift+Z");
+	new SAction("aman_newmap", "New Map", "t_mapeditor", "Create a new standalone map", "Ctrl+Shift+M");
 	new SAction("aman_open", "&Open", "t_open", "Open an existing Archive", "Ctrl+O");
 	new SAction("aman_save", "&Save", "t_save", "Save the currently open Archive", "Ctrl+S");
 	new SAction("aman_saveas", "Save &As", "t_saveas", "Save the currently open Archive to a new file", "Ctrl+Shift+S");
@@ -491,6 +495,7 @@ void MainApp::initActions()
 	new SAction("arch_scripts_compileacs", "Compile ACS", "t_compile", "Compile any selected text entries to ACS bytecode");
 	new SAction("arch_scripts_compilehacs", "Compile ACS (Hexen bytecode)", "t_compile2", "Compile any selected text entries to Hexen-compatible ACS bytecode");
 	new SAction("arch_map_opendb2", "Open Map in Doom Builder 2", "", "Open the selected map in Doom Builder 2");
+	new SAction("arch_run", "Run Archive", "t_run", "Run the current archive", "Ctrl+Shift+R");
 
 	// GfxEntryPanel
 	new SAction("pgfx_mirror", "Mirror", "t_mirror", "Mirror the graphic horizontally");
@@ -510,6 +515,7 @@ void MainApp::initActions()
 	new SAction("aelt_typecol", "Type", "", "Show the type column", "", SAction::CHECK);
 	new SAction("aelt_hrules", "Horizontal Rules", "", "Show horizontal rules between entries", "", SAction::CHECK);
 	new SAction("aelt_vrules", "Vertical Rules", "", "Show vertical rules between columns", "", SAction::CHECK);
+	new SAction("aelt_bgcolour", "Colour by Type", "", "Colour item background by entry type", "", SAction::CHECK);
 
 	// TextureEditorPanel
 	new SAction("txed_new", "New Texture", "t_tex_new", "Create a new, empty texture");
@@ -579,9 +585,6 @@ void MainApp::initActions()
 	new SAction("mapw_mode_lines", "Lines Mode", "t_lines", "Change to lines editing mode", "", SAction::RADIO, -1, group_mode);
 	new SAction("mapw_mode_sectors", "Sectors Mode", "t_sectors", "Change to sectors editing mode", "", SAction::RADIO, -1, group_mode);
 	new SAction("mapw_mode_things", "Things Mode", "t_things", "Change to things editing mode", "", SAction::RADIO, -1, group_mode);
-	new SAction("mapw_showconsole", "&Console", "t_console", "Toggle the Console window", "Ctrl+2");
-	new SAction("mapw_showproperties", "&Item Properties", "t_properties", "Toggle the Item Properties window", "Ctrl+1");
-	new SAction("mapw_showscripteditor", "Script &Editor", "e_text", "Toggle the Script Editor window", "Ctrl+3");
 	int group_flat_type = SAction::newGroup();
 	new SAction("mapw_flat_none", "Wireframe", "t_flat_w", "Don't show flats (wireframe)", "", SAction::RADIO, -1, group_flat_type);
 	new SAction("mapw_flat_untextured", "Untextured", "t_flat_u", "Show untextured flats", "", SAction::RADIO, -1, group_flat_type);
@@ -590,6 +593,10 @@ void MainApp::initActions()
 	new SAction("mapw_sectormode_normal", "Normal (Both)", "t_sector_both", "Edit sector floors and ceilings", "", SAction::RADIO, -1, group_sector_mode);
 	new SAction("mapw_sectormode_floor", "Floors", "t_sector_floor", "Edit sector floors", "", SAction::RADIO, -1, group_sector_mode);
 	new SAction("mapw_sectormode_ceiling", "Ceilings", "t_sector_ceiling", "Edit sector ceilings", "", SAction::RADIO, -1, group_sector_mode);
+	new SAction("mapw_showconsole", "&Console", "t_console", "Toggle the Console window", "Ctrl+2");
+	new SAction("mapw_showproperties", "&Item Properties", "t_properties", "Toggle the Item Properties window", "Ctrl+1");
+	new SAction("mapw_showscripteditor", "Script &Editor", "e_text", "Toggle the Script Editor window", "Ctrl+3");
+	new SAction("mapw_run_map", "Run Map", "t_run", "Run the current map", "Ctrl+Shift+R");
 	new SAction("mapw_line_changetexture", "Change Texture", "", "Change the currently selected or hilighted line texture(s)");
 	new SAction("mapw_line_changespecial", "Change Special", "", "Change the currently selected or hilighted line special");
 	new SAction("mapw_line_tagedit", "Edit Tagged", "", "Select sectors/things to tag to this line's special");
@@ -669,6 +676,10 @@ bool MainApp::OnInit()
 	// Init lua
 	Lua::init();
 
+	// Calculate scaling factor (from system ppi)
+	wxMemoryDC dc;
+	Global::ppi_scale = (double)(dc.GetPPI().x) / 96.0;
+
 	// Show splash screen
 	theSplashWindow->init();
 	theSplashWindow->show("Starting up...");
@@ -703,6 +714,9 @@ bool MainApp::OnInit()
 
 	// Init nodebuilders
 	NodeBuilders::init();
+
+	// Init game executables
+	Executables::init();
 
 	// Init actions
 	initActions();
@@ -769,6 +783,12 @@ int MainApp::OnExit()
 	ColourConfiguration::writeConfiguration(ccfg);
 	ccfg.exportFile(appPath("colours.cfg", DIR_USER));
 
+	// Save game exes
+	wxFile f;
+	f.Open(appPath("executables.cfg", DIR_USER), wxFile::write);
+	f.Write(Executables::writeExecutables());
+	f.Close();
+
 	// Close the map editor if it's open
 	theMapEditor->Close();
 
@@ -810,13 +830,6 @@ void MainApp::OnFatalException()
 #endif
 #endif
 }
-	
-#ifdef __APPLE__
-void MainApp::MacOpenFile(const wxString &fileName)
-{
-	theMainWindow->getArchiveManagerPanel()->openFile(fileName);
-}
-#endif // __APPLE__
 
 /* MainApp::readConfigFile
  * Reads and parses the SLADE configuration file
@@ -899,6 +912,21 @@ void MainApp::readConfigFile()
 			}
 		}
 
+		// Read game exe paths
+		if (token == "executable_paths")
+		{
+			token = tz.getToken();	// Skip {
+
+			// Read paths until closing brace found
+			token = tz.getToken();
+			while (token != "}")
+			{
+				string path = tz.getToken();
+				Executables::setExePath(token, path);
+				token = tz.getToken();
+			}
+		}
+
 		// Get next token
 		token = tz.getToken();
 	}
@@ -945,6 +973,11 @@ void MainApp::saveConfigFile()
 	// Write nodebuilder paths
 	file.Write("\n");
 	NodeBuilders::saveBuilderPaths(file);
+
+	// Write game exe paths
+	file.Write("\nexecutable_paths\n{\n");
+	file.Write(Executables::writePaths());
+	file.Write("}\n");
 
 	// Close configuration file
 	file.Write("\n// End Configuration File\n\n");

@@ -37,7 +37,9 @@
 #include "Archive.h"
 #include "WadArchive.h"
 #include "UndoRedo.h"
+#include "SectorBuilder.h"
 #include <wx/colour.h>
+
 
 SLADEMap::SLADEMap()
 {
@@ -118,146 +120,6 @@ MapObject* SLADEMap::getObject(uint8_t type, unsigned index)
 	return NULL;
 }
 
-int	SLADEMap::vertexIndex(MapVertex* v)
-{
-	// Check vertex was given
-	if (!v)
-		return -1;
-
-	// Check if item index is valid
-	if (v->index >= 0)
-		return v->index;
-
-	// Find vertex
-	for (unsigned a = 0; a < vertices.size(); a++)
-	{
-		if (vertices[a] == v)
-		{
-			v->index = a;
-			return a;
-		}
-	}
-
-	// Not found
-	return -1;
-}
-
-int	SLADEMap::sideIndex(MapSide* s)
-{
-	// Check side was given
-	if (!s)
-		return -1;
-
-	// Check if item index is valid
-	if (s->index >= 0)
-		return s->index;
-
-	// Find side
-	for (unsigned a = 0; a < sides.size(); a++)
-	{
-		if (sides[a] == s)
-		{
-			s->index = a;
-			return a;
-		}
-	}
-
-	// Not found
-	return -1;
-}
-
-int	SLADEMap::lineIndex(MapLine* l)
-{
-	// Check line was given
-	if (!l)
-		return -1;
-
-	// Check if item index is valid
-	if (l->index >= 0)
-		return l->index;
-
-	// Find line
-	for (unsigned a = 0; a < lines.size(); a++)
-	{
-		if (lines[a] == l)
-		{
-			l->index = a;
-			return a;
-		}
-	}
-
-	// Not found
-	return -1;
-}
-
-int	SLADEMap::sectorIndex(MapSector* s)
-{
-	// Check sector was given
-	if (!s)
-		return -1;
-
-	// Check if item index is valid
-	if (s->index >= 0)
-		return s->index;
-
-	// Find sector
-	for (unsigned a = 0; a < sectors.size(); a++)
-	{
-		if (sectors[a] == s)
-		{
-			s->index = a;
-			return a;
-		}
-	}
-
-	// Not found
-	return -1;
-}
-
-int	SLADEMap::thingIndex(MapThing* t)
-{
-	// Check thing was given
-	if (!t)
-		return -1;
-
-	// Check if item index is valid
-	if (t->index >= 0)
-		return t->index;
-
-	// Find thing
-	for (unsigned a = 0; a < things.size(); a++)
-	{
-		if (things[a] == t)
-		{
-			t->index = a;
-			return a;
-		}
-	}
-
-	// Not found
-	return -1;
-}
-
-int SLADEMap::objectIndex(MapObject* o)
-{
-	// Check object was given
-	if (!o)
-		return -1;
-
-	// Get index depending on type
-	switch (o->getObjType())
-	{
-	case MOBJ_VERTEX: return vertexIndex((MapVertex*)o); break;
-	case MOBJ_LINE: return lineIndex((MapLine*)o); break;
-	case MOBJ_SIDE: return sideIndex((MapSide*)o); break;
-	case MOBJ_SECTOR: return sectorIndex((MapSector*)o); break;
-	case MOBJ_THING: return thingIndex((MapThing*)o); break;
-	default: return o->index; break;
-	}
-
-	return -1;
-}
-
 void SLADEMap::refreshIndices()
 {
 	// Vertex indices
@@ -285,13 +147,13 @@ void SLADEMap::addMapObject(MapObject* object)
 {
 	all_objects.push_back(mobj_holder_t(object, true));
 	object->id = all_objects.size() - 1;
-	created_objects.push_back(object->id);
+	created_deleted_objects.push_back(mobj_cd_t(object->id, true));
 }
 
 void SLADEMap::removeMapObject(MapObject* object)
 {
 	all_objects[object->id].in_map = false;
-	deleted_objects.push_back(object->id);
+	created_deleted_objects.push_back(mobj_cd_t(object->id, false));
 }
 
 void SLADEMap::restoreObjectById(unsigned id)
@@ -308,8 +170,10 @@ void SLADEMap::restoreObjectById(unsigned id)
 	if (object->getObjType() == MOBJ_VERTEX)
 	{
 		// Add to map
-		object->index = vertices.size();
-		vertices.push_back((MapVertex*)object);
+		MapVertex* current = vertices[object->index];
+		vertices[object->index] = (MapVertex*)object;
+		current->index = vertices.size();
+		vertices.push_back(current);
 
 		geometry_updated = theApp->runTimer();
 	}
@@ -327,8 +191,10 @@ void SLADEMap::restoreObjectById(unsigned id)
 		}
 
 		// Add to map
-		object->index = sides.size();
-		sides.push_back(side);
+		MapSide* current = sides[side->index];
+		sides[object->index] = side;
+		current->index = sides.size();
+		sides.push_back(current);
 
 		geometry_updated = theApp->runTimer();
 	}
@@ -345,8 +211,10 @@ void SLADEMap::restoreObjectById(unsigned id)
 			line->vertex2->connected_lines.push_back(line);
 
 		// Add to map
-		object->index = lines.size();
-		lines.push_back(line);
+		MapLine* current = lines[line->index];
+		lines[line->index] = line;
+		current->index = lines.size();
+		lines.push_back(current);
 
 		geometry_updated = theApp->runTimer();
 	}
@@ -355,17 +223,23 @@ void SLADEMap::restoreObjectById(unsigned id)
 	else if (object->getObjType() == MOBJ_SECTOR)
 	{
 		// Add to map
-		object->index = sectors.size();
-		sectors.push_back((MapSector*)object);
+		MapSector* current = sectors[object->index];
+		sectors[object->index] = (MapSector*)object;
+		current->index = sectors.size();
+		sectors.push_back(current);
 	}
 
 	// Thing
 	else if (object->getObjType() == MOBJ_THING)
 	{
 		// Add to map
-		object->index = things.size();
-		things.push_back((MapThing*)object);
+		MapThing* current = things[object->index];
+		things[object->index] = (MapThing*)object;
+		current->index = things.size();
+		things.push_back(current);
 	}
+
+	LOG_MESSAGE(4, "restore id %d index %d", object->id, object->index);
 }
 
 void SLADEMap::removeObjectById(unsigned id)
@@ -439,6 +313,7 @@ void SLADEMap::removeObjectById(unsigned id)
 		things.pop_back();
 	}
 
+	LOG_MESSAGE(4, "remove id %d index %d", object->id, object->index);
 	removeMapObject(object);
 }
 
@@ -460,16 +335,19 @@ bool SLADEMap::readMap(Archive::mapdesc_t map)
 	}
 
 	bool ok = false;
-	if (omap.format == MAP_DOOM)
-		ok = readDoomMap(omap);
-	else if (omap.format == MAP_HEXEN)
-		ok = readHexenMap(omap);
-	else if (omap.format == MAP_DOOM64)
-		ok = readDoom64Map(omap);
-	else if (omap.format == MAP_UDMF)
+	if (omap.head)
 	{
-		ok = readUDMFMap(omap);
+		if (omap.format == MAP_DOOM)
+			ok = readDoomMap(omap);
+		else if (omap.format == MAP_HEXEN)
+			ok = readHexenMap(omap);
+		else if (omap.format == MAP_DOOM64)
+			ok = readDoom64Map(omap);
+		else if (omap.format == MAP_UDMF)
+			ok = readUDMFMap(omap);
 	}
+	else
+		ok = true;
 
 	if (tempwad)
 		delete tempwad;
@@ -2321,7 +2199,7 @@ bool SLADEMap::removeVertex(MapVertex* vertex)
 	if (!vertex)
 		return false;
 
-	return removeVertex(vertexIndex(vertex));
+	return removeVertex(vertex->index);
 }
 
 bool SLADEMap::removeVertex(unsigned index)
@@ -2353,7 +2231,7 @@ bool SLADEMap::removeLine(MapLine* line)
 	if (!line)
 		return false;
 
-	return removeLine(lineIndex(line));
+	return removeLine(line->index);
 }
 
 bool SLADEMap::removeLine(unsigned index)
@@ -2361,6 +2239,8 @@ bool SLADEMap::removeLine(unsigned index)
 	// Check index
 	if (index >= lines.size())
 		return false;
+
+	LOG_MESSAGE(4, "id %d  index %d  objindex %d", lines[index]->id, index, lines[index]->index);
 
 	// Init
 	lines[index]->resetInternals();
@@ -2395,7 +2275,7 @@ bool SLADEMap::removeSide(MapSide* side, bool remove_from_line)
 	if (!side)
 		return false;
 
-	return removeSide(sideIndex(side), remove_from_line);
+	return removeSide(side->index, remove_from_line);
 }
 
 bool SLADEMap::removeSide(unsigned index, bool remove_from_line)
@@ -2448,7 +2328,7 @@ bool SLADEMap::removeSector(MapSector* sector)
 	if (!sector)
 		return false;
 
-	return removeSector(sectorIndex(sector));
+	return removeSector(sector->index);
 }
 
 bool SLADEMap::removeSector(unsigned index)
@@ -2477,7 +2357,7 @@ bool SLADEMap::removeThing(MapThing* thing)
 	if (!thing)
 		return false;
 
-	return removeThing(thingIndex(thing));
+	return removeThing(thing->index);
 }
 
 bool SLADEMap::removeThing(unsigned index)
@@ -2825,6 +2705,13 @@ void SLADEMap::updateGeometryInfo(long modified_time)
 			}
 		}
 	}
+}
+
+bool SLADEMap::linesIntersect(MapLine* line1, MapLine* line2)
+{
+	double x, y;
+	return MathStuff::linesIntersect(line1->vertex1->x, line1->vertex1->y, line1->vertex2->x, line1->vertex2->y,
+		line2->vertex1->x, line2->vertex1->y, line2->vertex2->x, line2->vertex2->y, x, y);
 }
 
 void SLADEMap::getSectorsByTag(int tag, vector<MapSector*>& list)
@@ -3692,8 +3579,8 @@ void SLADEMap::splitLinesAt(MapVertex* vertex, double split_dist)
 
 		if (lines[a]->distanceTo(vertex->x, vertex->y) < split_dist)
 		{
-			wxLogMessage("Vertex at (%1.2f,%1.2f) splits line %d", vertex->x, vertex->y, a);
-			splitLine(a, vertexIndex(vertex));
+			LOG_MESSAGE(2, "Vertex at (%1.2f,%1.2f) splits line %d", vertex->x, vertex->y, a);
+			splitLine(a, vertex->index);
 		}
 	}
 }
@@ -3711,12 +3598,17 @@ bool SLADEMap::setLineSector(unsigned line, unsigned sector, bool front)
 	else
 		side = lines[line]->side2;
 
+	// Do nothing if already the same sector
+	if (side && side->sector == sectors[sector])
+		return true;
+
 	// Create side if needed
 	if (!side)
 	{
 		side = createSide(sectors[sector]);
 
 		// Add to line
+		lines[line]->setModified();
 		side->parent = lines[line];
 		if (front)
 			lines[line]->side1 = side;
@@ -3725,7 +3617,6 @@ bool SLADEMap::setLineSector(unsigned line, unsigned sector, bool front)
 
 		// Set appropriate line flags
 		bool twosided = (lines[line]->side1 && lines[line]->side2);
-		lines[line]->setModified();
 		theGameConfiguration->setLineBasicFlag("blocking", lines[line], current_format, !twosided);
 		theGameConfiguration->setLineBasicFlag("twosided", lines[line], current_format, twosided);
 
@@ -3813,6 +3704,383 @@ int SLADEMap::mergeLine(unsigned line)
 	}
 
 	return merged;
+}
+
+bool SLADEMap::mergeArch(vector<MapVertex*> vertices)
+{
+	unsigned n_vertices = vertices.size();
+	unsigned n_lines = lines.size();
+	MapVertex* last_vertex = vertices.back();
+	MapLine* last_line = lines.back();
+
+	// Merge vertices
+	vector<MapVertex*> merged_vertices;
+	for (unsigned a = 0; a < vertices.size(); a++)
+		VECTOR_ADD_UNIQUE(merged_vertices, mergeVerticesPoint(vertices[a]->x, vertices[a]->y));
+
+	// Split lines (by vertices)
+	int nl_start = lines.size();
+	for (unsigned a = 0; a < merged_vertices.size(); a++)
+		splitLinesAt(merged_vertices[a], 0.1);
+
+	// Get all connected lines
+	vector<MapLine*> connected_lines;
+	for (unsigned a = 0; a < merged_vertices.size(); a++)
+	{
+		for (unsigned l = 0; l < merged_vertices[a]->connected_lines.size(); l++)
+			VECTOR_ADD_UNIQUE(connected_lines, merged_vertices[a]->connected_lines[l]);
+	}
+
+	// Find overlapping lines
+	vector<MapLine*> remove_lines;
+	for (unsigned a = 0; a < connected_lines.size(); a++)
+	{
+		MapLine* line1 = connected_lines[a];
+
+		// Skip if removing already
+		if (VECTOR_EXISTS(remove_lines, line1))
+			continue;
+
+		for (unsigned l = a + 1; l < connected_lines.size(); l++)
+		{
+			MapLine* line2 = connected_lines[l];
+
+			// Skip if removing already
+			if (VECTOR_EXISTS(remove_lines, line2))
+				continue;
+
+			if ((line1->vertex1 == line2->vertex1 && line1->vertex2 == line2->vertex2) ||
+				(line1->vertex1 == line2->vertex2 && line1->vertex2 == line2->vertex1))
+			{
+				VECTOR_ADD_UNIQUE(remove_lines, mergeOverlappingLines(line2, line1));
+				//// Prioritise removing 2-sided lines
+				//if (line1->side2 && !line2->side2)
+				//{
+				//	VECTOR_ADD_UNIQUE(remove_lines, line1);
+				//	break;
+				//}
+				//else
+				//{
+				//	VECTOR_ADD_UNIQUE(remove_lines, line2);
+				//}
+			}
+		}
+	}
+
+	// Remove overlapping lines
+	for (unsigned a = 0; a < remove_lines.size(); a++)
+	{
+		LOG_MESSAGE(4, "Removing overlapping line %d (#%d)", remove_lines[a]->getId(), remove_lines[a]->getIndex());
+		removeLine(remove_lines[a]);
+	}
+	for (unsigned a = 0; a < connected_lines.size(); a++)
+	{
+		if (VECTOR_EXISTS(remove_lines, connected_lines[a]))
+		{
+			connected_lines[a] = connected_lines.back();
+			connected_lines.pop_back();
+			a--;
+		}
+	}
+
+	// Split lines (by lines)
+	double l1x1, l1y1, l1x2, l1y2;
+	double l2x1, l2y1, l2x2, l2y2;
+	for (unsigned a = 0; a < connected_lines.size(); a++)
+	{
+		MapLine* line1 = connected_lines[a];
+		l1x1 = line1->x1();
+		l1y1 = line1->y1();
+		l1x2 = line1->x2();
+		l1y2 = line1->y2();
+
+		unsigned n_lines = lines.size();
+		for (unsigned b = 0; b < n_lines; b++)
+		{
+			MapLine* line2 = lines[b];
+
+			// Can't intersect if they share a vertex
+			if (line1->vertex1 == line2->vertex1 ||
+				line1->vertex1 == line2->vertex2 ||
+				line2->vertex1 == line1->vertex2 ||
+				line2->vertex2 == line1->vertex2)
+				continue;
+
+			l2x1 = line2->x1();
+			l2y1 = line2->y1();
+			l2x2 = line2->x2();
+			l2y2 = line2->y2();
+
+			// Check for intersection
+			double x, y;
+			if (MathStuff::linesIntersect(l1x1, l1y1, l1x2, l1y2, l2x1, l2y1, l2x2, l2y2, x, y))
+			{
+				// Create split vertex
+				MapVertex* nv = createVertex(x, y);
+
+				// Split lines
+				splitLine(line1->getIndex(), nv->getIndex());
+				connected_lines.push_back(lines.back());
+				splitLine(line2->getIndex(), nv->getIndex());
+				connected_lines.push_back(lines.back());
+
+				LOG_MESSAGE(4, "Lines %d and %d intersect", line1->getIndex(), line2->getIndex());
+
+				a--;
+				break;
+			}
+		}
+	}
+
+	// Check if anything was actually merged
+	bool merged = false;
+	if (vertices.size() != n_vertices || lines.size() != n_lines)
+		merged = true;
+	if (vertices.back() != last_vertex || lines.back() != last_line)
+		merged = true;
+	if (!remove_lines.empty())
+		merged = true;
+
+	// Correct sector references
+	if (merged)
+		correctSectors(connected_lines, true);
+	else
+	{
+		for (unsigned a = 0; a < connected_lines.size(); a++)
+		{
+			MapSector* s1 = getLineSideSector(connected_lines[a], true);
+			MapSector* s2 = getLineSideSector(connected_lines[a], false);
+			if (s1) setLineSector(connected_lines[a]->index, s1->index, true);
+			if (s2) setLineSector(connected_lines[a]->index, s2->index, false);
+		}
+	}
+
+	return merged;
+}
+
+MapLine* SLADEMap::mergeOverlappingLines(MapLine* line1, MapLine* line2)
+{
+	// Determine which line to remove (prioritise 2s)
+	MapLine* remove, *keep;
+	if (line1->side2 && !line2->side2)
+	{
+		remove = line1;
+		keep = line2;
+	}
+	else
+	{
+		remove = line2;
+		keep = line1;
+	}
+
+	// Front-facing overlap
+	if (remove->vertex1 == keep->vertex1)
+	{
+		// Set keep front sector to remove front sector
+		setLineSector(keep->index, remove->side1->sector->index);
+	}
+	else
+	{
+		setLineSector(keep->index, remove->side2->sector->index);
+	}
+
+	return remove;
+}
+
+struct me_ls_t
+{
+	MapLine*	line;
+	bool		front;
+	bool		ignore;
+	me_ls_t(MapLine* line, bool front) { this->line = line; this->front = front; ignore = false; }
+};
+
+void SLADEMap::correctSectors(vector<MapLine*> lines, bool existing_only)
+{
+	// Create a list of line sides (edges) to perform sector creation with
+	vector<me_ls_t> edges;
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		if (existing_only)
+		{
+			// Add only existing sides as edges
+			// (or front side if line has none)
+			if (lines[a]->side1 || (!lines[a]->side1 && !lines[a]->side2))
+				edges.push_back(me_ls_t(lines[a], true));
+			if (lines[a]->side2)
+				edges.push_back(me_ls_t(lines[a], false));
+		}
+		else
+		{
+			edges.push_back(me_ls_t(lines[a], true));
+			fpoint2_t mid = lines[a]->midPoint();
+			if (sectorAt(mid.x, mid.y) >= 0)
+				edges.push_back(me_ls_t(lines[a], false));
+		}
+	}
+
+	vector<MapSide*> sides_correct;
+	for (unsigned a = 0; a < edges.size(); a++)
+	{
+		if (edges[a].front && edges[a].line->side1)
+			sides_correct.push_back(edges[a].line->side1);
+		else if (!edges[a].front && edges[a].line->side2)
+			sides_correct.push_back(edges[a].line->side2);
+	}
+
+	// Build sectors
+	SectorBuilder builder;
+	int runs = 0;
+	unsigned ns_start = sectors.size();
+	unsigned nsd_start = sides.size();
+	vector<MapSector*> sectors_reused;
+	for (unsigned a = 0; a < edges.size(); a++)
+	{
+		// Skip if edge is ignored
+		if (edges[a].ignore)
+			continue;
+
+		// Run sector builder on current edge
+		bool ok = builder.traceSector(this, edges[a].line, edges[a].front);
+		runs++;
+
+		// Don't create sector if trace failed
+		if (!ok)
+			continue;
+
+		// Ignore any subsequent edges that were part of the sector created
+		for (unsigned e = a; e < edges.size(); e++)
+		{
+			if (edges[e].ignore)
+				continue;
+
+			for (unsigned b = 0; b < builder.nEdges(); b++)
+			{
+				if (edges[e].line == builder.getEdgeLine(b) &&
+					edges[e].front == builder.edgeIsFront(b))
+					edges[e].ignore = true;
+			}
+		}
+
+		// Check if sector traced is already valid
+		bool valid = builder.isValidSector();
+
+		// Check if we traced over an existing sector (or part of one)
+		MapSector* sector = builder.findExistingSector(sides_correct);
+		if (sector && !valid)
+		{
+			// Check if it's already been (re)used
+			bool reused = false;
+			for (unsigned s = 0; s < sectors_reused.size(); s++)
+			{
+				if (sectors_reused[s] == sector)
+				{
+					reused = true;
+					break;
+				}
+			}
+
+			// If we can reuse the sector, do so
+			if (!reused)
+				sectors_reused.push_back(sector);
+			else
+				sector = NULL;
+		}
+
+		// Create sector
+		if (!valid)
+			builder.createSector(sector);
+	}
+
+	// Remove any sides that weren't part of a sector
+	for (unsigned a = 0; a < edges.size(); a++)
+	{
+		if (edges[a].ignore || !edges[a].line)
+			continue;
+
+		if (edges[a].front)
+			removeSide(edges[a].line->side1);
+		else
+			removeSide(edges[a].line->side2);
+	}
+
+	//wxLogMessage("Ran sector builder %d times", runs);
+
+	// Check if any lines need to be flipped
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		if (lines[a]->backSector() && !lines[a]->frontSector())
+			lines[a]->flip(true);
+	}
+
+	// Find an adjacent sector to copy properties from
+	MapSector* sector_copy = NULL;
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		// Check front sector
+		MapSector* sector = lines[a]->frontSector();
+		if (sector && sector->getIndex() < ns_start)
+		{
+			// Copy this sector if it isn't newly created
+			sector_copy = sector;
+			break;
+		}
+
+		// Check back sector
+		sector = lines[a]->backSector();
+		if (sector && sector->getIndex() < ns_start)
+		{
+			// Copy this sector if it isn't newly created
+			sector_copy = sector;
+			break;
+		}
+	}
+
+	// Go through newly created sectors
+	for (unsigned a = ns_start; a < sectors.size(); a++)
+	{
+		// Skip if sector already has properties
+		if (!sectors[a]->getCeilingTex().IsEmpty())
+			continue;
+
+		// Copy from adjacent sector if any
+		if (sector_copy)
+		{
+			sectors[a]->copy(sector_copy);
+			continue;
+		}
+
+		// Otherwise, use defaults from game configuration
+		theGameConfiguration->applyDefaults(sectors[a], current_format == MAP_UDMF);
+	}
+
+	// Update line textures
+	for (unsigned a = nsd_start; a < sides.size(); a++)
+	{
+		// Clear any unneeded textures
+		MapLine* line = sides[a]->getParentLine();
+		line->clearUnneededTextures();
+
+		// Set middle texture if needed
+		if (sides[a] == line->s1() && !line->s2() && sides[a]->stringProperty("texturemiddle") == "-")
+		{
+			//wxLogMessage("midtex");
+			// Find adjacent texture (any)
+			string tex = getAdjacentLineTexture(line->v1());
+			if (tex == "-")
+				tex = getAdjacentLineTexture(line->v2());
+
+			// If no adjacent texture, get default from game configuration
+			if (tex == "-")
+				tex = theGameConfiguration->getDefaultString(MOBJ_SIDE, "texturemiddle");
+
+			// Set texture
+			sides[a]->setStringProperty("texturemiddle", tex);
+		}
+	}
+
+	// Remove any extra sectors
+	removeDetachedSectors();
 }
 
 void SLADEMap::mapOpenChecks()
