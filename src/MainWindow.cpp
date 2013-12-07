@@ -198,7 +198,11 @@ void MainWindow::setupLayout()
 	// Create Start Page (temporary)
 	html_startpage = wxWebView::New(notebook_tabs, -1, wxEmptyString);
 	html_startpage->SetName("startpage");
+#ifdef __WXMAC__
+	html_startpage->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
+#else // !__WXMAC__
 	html_startpage->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
+#endif // __WXMAC__
 	if (show_start_page)
 	{
 		notebook_tabs->AddPage(html_startpage,"Start Page");
@@ -461,7 +465,9 @@ void MainWindow::createStartPage()
 	// Load page
 	html_startpage->ClearHistory();
 	html_startpage->LoadURL(html_file);
+#ifndef __WXMAC__
 	html_startpage->Reload();
+#endif // !__WXMAC__
 
 	// Clean up
 	//wxRemoveFile(html_file);

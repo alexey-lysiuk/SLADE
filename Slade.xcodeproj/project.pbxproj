@@ -165,6 +165,198 @@
 		8A569326154EE501000DF3CE /* stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692FC154EE501000DF3CE /* stdafx.h */; };
 		8A569327154EE501000DF3CE /* tables.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692FD154EE501000DF3CE /* tables.h */; };
 		8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */; };
+		8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909718533A4600C1EF18 /* RunDialog.cpp */; };
+		8A880C0618533C56005DE572 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */; };
+		8A880C0718533C56005DE572 /* ActionSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */; };
+		8A880C0818533C56005DE572 /* ActionSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */; };
+		8A880C0918533C56005DE572 /* ADatArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDB1778510400ADDE06 /* ADatArchive.cpp */; };
+		8A880C0A18533C56005DE572 /* AdvancedPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDD1778510400ADDE06 /* AdvancedPrefsPanel.cpp */; };
+		8A880C0B18533C56005DE572 /* AnimatedEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDF1778510400ADDE06 /* AnimatedEntryPanel.cpp */; };
+		8A880C0C18533C56005DE572 /* AnimatedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE11778510400ADDE06 /* AnimatedList.cpp */; };
+		8A880C0D18533C56005DE572 /* ANSICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE31778510400ADDE06 /* ANSICanvas.cpp */; };
+		8A880C0E18533C56005DE572 /* ANSIEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE51778510400ADDE06 /* ANSIEntryPanel.cpp */; };
+		8A880C0F18533C56005DE572 /* Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE71778510400ADDE06 /* Archive.cpp */; };
+		8A880C1018533C56005DE572 /* ArchiveEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE91778510400ADDE06 /* ArchiveEntry.cpp */; };
+		8A880C1118533C56005DE572 /* ArchiveEntryList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBEB1778510400ADDE06 /* ArchiveEntryList.cpp */; };
+		8A880C1218533C56005DE572 /* ArchiveManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBEE1778510400ADDE06 /* ArchiveManager.cpp */; };
+		8A880C1318533C56005DE572 /* ArchiveManagerPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF01778510400ADDE06 /* ArchiveManagerPanel.cpp */; };
+		8A880C1418533C56005DE572 /* ArchiveOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF21778510400ADDE06 /* ArchiveOperations.cpp */; };
+		8A880C1518533C56005DE572 /* ArchivePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF41778510400ADDE06 /* ArchivePanel.cpp */; };
+		8A880C1618533C56005DE572 /* AudioEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF81778510400ADDE06 /* AudioEntryPanel.cpp */; };
+		8A880C1718533C56005DE572 /* AudioPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFB1778510400ADDE06 /* AudioPrefsPanel.cpp */; };
+		8A880C1818533C56005DE572 /* BaseResourceArchivesPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFD1778510400ADDE06 /* BaseResourceArchivesPanel.cpp */; };
+		8A880C1918533C56005DE572 /* BaseResourceChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFF1778510400ADDE06 /* BaseResourceChooser.cpp */; };
+		8A880C1A18533C56005DE572 /* BrowserCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC021778510400ADDE06 /* BrowserCanvas.cpp */; };
+		8A880C1B18533C56005DE572 /* BrowserItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC041778510400ADDE06 /* BrowserItem.cpp */; };
+		8A880C1C18533C56005DE572 /* BrowserWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC061778510400ADDE06 /* BrowserWindow.cpp */; };
+		8A880C1D18533C56005DE572 /* BSPArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC081778510400ADDE06 /* BSPArchive.cpp */; };
+		8A880C1E18533C56005DE572 /* BZip2Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0A1778510400ADDE06 /* BZip2Archive.cpp */; };
+		8A880C1F18533C56005DE572 /* CIEDeltaEquations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0C1778510400ADDE06 /* CIEDeltaEquations.cpp */; };
+		8A880C2018533C56005DE572 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0E1778510400ADDE06 /* Clipboard.cpp */; };
+		8A880C2118533C56005DE572 /* CodePages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC111778510400ADDE06 /* CodePages.cpp */; };
+		8A880C2218533C56005DE572 /* ColorimetryPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC131778510400ADDE06 /* ColorimetryPrefsPanel.cpp */; };
+		8A880C2318533C56005DE572 /* ColourBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC151778510400ADDE06 /* ColourBox.cpp */; };
+		8A880C2418533C56005DE572 /* ColourConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC171778510400ADDE06 /* ColourConfiguration.cpp */; };
+		8A880C2518533C56005DE572 /* ColourPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC191778510400ADDE06 /* ColourPrefsPanel.cpp */; };
+		8A880C2618533C56005DE572 /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1B1778510400ADDE06 /* Compression.cpp */; };
+		8A880C2718533C56005DE572 /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1D1778510400ADDE06 /* Console.cpp */; };
+		8A880C2818533C56005DE572 /* ConsolePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC201778510400ADDE06 /* ConsolePanel.cpp */; };
+		8A880C2918533C56005DE572 /* Conversions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC221778510400ADDE06 /* Conversions.cpp */; };
+		8A880C2A18533C56005DE572 /* CTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC241778510400ADDE06 /* CTexture.cpp */; };
+		8A880C2B18533C56005DE572 /* CTextureCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC261778510400ADDE06 /* CTextureCanvas.cpp */; };
+		8A880C2C18533C56005DE572 /* CVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC281778510400ADDE06 /* CVar.cpp */; };
+		8A880C2D18533C56005DE572 /* DatArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2A1778510400ADDE06 /* DatArchive.cpp */; };
+		8A880C2E18533C56005DE572 /* DefaultEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2D1778510400ADDE06 /* DefaultEntryPanel.cpp */; };
+		8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2F1778510400ADDE06 /* DiskArchive.cpp */; };
+		8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC311778510400ADDE06 /* DockPanel.cpp */; };
+		8A880C3118533C56005DE572 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC331778510400ADDE06 /* Drawing.cpp */; };
+		8A880C3218533C56005DE572 /* EditingPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC351778510400ADDE06 /* EditingPrefsPanel.cpp */; };
+		8A880C3318533C56005DE572 /* EntryDataFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */; };
+		8A880C3418533C56005DE572 /* EntryOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC391778510400ADDE06 /* EntryOperations.cpp */; };
+		8A880C3518533C56005DE572 /* EntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3B1778510400ADDE06 /* EntryPanel.cpp */; };
+		8A880C3618533C56005DE572 /* EntryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3D1778510400ADDE06 /* EntryType.cpp */; };
+		8A880C3718533C56005DE572 /* Executables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60908B18533A3D00C1EF18 /* Executables.cpp */; };
+		8A880C3818533C56005DE572 /* ExtMessageDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3F1778510400ADDE06 /* ExtMessageDialog.cpp */; };
+		8A880C3918533C56005DE572 /* FileMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC411778510400ADDE06 /* FileMonitor.cpp */; };
+		8A880C3A18533C56005DE572 /* GameConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC431778510400ADDE06 /* GameConfiguration.cpp */; };
+		8A880C3B18533C56005DE572 /* GeneralPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC451778510400ADDE06 /* GeneralPrefsPanel.cpp */; };
+		8A880C3C18533C56005DE572 /* GenLineSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC471778510400ADDE06 /* GenLineSpecial.cpp */; };
+		8A880C3D18533C56005DE572 /* GenLineSpecialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC491778510400ADDE06 /* GenLineSpecialPanel.cpp */; };
+		8A880C3E18533C56005DE572 /* GfxCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4B1778510400ADDE06 /* GfxCanvas.cpp */; };
+		8A880C3F18533C56005DE572 /* GfxConvDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4D1778510400ADDE06 /* GfxConvDialog.cpp */; };
+		8A880C4018533C56005DE572 /* GfxEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4F1778510400ADDE06 /* GfxEntryPanel.cpp */; };
+		8A880C4118533C56005DE572 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC511778510400ADDE06 /* GLTexture.cpp */; };
+		8A880C4218533C56005DE572 /* GobArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC531778510400ADDE06 /* GobArchive.cpp */; };
+		8A880C4318533C56005DE572 /* GraphicsPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC551778510400ADDE06 /* GraphicsPrefsPanel.cpp */; };
+		8A880C4418533C56005DE572 /* GrpArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC571778510400ADDE06 /* GrpArchive.cpp */; };
+		8A880C4518533C56005DE572 /* GZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC591778510400ADDE06 /* GZipArchive.cpp */; };
+		8A880C4618533C56005DE572 /* HexEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5B1778510400ADDE06 /* HexEditorPanel.cpp */; };
+		8A880C4718533C56005DE572 /* HexEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5D1778510400ADDE06 /* HexEntryPanel.cpp */; };
+		8A880C4818533C56005DE572 /* HogArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5F1778510400ADDE06 /* HogArchive.cpp */; };
+		8A880C4918533C56005DE572 /* Icons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC611778510400ADDE06 /* Icons.cpp */; };
+		8A880C4A18533C56005DE572 /* InfoOverlay3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC641778510400ADDE06 /* InfoOverlay3d.cpp */; };
+		8A880C4B18533C56005DE572 /* InputPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC661778510400ADDE06 /* InputPrefsPanel.cpp */; };
+		8A880C4C18533C56005DE572 /* InterfacePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC681778510400ADDE06 /* InterfacePrefsPanel.cpp */; };
+		8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6A1778510400ADDE06 /* KeyBind.cpp */; };
+		8A880C4E18533C56005DE572 /* LfdArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6C1778510400ADDE06 /* LfdArchive.cpp */; };
+		8A880C4F18533C56005DE572 /* LibArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6E1778510400ADDE06 /* LibArchive.cpp */; };
+		8A880C5018533C56005DE572 /* LineInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC701778510400ADDE06 /* LineInfoOverlay.cpp */; };
+		8A880C5118533C56005DE572 /* LineTextureOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC721778510400ADDE06 /* LineTextureOverlay.cpp */; };
+		8A880C5218533C56005DE572 /* ListenerAnnouncer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC741778510400ADDE06 /* ListenerAnnouncer.cpp */; };
+		8A880C5318533C56005DE572 /* ListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC761778510400ADDE06 /* ListView.cpp */; };
+		8A880C5418533C56005DE572 /* Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC781778510400ADDE06 /* Lua.cpp */; };
+		8A880C5518533C56005DE572 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7C1778510400ADDE06 /* MainApp.cpp */; };
+		8A880C5618533C56005DE572 /* MainWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */; };
+		8A880C5718533C56005DE572 /* Map3DPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC801778510500ADDE06 /* Map3DPrefsPanel.cpp */; };
+		8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC821778510500ADDE06 /* MapCanvas.cpp */; };
+		8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60908D18533A3D00C1EF18 /* MapChecks.cpp */; };
+		8A880C5A18533C56005DE572 /* MapDisplayPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */; };
+		8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC861778510500ADDE06 /* MapEditor.cpp */; };
+		8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC881778510500ADDE06 /* MapEditorConfigDialog.cpp */; };
+		8A880C5D18533C56005DE572 /* MapEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8A1778510500ADDE06 /* MapEditorPrefsPanel.cpp */; };
+		8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8C1778510500ADDE06 /* MapEditorWindow.cpp */; };
+		8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8E1778510500ADDE06 /* MapEntryPanel.cpp */; };
+		8A880C6018533C56005DE572 /* MapLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC901778510500ADDE06 /* MapLine.cpp */; };
+		8A880C6118533C56005DE572 /* MapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC921778510500ADDE06 /* MapObject.cpp */; };
+		8A880C6218533C56005DE572 /* MapObjectPropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC941778510500ADDE06 /* MapObjectPropsPanel.cpp */; };
+		8A880C6318533C56005DE572 /* MapPreviewCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC961778510500ADDE06 /* MapPreviewCanvas.cpp */; };
+		8A880C6418533C56005DE572 /* MapRenderer2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC981778510500ADDE06 /* MapRenderer2D.cpp */; };
+		8A880C6518533C56005DE572 /* MapRenderer3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9A1778510500ADDE06 /* MapRenderer3D.cpp */; };
+		8A880C6618533C56005DE572 /* MapReplaceDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9C1778510500ADDE06 /* MapReplaceDialog.cpp */; };
+		8A880C6718533C56005DE572 /* MapSector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9E1778510500ADDE06 /* MapSector.cpp */; };
+		8A880C6818533C56005DE572 /* MapSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA01778510500ADDE06 /* MapSide.cpp */; };
+		8A880C6918533C56005DE572 /* MapTextureBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA21778510500ADDE06 /* MapTextureBrowser.cpp */; };
+		8A880C6A18533C56005DE572 /* MapTextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA41778510500ADDE06 /* MapTextureManager.cpp */; };
+		8A880C6B18533C56005DE572 /* MapThing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA61778510500ADDE06 /* MapThing.cpp */; };
+		8A880C6C18533C56005DE572 /* MapVertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA81778510500ADDE06 /* MapVertex.cpp */; };
+		8A880C6D18533C56005DE572 /* MathStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAA1778510500ADDE06 /* MathStuff.cpp */; };
+		8A880C6E18533C56005DE572 /* MCAnimations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAC1778510500ADDE06 /* MCAnimations.cpp */; };
+		8A880C6F18533C56005DE572 /* MemChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAF1778510500ADDE06 /* MemChunk.cpp */; };
+		8A880C7018533C56005DE572 /* MIDIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB11778510500ADDE06 /* MIDIPlayer.cpp */; };
+		8A880C7118533C56005DE572 /* Misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB31778510500ADDE06 /* Misc.cpp */; };
+		8A880C7218533C56005DE572 /* MobjPropertyList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60908F18533A3D00C1EF18 /* MobjPropertyList.cpp */; };
+		8A880C7318533C56005DE572 /* ModifyOffsetsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB71778510500ADDE06 /* ModifyOffsetsDialog.cpp */; };
+		8A880C7418533C56005DE572 /* MOPGProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB91778510500ADDE06 /* MOPGProperty.cpp */; };
+		8A880C7518533C56005DE572 /* NodeBuilders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */; };
+		8A880C7618533C56005DE572 /* NodesPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */; };
+		8A880C7718533C56005DE572 /* ObjectEdit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */; };
+		8A880C7818533C56005DE572 /* ObjectEditPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */; };
+		8A880C7918533C56005DE572 /* OGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBF1778510500ADDE06 /* OGLCanvas.cpp */; };
+		8A880C7A18533C56005DE572 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC11778510500ADDE06 /* OpenGL.cpp */; };
+		8A880C7B18533C56005DE572 /* PakArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC31778510500ADDE06 /* PakArchive.cpp */; };
+		8A880C7C18533C56005DE572 /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC51778510500ADDE06 /* Palette.cpp */; };
+		8A880C7D18533C56005DE572 /* PaletteCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC71778510500ADDE06 /* PaletteCanvas.cpp */; };
+		8A880C7E18533C56005DE572 /* PaletteChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC91778510500ADDE06 /* PaletteChooser.cpp */; };
+		8A880C7F18533C56005DE572 /* PaletteDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCB1778510500ADDE06 /* PaletteDialog.cpp */; };
+		8A880C8018533C56005DE572 /* PaletteEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCD1778510500ADDE06 /* PaletteEntryPanel.cpp */; };
+		8A880C8118533C56005DE572 /* PaletteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCF1778510500ADDE06 /* PaletteManager.cpp */; };
+		8A880C8218533C56005DE572 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD11778510500ADDE06 /* Parser.cpp */; };
+		8A880C8318533C56005DE572 /* PatchBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD31778510500ADDE06 /* PatchBrowser.cpp */; };
+		8A880C8418533C56005DE572 /* PatchTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD51778510500ADDE06 /* PatchTable.cpp */; };
+		8A880C8518533C56005DE572 /* PatchTablePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD81778510500ADDE06 /* PatchTablePanel.cpp */; };
+		8A880C8618533C56005DE572 /* PnamesEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDA1778510500ADDE06 /* PnamesEntryPanel.cpp */; };
+		8A880C8718533C56005DE572 /* PnamesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDC1778510500ADDE06 /* PnamesList.cpp */; };
+		8A880C8818533C56005DE572 /* PNGPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDE1778510500ADDE06 /* PNGPrefsPanel.cpp */; };
+		8A880C8918533C56005DE572 /* Polygon2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE01778510500ADDE06 /* Polygon2D.cpp */; };
+		8A880C8A18533C56005DE572 /* PreferencesDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE21778510500ADDE06 /* PreferencesDialog.cpp */; };
+		8A880C8B18533C56005DE572 /* Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE51778510500ADDE06 /* Property.cpp */; };
+		8A880C8C18533C56005DE572 /* PropertyEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE71778510500ADDE06 /* PropertyEditorPanel.cpp */; };
+		8A880C8D18533C56005DE572 /* PropertyList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE91778510500ADDE06 /* PropertyList.cpp */; };
+		8A880C8E18533C56005DE572 /* QuickTextureOverlay3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECEB1778510500ADDE06 /* QuickTextureOverlay3d.cpp */; };
+		8A880C8F18533C56005DE572 /* ResArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECED1778510500ADDE06 /* ResArchive.cpp */; };
+		8A880C9018533C56005DE572 /* ResourceArchiveChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909118533A3D00C1EF18 /* ResourceArchiveChooser.cpp */; };
+		8A880C9118533C56005DE572 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECEF1778510500ADDE06 /* ResourceManager.cpp */; };
+		8A880C9218533C56005DE572 /* RffArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF11778510500ADDE06 /* RffArchive.cpp */; };
+		8A880C9318533C56005DE572 /* SAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF31778510500ADDE06 /* SAction.cpp */; };
+		8A880C9418533C56005DE572 /* ScriptEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF51778510500ADDE06 /* ScriptEditorPanel.cpp */; };
+		8A880C9518533C56005DE572 /* SectorBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF71778510500ADDE06 /* SectorBuilder.cpp */; };
+		8A880C9618533C56005DE572 /* SectorInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF91778510500ADDE06 /* SectorInfoOverlay.cpp */; };
+		8A880C9718533C56005DE572 /* SectorSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFB1778510500ADDE06 /* SectorSpecialDialog.cpp */; };
+		8A880C9818533C56005DE572 /* SectorTextureOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFD1778510500ADDE06 /* SectorTextureOverlay.cpp */; };
+		8A880C9918533C56005DE572 /* SFileDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFF1778510500ADDE06 /* SFileDialog.cpp */; };
+		8A880C9A18533C56005DE572 /* SFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED011778510500ADDE06 /* SFont.cpp */; };
+		8A880C9B18533C56005DE572 /* ShapeDrawPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED031778510500ADDE06 /* ShapeDrawPanel.cpp */; };
+		8A880C9C18533C56005DE572 /* SIFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED091778510500ADDE06 /* SIFormat.cpp */; };
+		8A880C9D18533C56005DE572 /* SImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED0F1778510500ADDE06 /* SImage.cpp */; };
+		8A880C9E18533C56005DE572 /* SImageFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED111778510500ADDE06 /* SImageFormats.cpp */; };
+		8A880C9F18533C56005DE572 /* SLADEMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED121778510500ADDE06 /* SLADEMap.cpp */; };
+		8A880CA018533C56005DE572 /* SplashWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED141778510500ADDE06 /* SplashWindow.cpp */; };
+		8A880CA118533C56005DE572 /* SToolBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED161778510500ADDE06 /* SToolBar.cpp */; };
+		8A880CA218533C56005DE572 /* SToolBarButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED181778510500ADDE06 /* SToolBarButton.cpp */; };
+		8A880CA318533C56005DE572 /* STopWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1A1778510500ADDE06 /* STopWindow.cpp */; };
+		8A880CA418533C56005DE572 /* SwitchesEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1D1778510500ADDE06 /* SwitchesEntryPanel.cpp */; };
+		8A880CA518533C56005DE572 /* SwitchesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1F1778510500ADDE06 /* SwitchesList.cpp */; };
+		8A880CA618533C56005DE572 /* TarArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED211778510500ADDE06 /* TarArchive.cpp */; };
+		8A880CA718533C56005DE572 /* TextEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED231778510500ADDE06 /* TextEditor.cpp */; };
+		8A880CA818533C56005DE572 /* TextEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED251778510500ADDE06 /* TextEditorPrefsPanel.cpp */; };
+		8A880CA918533C56005DE572 /* TextEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED271778510500ADDE06 /* TextEntryPanel.cpp */; };
+		8A880CAA18533C56005DE572 /* TextLanguage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED291778510500ADDE06 /* TextLanguage.cpp */; };
+		8A880CAB18533C56005DE572 /* TextStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2B1778510500ADDE06 /* TextStyle.cpp */; };
+		8A880CAC18533C56005DE572 /* TextStylePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2D1778510500ADDE06 /* TextStylePrefsPanel.cpp */; };
+		8A880CAD18533C56005DE572 /* TextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2F1778510500ADDE06 /* TextureEditorPanel.cpp */; };
+		8A880CAE18533C56005DE572 /* TextureXEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED311778510500ADDE06 /* TextureXEditor.cpp */; };
+		8A880CAF18533C56005DE572 /* TextureXList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED331778510500ADDE06 /* TextureXList.cpp */; };
+		8A880CB018533C56005DE572 /* TextureXPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED351778510500ADDE06 /* TextureXPanel.cpp */; };
+		8A880CB118533C56005DE572 /* ThingInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED371778510500ADDE06 /* ThingInfoOverlay.cpp */; };
+		8A880CB218533C56005DE572 /* ThingType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED391778510500ADDE06 /* ThingType.cpp */; };
+		8A880CB318533C56005DE572 /* ThingTypeBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3B1778510500ADDE06 /* ThingTypeBrowser.cpp */; };
+		8A880CB418533C56005DE572 /* ThingTypeTreeView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3D1778510500ADDE06 /* ThingTypeTreeView.cpp */; };
+		8A880CB518533C56005DE572 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3F1778510500ADDE06 /* Tokenizer.cpp */; };
+		8A880CB618533C56005DE572 /* Translation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED411778510500ADDE06 /* Translation.cpp */; };
+		8A880CB718533C56005DE572 /* TranslationEditorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED431778510500ADDE06 /* TranslationEditorDialog.cpp */; };
+		8A880CB818533C56005DE572 /* Tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED451778510500ADDE06 /* Tree.cpp */; };
+		8A880CB918533C56005DE572 /* UDMFProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED471778510500ADDE06 /* UDMFProperty.cpp */; };
+		8A880CBA18533C56005DE572 /* UndoManagerHistoryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED491778510500ADDE06 /* UndoManagerHistoryPanel.cpp */; };
+		8A880CBB18533C56005DE572 /* UndoRedo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4B1778510500ADDE06 /* UndoRedo.cpp */; };
+		8A880CBC18533C56005DE572 /* VertexInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4D1778510500ADDE06 /* VertexInfoOverlay.cpp */; };
+		8A880CBD18533C56005DE572 /* VirtualListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4F1778510500ADDE06 /* VirtualListView.cpp */; };
+		8A880CBE18533C56005DE572 /* Wad2Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED511778510500ADDE06 /* Wad2Archive.cpp */; };
+		8A880CBF18533C56005DE572 /* WadArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED531778510500ADDE06 /* WadArchive.cpp */; };
+		8A880CC018533C56005DE572 /* WadJArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED551778510500ADDE06 /* WadJArchive.cpp */; };
+		8A880CC118533C56005DE572 /* WolfArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED571778510600ADDE06 /* WolfArchive.cpp */; };
+		8A880CC218533C56005DE572 /* WxStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED591778510600ADDE06 /* WxStuff.cpp */; };
+		8A880CC318533C56005DE572 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5B1778510600ADDE06 /* ZipArchive.cpp */; };
+		8A880CC418533C56005DE572 /* ZTextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5D1778510600ADDE06 /* ZTextureEditorPanel.cpp */; };
 		8AAD20691839282A00E1C89E /* libwx_baseu_net-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */; };
 		8AAD206A1839282A00E1C89E /* libwx_baseu_xml-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */; };
 		8AAD206B1839282A00E1C89E /* libwx_baseu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */; };
@@ -187,8 +379,6 @@
 		8AAD207C1839282B00E1C89E /* libwxscintilla-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */; };
 		8AAD207D1839282B00E1C89E /* libwxtiff-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */; };
 		8AAD208B18392A1300E1C89E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD208A18392A1300E1C89E /* QTKit.framework */; };
-		8AAD20D8183931E800E1C89E /* ObjectEdit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */; };
-		8AAD20D9183931E800E1C89E /* ObjectEditPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */; };
 		8AAD20DE183933B800E1C89E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20DD183933B800E1C89E /* WebKit.framework */; };
 		8AD18A56154A8A7000AB9C07 /* SLADE-osx.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8AD18A54154A8A7000AB9C07 /* SLADE-osx.icns */; };
 		8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18D9D154A8A9A00AB9C07 /* cl_aui_notebook_art.cpp */; };
@@ -197,192 +387,7 @@
 		8AD19050154A8A9B00AB9C07 /* ancientzip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4A154A8A9B00AB9C07 /* ancientzip.cpp */; };
 		8AD19051154A8A9B00AB9C07 /* files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4C154A8A9B00AB9C07 /* files.cpp */; };
 		8AD19052154A8A9B00AB9C07 /* m_alloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4E154A8A9B00AB9C07 /* m_alloc.cpp */; };
-		8AD5ED5F1778510600ADDE06 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */; };
-		8AD5ED601778510600ADDE06 /* ActionSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */; };
-		8AD5ED611778510600ADDE06 /* ActionSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */; };
-		8AD5ED621778510600ADDE06 /* ADatArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDB1778510400ADDE06 /* ADatArchive.cpp */; };
-		8AD5ED631778510600ADDE06 /* AdvancedPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDD1778510400ADDE06 /* AdvancedPrefsPanel.cpp */; };
-		8AD5ED641778510600ADDE06 /* AnimatedEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDF1778510400ADDE06 /* AnimatedEntryPanel.cpp */; };
-		8AD5ED651778510600ADDE06 /* AnimatedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE11778510400ADDE06 /* AnimatedList.cpp */; };
-		8AD5ED661778510600ADDE06 /* ANSICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE31778510400ADDE06 /* ANSICanvas.cpp */; };
-		8AD5ED671778510600ADDE06 /* ANSIEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE51778510400ADDE06 /* ANSIEntryPanel.cpp */; };
-		8AD5ED681778510600ADDE06 /* Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE71778510400ADDE06 /* Archive.cpp */; };
-		8AD5ED691778510600ADDE06 /* ArchiveEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE91778510400ADDE06 /* ArchiveEntry.cpp */; };
-		8AD5ED6A1778510600ADDE06 /* ArchiveEntryList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBEB1778510400ADDE06 /* ArchiveEntryList.cpp */; };
-		8AD5ED6B1778510600ADDE06 /* ArchiveManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBEE1778510400ADDE06 /* ArchiveManager.cpp */; };
-		8AD5ED6C1778510600ADDE06 /* ArchiveManagerPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF01778510400ADDE06 /* ArchiveManagerPanel.cpp */; };
-		8AD5ED6D1778510600ADDE06 /* ArchiveOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF21778510400ADDE06 /* ArchiveOperations.cpp */; };
-		8AD5ED6E1778510600ADDE06 /* ArchivePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF41778510400ADDE06 /* ArchivePanel.cpp */; };
-		8AD5ED6F1778510600ADDE06 /* AudioEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF81778510400ADDE06 /* AudioEntryPanel.cpp */; };
-		8AD5ED701778510600ADDE06 /* AudioPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFB1778510400ADDE06 /* AudioPrefsPanel.cpp */; };
-		8AD5ED711778510600ADDE06 /* BaseResourceArchivesPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFD1778510400ADDE06 /* BaseResourceArchivesPanel.cpp */; };
-		8AD5ED721778510600ADDE06 /* BaseResourceChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFF1778510400ADDE06 /* BaseResourceChooser.cpp */; };
-		8AD5ED731778510600ADDE06 /* BrowserCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC021778510400ADDE06 /* BrowserCanvas.cpp */; };
-		8AD5ED741778510600ADDE06 /* BrowserItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC041778510400ADDE06 /* BrowserItem.cpp */; };
-		8AD5ED751778510600ADDE06 /* BrowserWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC061778510400ADDE06 /* BrowserWindow.cpp */; };
-		8AD5ED761778510600ADDE06 /* BSPArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC081778510400ADDE06 /* BSPArchive.cpp */; };
-		8AD5ED771778510600ADDE06 /* BZip2Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0A1778510400ADDE06 /* BZip2Archive.cpp */; };
-		8AD5ED781778510600ADDE06 /* CIEDeltaEquations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0C1778510400ADDE06 /* CIEDeltaEquations.cpp */; };
-		8AD5ED791778510600ADDE06 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0E1778510400ADDE06 /* Clipboard.cpp */; };
 		8AD5ED7A1778510600ADDE06 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8AD5EC101778510400ADDE06 /* CMakeLists.txt */; };
-		8AD5ED7B1778510600ADDE06 /* CodePages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC111778510400ADDE06 /* CodePages.cpp */; };
-		8AD5ED7C1778510600ADDE06 /* ColorimetryPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC131778510400ADDE06 /* ColorimetryPrefsPanel.cpp */; };
-		8AD5ED7D1778510600ADDE06 /* ColourBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC151778510400ADDE06 /* ColourBox.cpp */; };
-		8AD5ED7E1778510600ADDE06 /* ColourConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC171778510400ADDE06 /* ColourConfiguration.cpp */; };
-		8AD5ED7F1778510600ADDE06 /* ColourPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC191778510400ADDE06 /* ColourPrefsPanel.cpp */; };
-		8AD5ED801778510600ADDE06 /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1B1778510400ADDE06 /* Compression.cpp */; };
-		8AD5ED811778510600ADDE06 /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1D1778510400ADDE06 /* Console.cpp */; };
-		8AD5ED821778510600ADDE06 /* ConsolePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC201778510400ADDE06 /* ConsolePanel.cpp */; };
-		8AD5ED831778510600ADDE06 /* Conversions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC221778510400ADDE06 /* Conversions.cpp */; };
-		8AD5ED841778510600ADDE06 /* CTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC241778510400ADDE06 /* CTexture.cpp */; };
-		8AD5ED851778510600ADDE06 /* CTextureCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC261778510400ADDE06 /* CTextureCanvas.cpp */; };
-		8AD5ED861778510600ADDE06 /* CVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC281778510400ADDE06 /* CVar.cpp */; };
-		8AD5ED871778510600ADDE06 /* DatArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2A1778510400ADDE06 /* DatArchive.cpp */; };
-		8AD5ED881778510600ADDE06 /* DefaultEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2D1778510400ADDE06 /* DefaultEntryPanel.cpp */; };
-		8AD5ED891778510600ADDE06 /* DiskArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2F1778510400ADDE06 /* DiskArchive.cpp */; };
-		8AD5ED8A1778510600ADDE06 /* DockPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC311778510400ADDE06 /* DockPanel.cpp */; };
-		8AD5ED8B1778510600ADDE06 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC331778510400ADDE06 /* Drawing.cpp */; };
-		8AD5ED8C1778510600ADDE06 /* EditingPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC351778510400ADDE06 /* EditingPrefsPanel.cpp */; };
-		8AD5ED8D1778510600ADDE06 /* EntryDataFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */; };
-		8AD5ED8E1778510600ADDE06 /* EntryOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC391778510400ADDE06 /* EntryOperations.cpp */; };
-		8AD5ED8F1778510600ADDE06 /* EntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3B1778510400ADDE06 /* EntryPanel.cpp */; };
-		8AD5ED901778510600ADDE06 /* EntryType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3D1778510400ADDE06 /* EntryType.cpp */; };
-		8AD5ED911778510600ADDE06 /* ExtMessageDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3F1778510400ADDE06 /* ExtMessageDialog.cpp */; };
-		8AD5ED921778510600ADDE06 /* FileMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC411778510400ADDE06 /* FileMonitor.cpp */; };
-		8AD5ED931778510600ADDE06 /* GameConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC431778510400ADDE06 /* GameConfiguration.cpp */; };
-		8AD5ED941778510600ADDE06 /* GeneralPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC451778510400ADDE06 /* GeneralPrefsPanel.cpp */; };
-		8AD5ED951778510600ADDE06 /* GenLineSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC471778510400ADDE06 /* GenLineSpecial.cpp */; };
-		8AD5ED961778510600ADDE06 /* GenLineSpecialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC491778510400ADDE06 /* GenLineSpecialPanel.cpp */; };
-		8AD5ED971778510600ADDE06 /* GfxCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4B1778510400ADDE06 /* GfxCanvas.cpp */; };
-		8AD5ED981778510600ADDE06 /* GfxConvDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4D1778510400ADDE06 /* GfxConvDialog.cpp */; };
-		8AD5ED991778510600ADDE06 /* GfxEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4F1778510400ADDE06 /* GfxEntryPanel.cpp */; };
-		8AD5ED9A1778510600ADDE06 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC511778510400ADDE06 /* GLTexture.cpp */; };
-		8AD5ED9B1778510600ADDE06 /* GobArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC531778510400ADDE06 /* GobArchive.cpp */; };
-		8AD5ED9C1778510600ADDE06 /* GraphicsPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC551778510400ADDE06 /* GraphicsPrefsPanel.cpp */; };
-		8AD5ED9D1778510600ADDE06 /* GrpArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC571778510400ADDE06 /* GrpArchive.cpp */; };
-		8AD5ED9E1778510600ADDE06 /* GZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC591778510400ADDE06 /* GZipArchive.cpp */; };
-		8AD5ED9F1778510600ADDE06 /* HexEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5B1778510400ADDE06 /* HexEditorPanel.cpp */; };
-		8AD5EDA01778510600ADDE06 /* HexEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5D1778510400ADDE06 /* HexEntryPanel.cpp */; };
-		8AD5EDA11778510600ADDE06 /* HogArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5F1778510400ADDE06 /* HogArchive.cpp */; };
-		8AD5EDA21778510600ADDE06 /* Icons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC611778510400ADDE06 /* Icons.cpp */; };
-		8AD5EDA31778510600ADDE06 /* InfoOverlay3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC641778510400ADDE06 /* InfoOverlay3d.cpp */; };
-		8AD5EDA41778510600ADDE06 /* InputPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC661778510400ADDE06 /* InputPrefsPanel.cpp */; };
-		8AD5EDA51778510600ADDE06 /* InterfacePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC681778510400ADDE06 /* InterfacePrefsPanel.cpp */; };
-		8AD5EDA61778510600ADDE06 /* KeyBind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6A1778510400ADDE06 /* KeyBind.cpp */; };
-		8AD5EDA71778510600ADDE06 /* LfdArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6C1778510400ADDE06 /* LfdArchive.cpp */; };
-		8AD5EDA81778510600ADDE06 /* LibArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6E1778510400ADDE06 /* LibArchive.cpp */; };
-		8AD5EDA91778510600ADDE06 /* LineInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC701778510400ADDE06 /* LineInfoOverlay.cpp */; };
-		8AD5EDAA1778510600ADDE06 /* LineTextureOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC721778510400ADDE06 /* LineTextureOverlay.cpp */; };
-		8AD5EDAB1778510600ADDE06 /* ListenerAnnouncer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC741778510400ADDE06 /* ListenerAnnouncer.cpp */; };
-		8AD5EDAC1778510600ADDE06 /* ListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC761778510400ADDE06 /* ListView.cpp */; };
-		8AD5EDAD1778510600ADDE06 /* Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC781778510400ADDE06 /* Lua.cpp */; };
-		8AD5EDAE1778510600ADDE06 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7C1778510400ADDE06 /* MainApp.cpp */; };
-		8AD5EDAF1778510600ADDE06 /* MainWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */; };
-		8AD5EDB01778510600ADDE06 /* Map3DPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC801778510500ADDE06 /* Map3DPrefsPanel.cpp */; };
-		8AD5EDB11778510600ADDE06 /* MapCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC821778510500ADDE06 /* MapCanvas.cpp */; };
-		8AD5EDB21778510600ADDE06 /* MapDisplayPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */; };
-		8AD5EDB31778510600ADDE06 /* MapEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC861778510500ADDE06 /* MapEditor.cpp */; };
-		8AD5EDB41778510600ADDE06 /* MapEditorConfigDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC881778510500ADDE06 /* MapEditorConfigDialog.cpp */; };
-		8AD5EDB51778510600ADDE06 /* MapEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8A1778510500ADDE06 /* MapEditorPrefsPanel.cpp */; };
-		8AD5EDB61778510600ADDE06 /* MapEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8C1778510500ADDE06 /* MapEditorWindow.cpp */; };
-		8AD5EDB71778510600ADDE06 /* MapEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8E1778510500ADDE06 /* MapEntryPanel.cpp */; };
-		8AD5EDB81778510600ADDE06 /* MapLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC901778510500ADDE06 /* MapLine.cpp */; };
-		8AD5EDB91778510600ADDE06 /* MapObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC921778510500ADDE06 /* MapObject.cpp */; };
-		8AD5EDBA1778510600ADDE06 /* MapObjectPropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC941778510500ADDE06 /* MapObjectPropsPanel.cpp */; };
-		8AD5EDBB1778510600ADDE06 /* MapPreviewCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC961778510500ADDE06 /* MapPreviewCanvas.cpp */; };
-		8AD5EDBC1778510600ADDE06 /* MapRenderer2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC981778510500ADDE06 /* MapRenderer2D.cpp */; };
-		8AD5EDBD1778510600ADDE06 /* MapRenderer3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9A1778510500ADDE06 /* MapRenderer3D.cpp */; };
-		8AD5EDBE1778510600ADDE06 /* MapReplaceDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9C1778510500ADDE06 /* MapReplaceDialog.cpp */; };
-		8AD5EDBF1778510600ADDE06 /* MapSector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC9E1778510500ADDE06 /* MapSector.cpp */; };
-		8AD5EDC01778510600ADDE06 /* MapSide.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA01778510500ADDE06 /* MapSide.cpp */; };
-		8AD5EDC11778510600ADDE06 /* MapTextureBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA21778510500ADDE06 /* MapTextureBrowser.cpp */; };
-		8AD5EDC21778510600ADDE06 /* MapTextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA41778510500ADDE06 /* MapTextureManager.cpp */; };
-		8AD5EDC31778510600ADDE06 /* MapThing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA61778510500ADDE06 /* MapThing.cpp */; };
-		8AD5EDC41778510600ADDE06 /* MapVertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECA81778510500ADDE06 /* MapVertex.cpp */; };
-		8AD5EDC51778510600ADDE06 /* MathStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAA1778510500ADDE06 /* MathStuff.cpp */; };
-		8AD5EDC61778510600ADDE06 /* MCAnimations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAC1778510500ADDE06 /* MCAnimations.cpp */; };
-		8AD5EDC71778510600ADDE06 /* MemChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECAF1778510500ADDE06 /* MemChunk.cpp */; };
-		8AD5EDC81778510600ADDE06 /* MIDIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB11778510500ADDE06 /* MIDIPlayer.cpp */; };
-		8AD5EDC91778510600ADDE06 /* Misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB31778510500ADDE06 /* Misc.cpp */; };
-		8AD5EDCA1778510600ADDE06 /* ModifyOffsetsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB71778510500ADDE06 /* ModifyOffsetsDialog.cpp */; };
-		8AD5EDCB1778510600ADDE06 /* MOPGProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB91778510500ADDE06 /* MOPGProperty.cpp */; };
-		8AD5EDCC1778510600ADDE06 /* NodeBuilders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */; };
-		8AD5EDCD1778510600ADDE06 /* NodesPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */; };
-		8AD5EDCE1778510600ADDE06 /* OGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBF1778510500ADDE06 /* OGLCanvas.cpp */; };
-		8AD5EDCF1778510600ADDE06 /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC11778510500ADDE06 /* OpenGL.cpp */; };
-		8AD5EDD01778510600ADDE06 /* PakArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC31778510500ADDE06 /* PakArchive.cpp */; };
-		8AD5EDD11778510600ADDE06 /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC51778510500ADDE06 /* Palette.cpp */; };
-		8AD5EDD21778510600ADDE06 /* PaletteCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC71778510500ADDE06 /* PaletteCanvas.cpp */; };
-		8AD5EDD31778510600ADDE06 /* PaletteChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECC91778510500ADDE06 /* PaletteChooser.cpp */; };
-		8AD5EDD41778510600ADDE06 /* PaletteDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCB1778510500ADDE06 /* PaletteDialog.cpp */; };
-		8AD5EDD51778510600ADDE06 /* PaletteEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCD1778510500ADDE06 /* PaletteEntryPanel.cpp */; };
-		8AD5EDD61778510600ADDE06 /* PaletteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECCF1778510500ADDE06 /* PaletteManager.cpp */; };
-		8AD5EDD71778510600ADDE06 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD11778510500ADDE06 /* Parser.cpp */; };
-		8AD5EDD81778510600ADDE06 /* PatchBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD31778510500ADDE06 /* PatchBrowser.cpp */; };
-		8AD5EDD91778510600ADDE06 /* PatchTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD51778510500ADDE06 /* PatchTable.cpp */; };
-		8AD5EDDA1778510600ADDE06 /* PatchTablePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD81778510500ADDE06 /* PatchTablePanel.cpp */; };
-		8AD5EDDB1778510600ADDE06 /* PnamesEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDA1778510500ADDE06 /* PnamesEntryPanel.cpp */; };
-		8AD5EDDC1778510600ADDE06 /* PnamesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDC1778510500ADDE06 /* PnamesList.cpp */; };
-		8AD5EDDD1778510600ADDE06 /* PNGPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDE1778510500ADDE06 /* PNGPrefsPanel.cpp */; };
-		8AD5EDDE1778510600ADDE06 /* Polygon2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE01778510500ADDE06 /* Polygon2D.cpp */; };
-		8AD5EDDF1778510600ADDE06 /* PreferencesDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE21778510500ADDE06 /* PreferencesDialog.cpp */; };
-		8AD5EDE01778510600ADDE06 /* Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE51778510500ADDE06 /* Property.cpp */; };
-		8AD5EDE11778510600ADDE06 /* PropertyEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE71778510500ADDE06 /* PropertyEditorPanel.cpp */; };
-		8AD5EDE21778510600ADDE06 /* PropertyList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE91778510500ADDE06 /* PropertyList.cpp */; };
-		8AD5EDE31778510600ADDE06 /* QuickTextureOverlay3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECEB1778510500ADDE06 /* QuickTextureOverlay3d.cpp */; };
-		8AD5EDE41778510600ADDE06 /* ResArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECED1778510500ADDE06 /* ResArchive.cpp */; };
-		8AD5EDE51778510600ADDE06 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECEF1778510500ADDE06 /* ResourceManager.cpp */; };
-		8AD5EDE61778510600ADDE06 /* RffArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF11778510500ADDE06 /* RffArchive.cpp */; };
-		8AD5EDE71778510600ADDE06 /* SAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF31778510500ADDE06 /* SAction.cpp */; };
-		8AD5EDE81778510600ADDE06 /* ScriptEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF51778510500ADDE06 /* ScriptEditorPanel.cpp */; };
-		8AD5EDE91778510600ADDE06 /* SectorBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF71778510500ADDE06 /* SectorBuilder.cpp */; };
-		8AD5EDEA1778510600ADDE06 /* SectorInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECF91778510500ADDE06 /* SectorInfoOverlay.cpp */; };
-		8AD5EDEB1778510600ADDE06 /* SectorSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFB1778510500ADDE06 /* SectorSpecialDialog.cpp */; };
-		8AD5EDEC1778510600ADDE06 /* SectorTextureOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFD1778510500ADDE06 /* SectorTextureOverlay.cpp */; };
-		8AD5EDED1778510600ADDE06 /* SFileDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECFF1778510500ADDE06 /* SFileDialog.cpp */; };
-		8AD5EDEE1778510600ADDE06 /* SFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED011778510500ADDE06 /* SFont.cpp */; };
-		8AD5EDEF1778510600ADDE06 /* ShapeDrawPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED031778510500ADDE06 /* ShapeDrawPanel.cpp */; };
-		8AD5EDF01778510600ADDE06 /* SIFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED091778510500ADDE06 /* SIFormat.cpp */; };
-		8AD5EDF11778510600ADDE06 /* SImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED0F1778510500ADDE06 /* SImage.cpp */; };
-		8AD5EDF21778510600ADDE06 /* SImageFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED111778510500ADDE06 /* SImageFormats.cpp */; };
-		8AD5EDF31778510600ADDE06 /* SLADEMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED121778510500ADDE06 /* SLADEMap.cpp */; };
-		8AD5EDF41778510600ADDE06 /* SplashWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED141778510500ADDE06 /* SplashWindow.cpp */; };
-		8AD5EDF51778510600ADDE06 /* SToolBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED161778510500ADDE06 /* SToolBar.cpp */; };
-		8AD5EDF61778510600ADDE06 /* SToolBarButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED181778510500ADDE06 /* SToolBarButton.cpp */; };
-		8AD5EDF71778510600ADDE06 /* STopWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1A1778510500ADDE06 /* STopWindow.cpp */; };
-		8AD5EDF81778510600ADDE06 /* SwitchesEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1D1778510500ADDE06 /* SwitchesEntryPanel.cpp */; };
-		8AD5EDF91778510600ADDE06 /* SwitchesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1F1778510500ADDE06 /* SwitchesList.cpp */; };
-		8AD5EDFA1778510600ADDE06 /* TarArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED211778510500ADDE06 /* TarArchive.cpp */; };
-		8AD5EDFB1778510600ADDE06 /* TextEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED231778510500ADDE06 /* TextEditor.cpp */; };
-		8AD5EDFC1778510600ADDE06 /* TextEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED251778510500ADDE06 /* TextEditorPrefsPanel.cpp */; };
-		8AD5EDFD1778510600ADDE06 /* TextEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED271778510500ADDE06 /* TextEntryPanel.cpp */; };
-		8AD5EDFE1778510600ADDE06 /* TextLanguage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED291778510500ADDE06 /* TextLanguage.cpp */; };
-		8AD5EDFF1778510600ADDE06 /* TextStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2B1778510500ADDE06 /* TextStyle.cpp */; };
-		8AD5EE001778510600ADDE06 /* TextStylePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2D1778510500ADDE06 /* TextStylePrefsPanel.cpp */; };
-		8AD5EE011778510600ADDE06 /* TextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2F1778510500ADDE06 /* TextureEditorPanel.cpp */; };
-		8AD5EE021778510600ADDE06 /* TextureXEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED311778510500ADDE06 /* TextureXEditor.cpp */; };
-		8AD5EE031778510600ADDE06 /* TextureXList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED331778510500ADDE06 /* TextureXList.cpp */; };
-		8AD5EE041778510600ADDE06 /* TextureXPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED351778510500ADDE06 /* TextureXPanel.cpp */; };
-		8AD5EE051778510600ADDE06 /* ThingInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED371778510500ADDE06 /* ThingInfoOverlay.cpp */; };
-		8AD5EE061778510600ADDE06 /* ThingType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED391778510500ADDE06 /* ThingType.cpp */; };
-		8AD5EE071778510600ADDE06 /* ThingTypeBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3B1778510500ADDE06 /* ThingTypeBrowser.cpp */; };
-		8AD5EE081778510600ADDE06 /* ThingTypeTreeView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3D1778510500ADDE06 /* ThingTypeTreeView.cpp */; };
-		8AD5EE091778510600ADDE06 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED3F1778510500ADDE06 /* Tokenizer.cpp */; };
-		8AD5EE0A1778510600ADDE06 /* Translation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED411778510500ADDE06 /* Translation.cpp */; };
-		8AD5EE0B1778510600ADDE06 /* TranslationEditorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED431778510500ADDE06 /* TranslationEditorDialog.cpp */; };
-		8AD5EE0C1778510600ADDE06 /* Tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED451778510500ADDE06 /* Tree.cpp */; };
-		8AD5EE0D1778510600ADDE06 /* UDMFProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED471778510500ADDE06 /* UDMFProperty.cpp */; };
-		8AD5EE0E1778510600ADDE06 /* UndoManagerHistoryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED491778510500ADDE06 /* UndoManagerHistoryPanel.cpp */; };
-		8AD5EE0F1778510600ADDE06 /* UndoRedo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4B1778510500ADDE06 /* UndoRedo.cpp */; };
-		8AD5EE101778510600ADDE06 /* VertexInfoOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4D1778510500ADDE06 /* VertexInfoOverlay.cpp */; };
-		8AD5EE111778510600ADDE06 /* VirtualListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED4F1778510500ADDE06 /* VirtualListView.cpp */; };
-		8AD5EE121778510600ADDE06 /* Wad2Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED511778510500ADDE06 /* Wad2Archive.cpp */; };
-		8AD5EE131778510600ADDE06 /* WadArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED531778510500ADDE06 /* WadArchive.cpp */; };
-		8AD5EE141778510600ADDE06 /* WadJArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED551778510500ADDE06 /* WadJArchive.cpp */; };
-		8AD5EE151778510600ADDE06 /* WolfArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED571778510600ADDE06 /* WolfArchive.cpp */; };
-		8AD5EE161778510600ADDE06 /* WxStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED591778510600ADDE06 /* WxStuff.cpp */; };
-		8AD5EE171778510600ADDE06 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5B1778510600ADDE06 /* ZipArchive.cpp */; };
-		8AD5EE181778510600ADDE06 /* ZTextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5D1778510600ADDE06 /* ZTextureEditorPanel.cpp */; };
 		8AE37010154D53AE00D88A7F /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE3700F154D53AE00D88A7F /* libsndfile.a */; };
 		8AE371E0154D56D100D88A7F /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371DF154D56D100D88A7F /* libintl.a */; };
 		8AE371E6154D580600D88A7F /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371E5154D580600D88A7F /* libvorbis.a */; };
@@ -550,6 +555,16 @@
 		8A5692FB154EE501000DF3CE /* sndmix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sndmix.cpp; sourceTree = "<group>"; };
 		8A5692FC154EE501000DF3CE /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
 		8A5692FD154EE501000DF3CE /* tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tables.h; sourceTree = "<group>"; };
+		8A60908B18533A3D00C1EF18 /* Executables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Executables.cpp; sourceTree = "<group>"; };
+		8A60908C18533A3D00C1EF18 /* Executables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Executables.h; sourceTree = "<group>"; };
+		8A60908D18533A3D00C1EF18 /* MapChecks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapChecks.cpp; sourceTree = "<group>"; };
+		8A60908E18533A3D00C1EF18 /* MapChecks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapChecks.h; sourceTree = "<group>"; };
+		8A60908F18533A3D00C1EF18 /* MobjPropertyList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MobjPropertyList.cpp; sourceTree = "<group>"; };
+		8A60909018533A3D00C1EF18 /* MobjPropertyList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobjPropertyList.h; sourceTree = "<group>"; };
+		8A60909118533A3D00C1EF18 /* ResourceArchiveChooser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceArchiveChooser.cpp; sourceTree = "<group>"; };
+		8A60909218533A3D00C1EF18 /* ResourceArchiveChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceArchiveChooser.h; sourceTree = "<group>"; };
+		8A60909718533A4600C1EF18 /* RunDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RunDialog.cpp; sourceTree = "<group>"; };
+		8A60909818533A4600C1EF18 /* RunDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunDialog.h; sourceTree = "<group>"; };
 		8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_net-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_net-3.0.a"; sourceTree = "<group>"; };
 		8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_xml-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_xml-3.0.a"; sourceTree = "<group>"; };
 		8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu-3.0.a"; sourceTree = "<group>"; };
@@ -1164,6 +1179,7 @@
 			);
 			name = slade;
 			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 		29B97315FDCFA39411CA2CEA /* Sources */ = {
 			isa = PBXGroup;
@@ -1283,6 +1299,8 @@
 				8AD5EC3C1778510400ADDE06 /* EntryPanel.h */,
 				8AD5EC3D1778510400ADDE06 /* EntryType.cpp */,
 				8AD5EC3E1778510400ADDE06 /* EntryType.h */,
+				8A60908B18533A3D00C1EF18 /* Executables.cpp */,
+				8A60908C18533A3D00C1EF18 /* Executables.h */,
 				8AD5EC3F1778510400ADDE06 /* ExtMessageDialog.cpp */,
 				8AD5EC401778510400ADDE06 /* ExtMessageDialog.h */,
 				8AD5EC411778510400ADDE06 /* FileMonitor.cpp */,
@@ -1352,6 +1370,8 @@
 				8AD5EC811778510500ADDE06 /* Map3DPrefsPanel.h */,
 				8AD5EC821778510500ADDE06 /* MapCanvas.cpp */,
 				8AD5EC831778510500ADDE06 /* MapCanvas.h */,
+				8A60908D18533A3D00C1EF18 /* MapChecks.cpp */,
+				8A60908E18533A3D00C1EF18 /* MapChecks.h */,
 				8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */,
 				8AD5EC851778510500ADDE06 /* MapDisplayPrefsPanel.h */,
 				8AD5EC861778510500ADDE06 /* MapEditor.cpp */,
@@ -1402,6 +1422,8 @@
 				8AD5ECB31778510500ADDE06 /* Misc.cpp */,
 				8AD5ECB41778510500ADDE06 /* Misc.h */,
 				8AD5ECB51778510500ADDE06 /* MiscFormats.h */,
+				8A60908F18533A3D00C1EF18 /* MobjPropertyList.cpp */,
+				8A60909018533A3D00C1EF18 /* MobjPropertyList.h */,
 				8AD5ECB61778510500ADDE06 /* ModelFormats.h */,
 				8AD5ECB71778510500ADDE06 /* ModifyOffsetsDialog.cpp */,
 				8AD5ECB81778510500ADDE06 /* ModifyOffsetsDialog.h */,
@@ -1463,6 +1485,8 @@
 				8AD5ECEC1778510500ADDE06 /* QuickTextureOverlay3d.h */,
 				8AD5ECED1778510500ADDE06 /* ResArchive.cpp */,
 				8AD5ECEE1778510500ADDE06 /* ResArchive.h */,
+				8A60909118533A3D00C1EF18 /* ResourceArchiveChooser.cpp */,
+				8A60909218533A3D00C1EF18 /* ResourceArchiveChooser.h */,
 				8AD5ECEF1778510500ADDE06 /* ResourceManager.cpp */,
 				8AD5ECF01778510500ADDE06 /* ResourceManager.h */,
 				8AD5ECF11778510500ADDE06 /* RffArchive.cpp */,
@@ -1713,6 +1737,8 @@
 			isa = PBXGroup;
 			children = (
 				8A40785B1840F29300843BD8 /* SetupWizard */,
+				8A60909718533A4600C1EF18 /* RunDialog.cpp */,
+				8A60909818533A4600C1EF18 /* RunDialog.h */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -2227,202 +2253,207 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */,
+				8A4078651840F29300843BD8 /* BaseResourceWizardPage.cpp in Sources */,
+				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
+				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
+				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
+				8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */,
 				8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */,
 				8AD1900E154A8A9B00AB9C07 /* sfMod.cpp in Sources */,
 				8AD19050154A8A9B00AB9C07 /* ancientzip.cpp in Sources */,
 				8AD19051154A8A9B00AB9C07 /* files.cpp in Sources */,
 				8AD19052154A8A9B00AB9C07 /* m_alloc.cpp in Sources */,
-				8AD5ED5F1778510600ADDE06 /* ACSPrefsPanel.cpp in Sources */,
-				8AD5ED601778510600ADDE06 /* ActionSpecial.cpp in Sources */,
-				8AD5ED611778510600ADDE06 /* ActionSpecialDialog.cpp in Sources */,
-				8AD5ED621778510600ADDE06 /* ADatArchive.cpp in Sources */,
-				8AD5ED631778510600ADDE06 /* AdvancedPrefsPanel.cpp in Sources */,
-				8AD5ED641778510600ADDE06 /* AnimatedEntryPanel.cpp in Sources */,
-				8AD5ED651778510600ADDE06 /* AnimatedList.cpp in Sources */,
-				8AD5ED661778510600ADDE06 /* ANSICanvas.cpp in Sources */,
-				8AD5ED671778510600ADDE06 /* ANSIEntryPanel.cpp in Sources */,
-				8AD5ED681778510600ADDE06 /* Archive.cpp in Sources */,
-				8AD5ED691778510600ADDE06 /* ArchiveEntry.cpp in Sources */,
-				8AD5ED6A1778510600ADDE06 /* ArchiveEntryList.cpp in Sources */,
-				8AD5ED6B1778510600ADDE06 /* ArchiveManager.cpp in Sources */,
-				8AD5ED6C1778510600ADDE06 /* ArchiveManagerPanel.cpp in Sources */,
-				8AD5ED6D1778510600ADDE06 /* ArchiveOperations.cpp in Sources */,
-				8AD5ED6E1778510600ADDE06 /* ArchivePanel.cpp in Sources */,
-				8AD5ED6F1778510600ADDE06 /* AudioEntryPanel.cpp in Sources */,
-				8AD5ED701778510600ADDE06 /* AudioPrefsPanel.cpp in Sources */,
-				8AD5ED711778510600ADDE06 /* BaseResourceArchivesPanel.cpp in Sources */,
-				8AD5ED721778510600ADDE06 /* BaseResourceChooser.cpp in Sources */,
-				8AD5ED731778510600ADDE06 /* BrowserCanvas.cpp in Sources */,
-				8AD5ED741778510600ADDE06 /* BrowserItem.cpp in Sources */,
-				8AD5ED751778510600ADDE06 /* BrowserWindow.cpp in Sources */,
-				8AD5ED761778510600ADDE06 /* BSPArchive.cpp in Sources */,
-				8AD5ED771778510600ADDE06 /* BZip2Archive.cpp in Sources */,
-				8AD5ED781778510600ADDE06 /* CIEDeltaEquations.cpp in Sources */,
-				8AD5ED791778510600ADDE06 /* Clipboard.cpp in Sources */,
-				8AD5ED7B1778510600ADDE06 /* CodePages.cpp in Sources */,
-				8AD5ED7C1778510600ADDE06 /* ColorimetryPrefsPanel.cpp in Sources */,
-				8AD5ED7D1778510600ADDE06 /* ColourBox.cpp in Sources */,
-				8AD5ED7E1778510600ADDE06 /* ColourConfiguration.cpp in Sources */,
-				8AD5ED7F1778510600ADDE06 /* ColourPrefsPanel.cpp in Sources */,
-				8AD5ED801778510600ADDE06 /* Compression.cpp in Sources */,
-				8AD5ED811778510600ADDE06 /* Console.cpp in Sources */,
-				8AD5ED821778510600ADDE06 /* ConsolePanel.cpp in Sources */,
-				8AD5ED831778510600ADDE06 /* Conversions.cpp in Sources */,
-				8AD5ED841778510600ADDE06 /* CTexture.cpp in Sources */,
-				8AD5ED851778510600ADDE06 /* CTextureCanvas.cpp in Sources */,
-				8AD5ED861778510600ADDE06 /* CVar.cpp in Sources */,
-				8AD5ED871778510600ADDE06 /* DatArchive.cpp in Sources */,
-				8AD5ED881778510600ADDE06 /* DefaultEntryPanel.cpp in Sources */,
-				8AD5ED891778510600ADDE06 /* DiskArchive.cpp in Sources */,
-				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
-				8AD5ED8A1778510600ADDE06 /* DockPanel.cpp in Sources */,
-				8AD5ED8B1778510600ADDE06 /* Drawing.cpp in Sources */,
-				8AD5ED8C1778510600ADDE06 /* EditingPrefsPanel.cpp in Sources */,
-				8AD5ED8D1778510600ADDE06 /* EntryDataFormat.cpp in Sources */,
-				8AD5ED8E1778510600ADDE06 /* EntryOperations.cpp in Sources */,
-				8AD5ED8F1778510600ADDE06 /* EntryPanel.cpp in Sources */,
-				8AD5ED901778510600ADDE06 /* EntryType.cpp in Sources */,
-				8AD5ED911778510600ADDE06 /* ExtMessageDialog.cpp in Sources */,
-				8AD5ED921778510600ADDE06 /* FileMonitor.cpp in Sources */,
-				8AD5ED931778510600ADDE06 /* GameConfiguration.cpp in Sources */,
-				8AD5ED941778510600ADDE06 /* GeneralPrefsPanel.cpp in Sources */,
-				8AD5ED951778510600ADDE06 /* GenLineSpecial.cpp in Sources */,
-				8AD5ED961778510600ADDE06 /* GenLineSpecialPanel.cpp in Sources */,
-				8AD5ED971778510600ADDE06 /* GfxCanvas.cpp in Sources */,
-				8AD5ED981778510600ADDE06 /* GfxConvDialog.cpp in Sources */,
-				8AD5ED991778510600ADDE06 /* GfxEntryPanel.cpp in Sources */,
-				8AD5ED9A1778510600ADDE06 /* GLTexture.cpp in Sources */,
-				8AD5ED9B1778510600ADDE06 /* GobArchive.cpp in Sources */,
-				8AD5ED9C1778510600ADDE06 /* GraphicsPrefsPanel.cpp in Sources */,
-				8AD5ED9D1778510600ADDE06 /* GrpArchive.cpp in Sources */,
-				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
-				8AD5ED9E1778510600ADDE06 /* GZipArchive.cpp in Sources */,
-				8AD5ED9F1778510600ADDE06 /* HexEditorPanel.cpp in Sources */,
-				8AD5EDA01778510600ADDE06 /* HexEntryPanel.cpp in Sources */,
-				8AD5EDA11778510600ADDE06 /* HogArchive.cpp in Sources */,
-				8AD5EDA21778510600ADDE06 /* Icons.cpp in Sources */,
-				8AD5EDA31778510600ADDE06 /* InfoOverlay3d.cpp in Sources */,
-				8AD5EDA41778510600ADDE06 /* InputPrefsPanel.cpp in Sources */,
-				8AD5EDA51778510600ADDE06 /* InterfacePrefsPanel.cpp in Sources */,
-				8AD5EDA61778510600ADDE06 /* KeyBind.cpp in Sources */,
-				8AD5EDA71778510600ADDE06 /* LfdArchive.cpp in Sources */,
-				8AD5EDA81778510600ADDE06 /* LibArchive.cpp in Sources */,
-				8AD5EDA91778510600ADDE06 /* LineInfoOverlay.cpp in Sources */,
-				8AD5EDAA1778510600ADDE06 /* LineTextureOverlay.cpp in Sources */,
-				8AD5EDAB1778510600ADDE06 /* ListenerAnnouncer.cpp in Sources */,
-				8AD5EDAC1778510600ADDE06 /* ListView.cpp in Sources */,
-				8AD5EDAD1778510600ADDE06 /* Lua.cpp in Sources */,
-				8AD5EDAE1778510600ADDE06 /* MainApp.cpp in Sources */,
-				8AD5EDAF1778510600ADDE06 /* MainWindow.cpp in Sources */,
-				8AD5EDB01778510600ADDE06 /* Map3DPrefsPanel.cpp in Sources */,
-				8AD5EDB11778510600ADDE06 /* MapCanvas.cpp in Sources */,
-				8AD5EDB21778510600ADDE06 /* MapDisplayPrefsPanel.cpp in Sources */,
-				8AD5EDB31778510600ADDE06 /* MapEditor.cpp in Sources */,
-				8AD5EDB41778510600ADDE06 /* MapEditorConfigDialog.cpp in Sources */,
-				8AD5EDB51778510600ADDE06 /* MapEditorPrefsPanel.cpp in Sources */,
-				8AD5EDB61778510600ADDE06 /* MapEditorWindow.cpp in Sources */,
-				8AD5EDB71778510600ADDE06 /* MapEntryPanel.cpp in Sources */,
-				8AD5EDB81778510600ADDE06 /* MapLine.cpp in Sources */,
-				8AD5EDB91778510600ADDE06 /* MapObject.cpp in Sources */,
-				8AD5EDBA1778510600ADDE06 /* MapObjectPropsPanel.cpp in Sources */,
-				8AD5EDBB1778510600ADDE06 /* MapPreviewCanvas.cpp in Sources */,
-				8AD5EDBC1778510600ADDE06 /* MapRenderer2D.cpp in Sources */,
-				8AD5EDBD1778510600ADDE06 /* MapRenderer3D.cpp in Sources */,
-				8AD5EDBE1778510600ADDE06 /* MapReplaceDialog.cpp in Sources */,
-				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
-				8AD5EDBF1778510600ADDE06 /* MapSector.cpp in Sources */,
-				8AD5EDC01778510600ADDE06 /* MapSide.cpp in Sources */,
-				8AD5EDC11778510600ADDE06 /* MapTextureBrowser.cpp in Sources */,
-				8AD5EDC21778510600ADDE06 /* MapTextureManager.cpp in Sources */,
-				8AD5EDC31778510600ADDE06 /* MapThing.cpp in Sources */,
-				8AD5EDC41778510600ADDE06 /* MapVertex.cpp in Sources */,
-				8AD5EDC51778510600ADDE06 /* MathStuff.cpp in Sources */,
-				8AD5EDC61778510600ADDE06 /* MCAnimations.cpp in Sources */,
-				8AD5EDC71778510600ADDE06 /* MemChunk.cpp in Sources */,
-				8AD5EDC81778510600ADDE06 /* MIDIPlayer.cpp in Sources */,
-				8AD5EDC91778510600ADDE06 /* Misc.cpp in Sources */,
-				8AD5EDCA1778510600ADDE06 /* ModifyOffsetsDialog.cpp in Sources */,
-				8AD5EDCB1778510600ADDE06 /* MOPGProperty.cpp in Sources */,
-				8AD5EDCC1778510600ADDE06 /* NodeBuilders.cpp in Sources */,
-				8AD5EDCD1778510600ADDE06 /* NodesPrefsPanel.cpp in Sources */,
-				8AAD20D8183931E800E1C89E /* ObjectEdit.cpp in Sources */,
-				8AAD20D9183931E800E1C89E /* ObjectEditPanel.cpp in Sources */,
-				8AD5EDCE1778510600ADDE06 /* OGLCanvas.cpp in Sources */,
-				8AD5EDCF1778510600ADDE06 /* OpenGL.cpp in Sources */,
-				8AD5EDD01778510600ADDE06 /* PakArchive.cpp in Sources */,
-				8AD5EDD11778510600ADDE06 /* Palette.cpp in Sources */,
-				8AD5EDD21778510600ADDE06 /* PaletteCanvas.cpp in Sources */,
-				8AD5EDD31778510600ADDE06 /* PaletteChooser.cpp in Sources */,
-				8AD5EDD41778510600ADDE06 /* PaletteDialog.cpp in Sources */,
-				8AD5EDD51778510600ADDE06 /* PaletteEntryPanel.cpp in Sources */,
-				8AD5EDD61778510600ADDE06 /* PaletteManager.cpp in Sources */,
-				8AD5EDD71778510600ADDE06 /* Parser.cpp in Sources */,
-				8AD5EDD81778510600ADDE06 /* PatchBrowser.cpp in Sources */,
-				8AD5EDD91778510600ADDE06 /* PatchTable.cpp in Sources */,
-				8AD5EDDA1778510600ADDE06 /* PatchTablePanel.cpp in Sources */,
-				8AD5EDDB1778510600ADDE06 /* PnamesEntryPanel.cpp in Sources */,
-				8AD5EDDC1778510600ADDE06 /* PnamesList.cpp in Sources */,
-				8AD5EDDD1778510600ADDE06 /* PNGPrefsPanel.cpp in Sources */,
-				8AD5EDDE1778510600ADDE06 /* Polygon2D.cpp in Sources */,
-				8AD5EDDF1778510600ADDE06 /* PreferencesDialog.cpp in Sources */,
-				8AD5EDE01778510600ADDE06 /* Property.cpp in Sources */,
-				8AD5EDE11778510600ADDE06 /* PropertyEditorPanel.cpp in Sources */,
-				8AD5EDE21778510600ADDE06 /* PropertyList.cpp in Sources */,
-				8AD5EDE31778510600ADDE06 /* QuickTextureOverlay3d.cpp in Sources */,
-				8AD5EDE41778510600ADDE06 /* ResArchive.cpp in Sources */,
-				8AD5EDE51778510600ADDE06 /* ResourceManager.cpp in Sources */,
-				8AD5EDE61778510600ADDE06 /* RffArchive.cpp in Sources */,
-				8AD5EDE71778510600ADDE06 /* SAction.cpp in Sources */,
-				8AD5EDE81778510600ADDE06 /* ScriptEditorPanel.cpp in Sources */,
-				8AD5EDE91778510600ADDE06 /* SectorBuilder.cpp in Sources */,
-				8AD5EDEA1778510600ADDE06 /* SectorInfoOverlay.cpp in Sources */,
-				8AD5EDEB1778510600ADDE06 /* SectorSpecialDialog.cpp in Sources */,
-				8AD5EDEC1778510600ADDE06 /* SectorTextureOverlay.cpp in Sources */,
-				8AD5EDED1778510600ADDE06 /* SFileDialog.cpp in Sources */,
-				8AD5EDEE1778510600ADDE06 /* SFont.cpp in Sources */,
-				8AD5EDEF1778510600ADDE06 /* ShapeDrawPanel.cpp in Sources */,
-				8AD5EDF01778510600ADDE06 /* SIFormat.cpp in Sources */,
-				8AD5EDF11778510600ADDE06 /* SImage.cpp in Sources */,
-				8AD5EDF21778510600ADDE06 /* SImageFormats.cpp in Sources */,
-				8AD5EDF31778510600ADDE06 /* SLADEMap.cpp in Sources */,
-				8AD5EDF41778510600ADDE06 /* SplashWindow.cpp in Sources */,
-				8AD5EDF51778510600ADDE06 /* SToolBar.cpp in Sources */,
-				8A4078651840F29300843BD8 /* BaseResourceWizardPage.cpp in Sources */,
-				8AD5EDF61778510600ADDE06 /* SToolBarButton.cpp in Sources */,
-				8AD5EDF71778510600ADDE06 /* STopWindow.cpp in Sources */,
-				8AD5EDF81778510600ADDE06 /* SwitchesEntryPanel.cpp in Sources */,
-				8AD5EDF91778510600ADDE06 /* SwitchesList.cpp in Sources */,
-				8AD5EDFA1778510600ADDE06 /* TarArchive.cpp in Sources */,
-				8AD5EDFB1778510600ADDE06 /* TextEditor.cpp in Sources */,
-				8AD5EDFC1778510600ADDE06 /* TextEditorPrefsPanel.cpp in Sources */,
-				8AD5EDFD1778510600ADDE06 /* TextEntryPanel.cpp in Sources */,
-				8AD5EDFE1778510600ADDE06 /* TextLanguage.cpp in Sources */,
-				8AD5EDFF1778510600ADDE06 /* TextStyle.cpp in Sources */,
-				8AD5EE001778510600ADDE06 /* TextStylePrefsPanel.cpp in Sources */,
-				8AD5EE011778510600ADDE06 /* TextureEditorPanel.cpp in Sources */,
-				8AD5EE021778510600ADDE06 /* TextureXEditor.cpp in Sources */,
-				8AD5EE031778510600ADDE06 /* TextureXList.cpp in Sources */,
-				8AD5EE041778510600ADDE06 /* TextureXPanel.cpp in Sources */,
-				8AD5EE051778510600ADDE06 /* ThingInfoOverlay.cpp in Sources */,
-				8AD5EE061778510600ADDE06 /* ThingType.cpp in Sources */,
-				8AD5EE071778510600ADDE06 /* ThingTypeBrowser.cpp in Sources */,
-				8AD5EE081778510600ADDE06 /* ThingTypeTreeView.cpp in Sources */,
-				8AD5EE091778510600ADDE06 /* Tokenizer.cpp in Sources */,
-				8AD5EE0A1778510600ADDE06 /* Translation.cpp in Sources */,
-				8AD5EE0B1778510600ADDE06 /* TranslationEditorDialog.cpp in Sources */,
-				8AD5EE0C1778510600ADDE06 /* Tree.cpp in Sources */,
-				8AD5EE0D1778510600ADDE06 /* UDMFProperty.cpp in Sources */,
-				8AD5EE0E1778510600ADDE06 /* UndoManagerHistoryPanel.cpp in Sources */,
-				8AD5EE0F1778510600ADDE06 /* UndoRedo.cpp in Sources */,
-				8AD5EE101778510600ADDE06 /* VertexInfoOverlay.cpp in Sources */,
-				8AD5EE111778510600ADDE06 /* VirtualListView.cpp in Sources */,
-				8AD5EE121778510600ADDE06 /* Wad2Archive.cpp in Sources */,
-				8AD5EE131778510600ADDE06 /* WadArchive.cpp in Sources */,
-				8AD5EE141778510600ADDE06 /* WadJArchive.cpp in Sources */,
-				8AD5EE151778510600ADDE06 /* WolfArchive.cpp in Sources */,
-				8AD5EE161778510600ADDE06 /* WxStuff.cpp in Sources */,
-				8AD5EE171778510600ADDE06 /* ZipArchive.cpp in Sources */,
-				8AD5EE181778510600ADDE06 /* ZTextureEditorPanel.cpp in Sources */,
+				8A880C0618533C56005DE572 /* ACSPrefsPanel.cpp in Sources */,
+				8A880C0718533C56005DE572 /* ActionSpecial.cpp in Sources */,
+				8A880C0818533C56005DE572 /* ActionSpecialDialog.cpp in Sources */,
+				8A880C0918533C56005DE572 /* ADatArchive.cpp in Sources */,
+				8A880C0A18533C56005DE572 /* AdvancedPrefsPanel.cpp in Sources */,
+				8A880C0B18533C56005DE572 /* AnimatedEntryPanel.cpp in Sources */,
+				8A880C0C18533C56005DE572 /* AnimatedList.cpp in Sources */,
+				8A880C0D18533C56005DE572 /* ANSICanvas.cpp in Sources */,
+				8A880C0E18533C56005DE572 /* ANSIEntryPanel.cpp in Sources */,
+				8A880C0F18533C56005DE572 /* Archive.cpp in Sources */,
+				8A880C1018533C56005DE572 /* ArchiveEntry.cpp in Sources */,
+				8A880C1118533C56005DE572 /* ArchiveEntryList.cpp in Sources */,
+				8A880C1218533C56005DE572 /* ArchiveManager.cpp in Sources */,
+				8A880C1318533C56005DE572 /* ArchiveManagerPanel.cpp in Sources */,
+				8A880C1418533C56005DE572 /* ArchiveOperations.cpp in Sources */,
+				8A880C1518533C56005DE572 /* ArchivePanel.cpp in Sources */,
+				8A880C1618533C56005DE572 /* AudioEntryPanel.cpp in Sources */,
+				8A880C1718533C56005DE572 /* AudioPrefsPanel.cpp in Sources */,
+				8A880C1818533C56005DE572 /* BaseResourceArchivesPanel.cpp in Sources */,
+				8A880C1918533C56005DE572 /* BaseResourceChooser.cpp in Sources */,
+				8A880C1A18533C56005DE572 /* BrowserCanvas.cpp in Sources */,
+				8A880C1B18533C56005DE572 /* BrowserItem.cpp in Sources */,
+				8A880C1C18533C56005DE572 /* BrowserWindow.cpp in Sources */,
+				8A880C1D18533C56005DE572 /* BSPArchive.cpp in Sources */,
+				8A880C1E18533C56005DE572 /* BZip2Archive.cpp in Sources */,
+				8A880C1F18533C56005DE572 /* CIEDeltaEquations.cpp in Sources */,
+				8A880C2018533C56005DE572 /* Clipboard.cpp in Sources */,
+				8A880C2118533C56005DE572 /* CodePages.cpp in Sources */,
+				8A880C2218533C56005DE572 /* ColorimetryPrefsPanel.cpp in Sources */,
+				8A880C2318533C56005DE572 /* ColourBox.cpp in Sources */,
+				8A880C2418533C56005DE572 /* ColourConfiguration.cpp in Sources */,
+				8A880C2518533C56005DE572 /* ColourPrefsPanel.cpp in Sources */,
+				8A880C2618533C56005DE572 /* Compression.cpp in Sources */,
+				8A880C2718533C56005DE572 /* Console.cpp in Sources */,
+				8A880C2818533C56005DE572 /* ConsolePanel.cpp in Sources */,
+				8A880C2918533C56005DE572 /* Conversions.cpp in Sources */,
+				8A880C2A18533C56005DE572 /* CTexture.cpp in Sources */,
+				8A880C2B18533C56005DE572 /* CTextureCanvas.cpp in Sources */,
+				8A880C2C18533C56005DE572 /* CVar.cpp in Sources */,
+				8A880C2D18533C56005DE572 /* DatArchive.cpp in Sources */,
+				8A880C2E18533C56005DE572 /* DefaultEntryPanel.cpp in Sources */,
+				8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */,
+				8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */,
+				8A880C3118533C56005DE572 /* Drawing.cpp in Sources */,
+				8A880C3218533C56005DE572 /* EditingPrefsPanel.cpp in Sources */,
+				8A880C3318533C56005DE572 /* EntryDataFormat.cpp in Sources */,
+				8A880C3418533C56005DE572 /* EntryOperations.cpp in Sources */,
+				8A880C3518533C56005DE572 /* EntryPanel.cpp in Sources */,
+				8A880C3618533C56005DE572 /* EntryType.cpp in Sources */,
+				8A880C3718533C56005DE572 /* Executables.cpp in Sources */,
+				8A880C3818533C56005DE572 /* ExtMessageDialog.cpp in Sources */,
+				8A880C3918533C56005DE572 /* FileMonitor.cpp in Sources */,
+				8A880C3A18533C56005DE572 /* GameConfiguration.cpp in Sources */,
+				8A880C3B18533C56005DE572 /* GeneralPrefsPanel.cpp in Sources */,
+				8A880C3C18533C56005DE572 /* GenLineSpecial.cpp in Sources */,
+				8A880C3D18533C56005DE572 /* GenLineSpecialPanel.cpp in Sources */,
+				8A880C3E18533C56005DE572 /* GfxCanvas.cpp in Sources */,
+				8A880C3F18533C56005DE572 /* GfxConvDialog.cpp in Sources */,
+				8A880C4018533C56005DE572 /* GfxEntryPanel.cpp in Sources */,
+				8A880C4118533C56005DE572 /* GLTexture.cpp in Sources */,
+				8A880C4218533C56005DE572 /* GobArchive.cpp in Sources */,
+				8A880C4318533C56005DE572 /* GraphicsPrefsPanel.cpp in Sources */,
+				8A880C4418533C56005DE572 /* GrpArchive.cpp in Sources */,
+				8A880C4518533C56005DE572 /* GZipArchive.cpp in Sources */,
+				8A880C4618533C56005DE572 /* HexEditorPanel.cpp in Sources */,
+				8A880C4718533C56005DE572 /* HexEntryPanel.cpp in Sources */,
+				8A880C4818533C56005DE572 /* HogArchive.cpp in Sources */,
+				8A880C4918533C56005DE572 /* Icons.cpp in Sources */,
+				8A880C4A18533C56005DE572 /* InfoOverlay3d.cpp in Sources */,
+				8A880C4B18533C56005DE572 /* InputPrefsPanel.cpp in Sources */,
+				8A880C4C18533C56005DE572 /* InterfacePrefsPanel.cpp in Sources */,
+				8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */,
+				8A880C4E18533C56005DE572 /* LfdArchive.cpp in Sources */,
+				8A880C4F18533C56005DE572 /* LibArchive.cpp in Sources */,
+				8A880C5018533C56005DE572 /* LineInfoOverlay.cpp in Sources */,
+				8A880C5118533C56005DE572 /* LineTextureOverlay.cpp in Sources */,
+				8A880C5218533C56005DE572 /* ListenerAnnouncer.cpp in Sources */,
+				8A880C5318533C56005DE572 /* ListView.cpp in Sources */,
+				8A880C5418533C56005DE572 /* Lua.cpp in Sources */,
+				8A880C5518533C56005DE572 /* MainApp.cpp in Sources */,
+				8A880C5618533C56005DE572 /* MainWindow.cpp in Sources */,
+				8A880C5718533C56005DE572 /* Map3DPrefsPanel.cpp in Sources */,
+				8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */,
+				8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */,
+				8A880C5A18533C56005DE572 /* MapDisplayPrefsPanel.cpp in Sources */,
+				8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */,
+				8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */,
+				8A880C5D18533C56005DE572 /* MapEditorPrefsPanel.cpp in Sources */,
+				8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */,
+				8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */,
+				8A880C6018533C56005DE572 /* MapLine.cpp in Sources */,
+				8A880C6118533C56005DE572 /* MapObject.cpp in Sources */,
+				8A880C6218533C56005DE572 /* MapObjectPropsPanel.cpp in Sources */,
+				8A880C6318533C56005DE572 /* MapPreviewCanvas.cpp in Sources */,
+				8A880C6418533C56005DE572 /* MapRenderer2D.cpp in Sources */,
+				8A880C6518533C56005DE572 /* MapRenderer3D.cpp in Sources */,
+				8A880C6618533C56005DE572 /* MapReplaceDialog.cpp in Sources */,
+				8A880C6718533C56005DE572 /* MapSector.cpp in Sources */,
+				8A880C6818533C56005DE572 /* MapSide.cpp in Sources */,
+				8A880C6918533C56005DE572 /* MapTextureBrowser.cpp in Sources */,
+				8A880C6A18533C56005DE572 /* MapTextureManager.cpp in Sources */,
+				8A880C6B18533C56005DE572 /* MapThing.cpp in Sources */,
+				8A880C6C18533C56005DE572 /* MapVertex.cpp in Sources */,
+				8A880C6D18533C56005DE572 /* MathStuff.cpp in Sources */,
+				8A880C6E18533C56005DE572 /* MCAnimations.cpp in Sources */,
+				8A880C6F18533C56005DE572 /* MemChunk.cpp in Sources */,
+				8A880C7018533C56005DE572 /* MIDIPlayer.cpp in Sources */,
+				8A880C7118533C56005DE572 /* Misc.cpp in Sources */,
+				8A880C7218533C56005DE572 /* MobjPropertyList.cpp in Sources */,
+				8A880C7318533C56005DE572 /* ModifyOffsetsDialog.cpp in Sources */,
+				8A880C7418533C56005DE572 /* MOPGProperty.cpp in Sources */,
+				8A880C7518533C56005DE572 /* NodeBuilders.cpp in Sources */,
+				8A880C7618533C56005DE572 /* NodesPrefsPanel.cpp in Sources */,
+				8A880C7718533C56005DE572 /* ObjectEdit.cpp in Sources */,
+				8A880C7818533C56005DE572 /* ObjectEditPanel.cpp in Sources */,
+				8A880C7918533C56005DE572 /* OGLCanvas.cpp in Sources */,
+				8A880C7A18533C56005DE572 /* OpenGL.cpp in Sources */,
+				8A880C7B18533C56005DE572 /* PakArchive.cpp in Sources */,
+				8A880C7C18533C56005DE572 /* Palette.cpp in Sources */,
+				8A880C7D18533C56005DE572 /* PaletteCanvas.cpp in Sources */,
+				8A880C7E18533C56005DE572 /* PaletteChooser.cpp in Sources */,
+				8A880C7F18533C56005DE572 /* PaletteDialog.cpp in Sources */,
+				8A880C8018533C56005DE572 /* PaletteEntryPanel.cpp in Sources */,
+				8A880C8118533C56005DE572 /* PaletteManager.cpp in Sources */,
+				8A880C8218533C56005DE572 /* Parser.cpp in Sources */,
+				8A880C8318533C56005DE572 /* PatchBrowser.cpp in Sources */,
+				8A880C8418533C56005DE572 /* PatchTable.cpp in Sources */,
+				8A880C8518533C56005DE572 /* PatchTablePanel.cpp in Sources */,
+				8A880C8618533C56005DE572 /* PnamesEntryPanel.cpp in Sources */,
+				8A880C8718533C56005DE572 /* PnamesList.cpp in Sources */,
+				8A880C8818533C56005DE572 /* PNGPrefsPanel.cpp in Sources */,
+				8A880C8918533C56005DE572 /* Polygon2D.cpp in Sources */,
+				8A880C8A18533C56005DE572 /* PreferencesDialog.cpp in Sources */,
+				8A880C8B18533C56005DE572 /* Property.cpp in Sources */,
+				8A880C8C18533C56005DE572 /* PropertyEditorPanel.cpp in Sources */,
+				8A880C8D18533C56005DE572 /* PropertyList.cpp in Sources */,
+				8A880C8E18533C56005DE572 /* QuickTextureOverlay3d.cpp in Sources */,
+				8A880C8F18533C56005DE572 /* ResArchive.cpp in Sources */,
+				8A880C9018533C56005DE572 /* ResourceArchiveChooser.cpp in Sources */,
+				8A880C9118533C56005DE572 /* ResourceManager.cpp in Sources */,
+				8A880C9218533C56005DE572 /* RffArchive.cpp in Sources */,
+				8A880C9318533C56005DE572 /* SAction.cpp in Sources */,
+				8A880C9418533C56005DE572 /* ScriptEditorPanel.cpp in Sources */,
+				8A880C9518533C56005DE572 /* SectorBuilder.cpp in Sources */,
+				8A880C9618533C56005DE572 /* SectorInfoOverlay.cpp in Sources */,
+				8A880C9718533C56005DE572 /* SectorSpecialDialog.cpp in Sources */,
+				8A880C9818533C56005DE572 /* SectorTextureOverlay.cpp in Sources */,
+				8A880C9918533C56005DE572 /* SFileDialog.cpp in Sources */,
+				8A880C9A18533C56005DE572 /* SFont.cpp in Sources */,
+				8A880C9B18533C56005DE572 /* ShapeDrawPanel.cpp in Sources */,
+				8A880C9C18533C56005DE572 /* SIFormat.cpp in Sources */,
+				8A880C9D18533C56005DE572 /* SImage.cpp in Sources */,
+				8A880C9E18533C56005DE572 /* SImageFormats.cpp in Sources */,
+				8A880C9F18533C56005DE572 /* SLADEMap.cpp in Sources */,
+				8A880CA018533C56005DE572 /* SplashWindow.cpp in Sources */,
+				8A880CA118533C56005DE572 /* SToolBar.cpp in Sources */,
+				8A880CA218533C56005DE572 /* SToolBarButton.cpp in Sources */,
+				8A880CA318533C56005DE572 /* STopWindow.cpp in Sources */,
+				8A880CA418533C56005DE572 /* SwitchesEntryPanel.cpp in Sources */,
+				8A880CA518533C56005DE572 /* SwitchesList.cpp in Sources */,
+				8A880CA618533C56005DE572 /* TarArchive.cpp in Sources */,
+				8A880CA718533C56005DE572 /* TextEditor.cpp in Sources */,
+				8A880CA818533C56005DE572 /* TextEditorPrefsPanel.cpp in Sources */,
+				8A880CA918533C56005DE572 /* TextEntryPanel.cpp in Sources */,
+				8A880CAA18533C56005DE572 /* TextLanguage.cpp in Sources */,
+				8A880CAB18533C56005DE572 /* TextStyle.cpp in Sources */,
+				8A880CAC18533C56005DE572 /* TextStylePrefsPanel.cpp in Sources */,
+				8A880CAD18533C56005DE572 /* TextureEditorPanel.cpp in Sources */,
+				8A880CAE18533C56005DE572 /* TextureXEditor.cpp in Sources */,
+				8A880CAF18533C56005DE572 /* TextureXList.cpp in Sources */,
+				8A880CB018533C56005DE572 /* TextureXPanel.cpp in Sources */,
+				8A880CB118533C56005DE572 /* ThingInfoOverlay.cpp in Sources */,
+				8A880CB218533C56005DE572 /* ThingType.cpp in Sources */,
+				8A880CB318533C56005DE572 /* ThingTypeBrowser.cpp in Sources */,
+				8A880CB418533C56005DE572 /* ThingTypeTreeView.cpp in Sources */,
+				8A880CB518533C56005DE572 /* Tokenizer.cpp in Sources */,
+				8A880CB618533C56005DE572 /* Translation.cpp in Sources */,
+				8A880CB718533C56005DE572 /* TranslationEditorDialog.cpp in Sources */,
+				8A880CB818533C56005DE572 /* Tree.cpp in Sources */,
+				8A880CB918533C56005DE572 /* UDMFProperty.cpp in Sources */,
+				8A880CBA18533C56005DE572 /* UndoManagerHistoryPanel.cpp in Sources */,
+				8A880CBB18533C56005DE572 /* UndoRedo.cpp in Sources */,
+				8A880CBC18533C56005DE572 /* VertexInfoOverlay.cpp in Sources */,
+				8A880CBD18533C56005DE572 /* VirtualListView.cpp in Sources */,
+				8A880CBE18533C56005DE572 /* Wad2Archive.cpp in Sources */,
+				8A880CBF18533C56005DE572 /* WadArchive.cpp in Sources */,
+				8A880CC018533C56005DE572 /* WadJArchive.cpp in Sources */,
+				8A880CC118533C56005DE572 /* WolfArchive.cpp in Sources */,
+				8A880CC218533C56005DE572 /* WxStuff.cpp in Sources */,
+				8A880CC318533C56005DE572 /* ZipArchive.cpp in Sources */,
+				8A880CC418533C56005DE572 /* ZTextureEditorPanel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
