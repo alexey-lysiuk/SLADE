@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A122A11185471A7009C4BBB /* MapChecksPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */; };
 		8A17BAC51764C2E500C5D768 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A17BAC41764C2E500C5D768 /* libGLEW.a */; };
 		8A17E7DA154C3435008FD77E /* libftgl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A17E7D9154C3435008FD77E /* libftgl.a */; };
 		8A17E7DC154C3467008FD77E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A17E7DB154C3467008FD77E /* libfreetype.a */; };
@@ -425,6 +426,8 @@
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8A103248154AF4BE00D4393F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapChecksPanel.cpp; sourceTree = "<group>"; };
+		8A122A10185471A7009C4BBB /* MapChecksPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapChecksPanel.h; sourceTree = "<group>"; };
 		8A17BAC41764C2E500C5D768 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = thirdparty/GLEW/lib/libGLEW.a; sourceTree = "<group>"; };
 		8A17E7D9154C3435008FD77E /* libftgl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libftgl.a; path = thirdparty/FTGL/lib/libftgl.a; sourceTree = "<group>"; };
 		8A17E7DB154C3467008FD77E /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = thirdparty/FreeType/lib/libfreetype.a; sourceTree = "<group>"; };
@@ -1372,6 +1375,8 @@
 				8AD5EC831778510500ADDE06 /* MapCanvas.h */,
 				8A60908D18533A3D00C1EF18 /* MapChecks.cpp */,
 				8A60908E18533A3D00C1EF18 /* MapChecks.h */,
+				8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */,
+				8A122A10185471A7009C4BBB /* MapChecksPanel.h */,
 				8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */,
 				8AD5EC851778510500ADDE06 /* MapDisplayPrefsPanel.h */,
 				8AD5EC861778510500ADDE06 /* MapEditor.cpp */,
@@ -2347,6 +2352,7 @@
 				8A880C5718533C56005DE572 /* Map3DPrefsPanel.cpp in Sources */,
 				8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */,
 				8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */,
+				8A122A11185471A7009C4BBB /* MapChecksPanel.cpp in Sources */,
 				8A880C5A18533C56005DE572 /* MapDisplayPrefsPanel.cpp in Sources */,
 				8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */,
 				8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */,
