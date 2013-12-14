@@ -1,3 +1,14 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.sdf
+*.suo
+*.opensdf
+*.obj
+*.tlog
+
+# OS X and Xcode
 /.deploy_image/
 build/
 xcuserdata/

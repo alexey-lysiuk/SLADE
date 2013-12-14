@@ -198,7 +198,7 @@ bool MapCanvas::helpActive()
 		return false;
 
 	// Enable depending on current state
-	if (mouse_state == MSTATE_EDIT || mouse_state == MSTATE_LINE_DRAW)
+	if (mouse_state == MSTATE_EDIT || mouse_state == MSTATE_LINE_DRAW || mouse_state == MSTATE_TAG_SECTORS)
 		return true;
 
 	return false;
@@ -2261,6 +2261,63 @@ void MapCanvas::changeTexture3d(selection_3d_t first)
 	}
 }
 
+void MapCanvas::editObjectProperties(vector<MapObject*>& list)
+{
+	// Determine selection type
+	string type = "Object";
+	if (editor->editMode() == MapEditor::MODE_VERTICES)
+		type = "Vertex";
+	else if (editor->editMode() == MapEditor::MODE_LINES)
+		type = "Line";
+	else if (editor->editMode() == MapEditor::MODE_SECTORS)
+		type = "Sector";
+	else if (editor->editMode() == MapEditor::MODE_THINGS)
+		type = "Thing";
+
+	// Begin recording undo level
+	editor->undoManager()->beginRecord(S_FMT("Property Edit (%s)", CHR(type)));
+	for (unsigned a = 0; a < list.size(); a++)
+		editor->recordPropertyChangeUndoStep(list[a]);
+
+	string selsize = "";
+	if (list.size() == 1)
+		type += S_FMT(" #%d", list[0]->getIndex());
+	else if (list.size() > 1)
+		selsize = S_FMT("(%d selected)", list.size());
+
+	// Create dialog for properties panel
+	wxDialog dlg(theMapEditor, -1, S_FMT("%s Properties %s", CHR(type), CHR(selsize)), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
+	dlg.SetInitialSize(wxSize(500, 500));
+	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+	dlg.SetSizer(sizer);
+
+	// Create properties panel
+	MapObjectPropsPanel* panel_props = new MapObjectPropsPanel(&dlg);
+	panel_props->showApplyButton(false);
+	sizer->Add(panel_props, 1, wxEXPAND|wxALL, 4);
+
+	// Add dialog buttons
+	sizer->Add(dlg.CreateButtonSizer(wxOK|wxCANCEL), 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 4);
+
+	// Open current selection
+	panel_props->openObjects(list);
+
+	// Open the dialog and apply changes if OK was clicked
+	dlg.CenterOnParent();
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		panel_props->applyChanges();
+		renderer_2d->forceUpdate(fade_lines);
+		Refresh();
+
+		if (editor->editMode() == MapEditor::MODE_THINGS)
+			editor->copyProperties(list[0]);
+	}
+
+	// End undo level
+	editor->undoManager()->endRecord(true);
+}
+
 void MapCanvas::onKeyBindPress(string name)
 {
 	// Check if an overlay is active
@@ -2978,59 +3035,7 @@ bool MapCanvas::handleAction(string id)
 		vector<MapObject*> list;
 		editor->getSelectedObjects(list);
 
-		// Determine selection type
-		string type = "Object";
-		if (editor->editMode() == MapEditor::MODE_VERTICES)
-			type = "Vertex";
-		else if (editor->editMode() == MapEditor::MODE_LINES)
-			type = "Line";
-		else if (editor->editMode() == MapEditor::MODE_SECTORS)
-			type = "Sector";
-		else if (editor->editMode() == MapEditor::MODE_THINGS)
-			type = "Thing";
-
-		// Begin recording undo level
-		editor->undoManager()->beginRecord(S_FMT("Property Edit (%s)", CHR(type)));
-		for (unsigned a = 0; a < list.size(); a++)
-			editor->recordPropertyChangeUndoStep(list[a]);
-
-		string selsize = "";
-		if (list.size() == 1)
-			type += S_FMT(" #%d", list[0]->getIndex());
-		else if (list.size() > 1)
-			selsize = S_FMT("(%d selected)", list.size());
-
-		// Create dialog for properties panel
-		wxDialog dlg(theMapEditor, -1, S_FMT("%s Properties %s", CHR(type), CHR(selsize)), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
-		dlg.SetInitialSize(wxSize(500, 500));
-		wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-		dlg.SetSizer(sizer);
-
-		// Create properties panel
-		MapObjectPropsPanel* panel_props = new MapObjectPropsPanel(&dlg);
-		panel_props->showApplyButton(false);
-		sizer->Add(panel_props, 1, wxEXPAND|wxALL, 4);
-
-		// Add dialog buttons
-		sizer->Add(dlg.CreateButtonSizer(wxOK|wxCANCEL), 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 4);
-
-		// Open current selection
-		panel_props->openObjects(list);
-
-		// Open the dialog and apply changes if OK was clicked
-		dlg.CenterOnParent();
-		if (dlg.ShowModal() == wxID_OK)
-		{
-			panel_props->applyChanges();
-			renderer_2d->forceUpdate(fade_lines);
-			Refresh();
-
-			if (editor->editMode() == MapEditor::MODE_THINGS)
-				editor->copyProperties(list[0]);
-		}
-
-		// End undo level
-		editor->undoManager()->endRecord(true);
+		editObjectProperties(list);
 
 		return true;
 	}
@@ -3092,7 +3097,26 @@ bool MapCanvas::handleAction(string id)
 	{
 		int type = editor->beginTagEdit();
 		if (type > 0)
+		{
 			mouse_state = MSTATE_TAG_SECTORS;
+
+			// Setup help text
+			string key_accept = KeyBind::getBind("map_edit_accept").keysAsString();
+			string key_cancel = KeyBind::getBind("map_edit_cancel").keysAsString();
+			feature_help_lines.clear();
+			feature_help_lines.push_back("Tag Edit");
+			feature_help_lines.push_back(S_FMT("%s = Accept", CHR(key_accept)));
+			feature_help_lines.push_back(S_FMT("%s = Cancel", CHR(key_cancel)));
+			feature_help_lines.push_back("Left Click = Toggle tagged sector");
+		}
+
+		return true;
+	}
+
+	// Correct sectors
+	else if (id == "mapw_line_correctsectors")
+	{
+		editor->correctLineSectors();
 		return true;
 	}
 
@@ -3483,6 +3507,7 @@ void MapCanvas::onMouseUp(wxMouseEvent& e)
 					theApp->getAction("mapw_line_changetexture")->addToMenu(&menu_context);
 					theApp->getAction("mapw_line_changespecial")->addToMenu(&menu_context);
 					theApp->getAction("mapw_line_tagedit")->addToMenu(&menu_context);
+					theApp->getAction("mapw_line_correctsectors")->addToMenu(&menu_context);
 				}
 			}
 			else if (editor->editMode() == MapEditor::MODE_THINGS)

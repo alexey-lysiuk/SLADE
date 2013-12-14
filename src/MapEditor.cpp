@@ -1552,8 +1552,35 @@ void MapEditor::flipLines(bool sides)
 	undo_manager->endRecord(true);
 
 	// Update display
-	canvas->forceRefreshRenderer();
 	updateDisplay();
+}
+
+void MapEditor::correctLineSectors()
+{
+	// Get selected/hilighted line(s)
+	vector<MapLine*> lines;
+	getSelectedLines(lines);
+
+	if (lines.empty())
+		return;
+
+	beginUndoRecord("Correct Line Sectors");
+
+	bool changed = false;
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		if (map.correctLineSectors(lines[a]))
+			changed = true;
+	}
+
+	endUndoRecord(changed);
+
+	// Update display
+	if (changed)
+	{
+		addEditorMessage("Corrected Sector references");
+		updateDisplay();
+	}
 }
 
 #pragma endregion
@@ -2066,9 +2093,6 @@ void MapEditor::createSector(double x, double y)
 	}
 	else
 		addEditorMessage("Sector creation failed: " + builder.getError());
-
-	// Refresh map canvas
-	canvas->forceRefreshRenderer();
 }
 
 #pragma endregion
@@ -2183,9 +2207,6 @@ void MapEditor::deleteObject()
 
 		// Remove detached vertices
 		map.removeDetachedVertices();
-
-		// Refresh map view
-		theMapEditor->forceRefresh(true);
 	}
 
 	// Things mode
@@ -4312,74 +4333,77 @@ CONSOLE_COMMAND(m_show_item, 1, true)
 	theMapEditor->mapEditor().showItem(index);
 }
 
-CONSOLE_COMMAND(m_check_missing_tex, 0, true)
+CONSOLE_COMMAND(m_check, 0, true)
 {
-	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
-	vector<MapChecks::missing_tex_t> missing = MapChecks::checkMissingTextures(map);
-
-	theConsole->logMessage(S_FMT("%d missing textures", missing.size()));
-
-	for (unsigned a = 0; a < missing.size(); a++)
+	if (args.empty())
 	{
-		string line = S_FMT("Line %d missing ", missing[a].line->getIndex());
-		switch (missing[a].part)
-		{
-		case TEX_FRONT_UPPER: line += "front upper texture"; break;
-		case TEX_FRONT_MIDDLE: line += "front middle texture"; break;
-		case TEX_FRONT_LOWER: line += "front lower texture"; break;
-		case TEX_BACK_UPPER: line += "back upper texture"; break;
-		case TEX_BACK_MIDDLE: line += "back middle texture"; break;
-		case TEX_BACK_LOWER: line += "back lower texture"; break;
-		default: break;
-		}
+		theConsole->logMessage("Usage: m_check <check1> <check2> ...");
+		theConsole->logMessage("Available map checks:");
+		theConsole->logMessage("missing_tex: Check for missing textures");
+		theConsole->logMessage("special_tags: Check for missing action special tags");
+		theConsole->logMessage("intersecting_lines: Check for intersecting lines");
+		theConsole->logMessage("overlapping_lines: Check for overlapping lines");
+		theConsole->logMessage("overlapping_things: Check for overlapping things");
+		theConsole->logMessage("unknown_textures: Check for unknown wall textures");
+		theConsole->logMessage("unknown_flats: Check for unknown floor/ceiling textures");
+		theConsole->logMessage("unknown_things: Check for unknown thing types");
+		theConsole->logMessage("stuck_things: Check for things stuck in walls");
+		theConsole->logMessage("sector_references: Check for wrong sector references");
+		theConsole->logMessage("all: Run all checks");
 
-		theConsole->logMessage(line);
+		return;
 	}
-}
 
-CONSOLE_COMMAND(m_check_special_tags, 0, true)
-{
 	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
-	vector<MapLine*> lines = MapChecks::checkSpecialTags(map);
+	MapTextureManager* texman = &(theMapEditor->textureManager());
 
-	theConsole->logMessage(S_FMT("%d Line(s) missing tags", lines.size()));
-
-	for (unsigned a = 0; a < lines.size(); a++)
+	// Get checks to run
+	vector<MapCheck*> checks;
+	for (unsigned a = 0; a < args.size(); a++)
 	{
-		int special = lines[a]->getSpecial();
-		ActionSpecial* as = theGameConfiguration->actionSpecial(special);
-		theConsole->logMessage(S_FMT("Line %d: Special %d (%s) requires a tag", lines[a]->getIndex(), special, as->getName()));
+		string id = args[a].Lower();
+		unsigned n = checks.size();
+
+		if (id == "missing_tex" || id == "all")
+			checks.push_back(MapCheck::missingTextureCheck(map));
+		if (id == "special_tags" || id == "all")
+			checks.push_back(MapCheck::specialTagCheck(map));
+		if (id == "intersecting_lines" || id == "all")
+			checks.push_back(MapCheck::intersectingLineCheck(map));
+		if (id == "overlapping_lines" || id == "all")
+			checks.push_back(MapCheck::overlappingLineCheck(map));
+		if (id == "overlapping_things" || id == "all")
+			checks.push_back(MapCheck::overlappingThingCheck(map));
+		if (id == "unknown_textures" || id == "all")
+			checks.push_back(MapCheck::unknownTextureCheck(map, texman));
+		if (id == "unknown_flats" || id == "all")
+			checks.push_back(MapCheck::unknownFlatCheck(map, texman));
+		if (id == "unknown_things" || id == "all")
+			checks.push_back(MapCheck::unknownThingTypeCheck(map));
+		if (id == "stuck_things" || id == "all")
+			checks.push_back(MapCheck::stuckThingsCheck(map));
+		if (id == "sector_references" || id == "all")
+			checks.push_back(MapCheck::sectorReferenceCheck(map));
+		
+		if (n == checks.size())
+			theConsole->logMessage(S_FMT("Unknown check \"%s\"", CHR(id)));
 	}
-}
 
-CONSOLE_COMMAND(m_check_intersecting_lines, 0, true)
-{
-	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
-	vector<MapChecks::intersect_line_t> lines = MapChecks::checkIntersectingLines(map);
+	// Run checks
+	for (unsigned a = 0; a < checks.size(); a++)
+	{
+		// Run
+		theConsole->logMessage(checks[a]->progressText());
+		checks[a]->doCheck();
 
-	theConsole->logMessage(S_FMT("%d Line(s) intersecting", lines.size()));
+		// Check if no problems found
+		if (checks[a]->nProblems() == 0)
+			theConsole->logMessage(checks[a]->problemDesc(0));
 
-	for (unsigned a = 0; a < lines.size(); a++)
-		theConsole->logMessage(S_FMT("Lines %d and %d are intersecting", lines[a].line1->getIndex(), lines[a].line2->getIndex()));
-}
-
-CONSOLE_COMMAND(m_check_overlapping_lines, 0, true)
-{
-	SLADEMap* map = &(theMapEditor->mapEditor().getMap());
-	vector<MapChecks::intersect_line_t> lines = MapChecks::checkOverlappingLines(map);
-
-	theConsole->logMessage(S_FMT("%d Line(s) overlapping", lines.size()));
-
-	for (unsigned a = 0; a < lines.size(); a++)
-		theConsole->logMessage(S_FMT("Lines %d and %d are overlapping", lines[a].line1->getIndex(), lines[a].line2->getIndex()));
-}
-
-CONSOLE_COMMAND(m_check_all, 0, true)
-{
-	theConsole->execute("m_check_missing_tex");
-	theConsole->execute("m_check_special_tags");
-	theConsole->execute("m_check_intersecting_lines");
-	theConsole->execute("m_check_overlapping_lines");
+		// List problem details
+		for (unsigned b = 0; b < checks[a]->nProblems(); b++)
+			theConsole->logMessage(checks[a]->problemDesc(b));
+	}
 }
 
 #pragma endregion

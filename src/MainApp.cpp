@@ -61,7 +61,7 @@
 #include <FreeImage.h>
 
 #ifdef UPDATEREVISION
-#include "svnrevision.h"
+#include "gitinfo.h"
 #endif
 
 
@@ -73,8 +73,8 @@ namespace Global
 	string error = "";
 
 	string version = "3.1.0 beta 2"
-#ifdef SVN_REVISION_STRING
-	                 " (r" SVN_REVISION_STRING ")"
+#ifdef GIT_DESCRIPTION
+	                 " (" GIT_DESCRIPTION ")"
 #endif
 	                 "";
 
@@ -601,6 +601,7 @@ void MainApp::initActions()
 	new SAction("mapw_line_changetexture", "Change Texture", "", "Change the currently selected or hilighted line texture(s)");
 	new SAction("mapw_line_changespecial", "Change Special", "", "Change the currently selected or hilighted line special");
 	new SAction("mapw_line_tagedit", "Edit Tagged", "", "Select sectors/things to tag to this line's special");
+	new SAction("mapw_line_correctsectors", "Correct Sectors", "i_tick", "Correct line sector references");
 	new SAction("mapw_thing_changetype", "Change Type", "", "Change the currently selected or hilighted thing type(s)");
 	new SAction("mapw_thing_create", "Create Thing Here", "", "Creates a new thing at the cursor position");
 	new SAction("mapw_sector_changetexture", "Change Texture", "", "Change the currently selected or hilighted sector texture(s)");

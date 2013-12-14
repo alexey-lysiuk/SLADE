@@ -443,6 +443,9 @@ bool MapEditorWindow::openMap(Archive::mapdesc_t map)
 		// Lock map entries
 		lockMapEntries();
 
+		// Reset map checks panel
+		panel_checks->reset();
+
 		this->Show(true);
 		map_canvas->viewFitToMap();
 		map_canvas->Refresh();
@@ -739,6 +742,11 @@ void MapEditorWindow::forceRefresh(bool renderer)
 void MapEditorWindow::refreshToolBar()
 {
 	toolbar->Refresh();
+}
+
+void MapEditorWindow::editObjectProperties(vector<MapObject*>& objects)
+{
+	map_canvas->editObjectProperties(objects);
 }
 
 void MapEditorWindow::showObjectEditPanel(bool show, ObjectEditGroup* group)
