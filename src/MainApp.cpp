@@ -496,6 +496,8 @@ void MainApp::initActions()
 	new SAction("arch_view_hex", "View as Hex", "e_data", "Open the selected entry in the hex editor, regardless of type");
 	new SAction("arch_gfx_convert", "Convert to...", "t_convert", "Open the Gfx Conversion Dialog for any selected gfx entries");
 	new SAction("arch_gfx_translate", "Colour Remap...", "t_remap", "Remap a range of colours in the selected gfx entries to another range (paletted gfx only)");
+	new SAction("arch_gfx_colourise", "Colourise", "t_colourise", "Colourise the selected gfx entries");
+	new SAction("arch_gfx_tint", "Tint", "t_tint", "Tint the selected gfx entries by a colour/amount");
 	new SAction("arch_gfx_offsets", "Modify Gfx Offsets", "t_offset", "Mass-modify the offsets for any selected gfx entries");
 	new SAction("arch_gfx_addptable", "Add to Patch Table", "e_pnames", "Add selected gfx entries to PNAMES");
 	new SAction("arch_gfx_addtexturex", "Add to TEXTUREx", "e_texturex", "Create textures from selected gfx entries and add them to TEXTUREx");
@@ -521,6 +523,7 @@ void MainApp::initActions()
 	new SAction("pgfx_extract", "Extract All", "", "Extract all images in this entry to separate PNGs");
 	new SAction("pgfx_crop", "Crop", "t_settings", "Crop the graphic");
 	new SAction("pgfx_convert", "Convert to...", "t_convert", "Open the Gfx Conversion Dialog for the entry");
+	new SAction("pgfx_pngopt", "Optimize PNG", "t_pngopt", "Optimize PNG entry");
 
 	// ArchiveEntryList
 	new SAction("aelt_sizecol", "Size", "", "Show the size column", "", SAction::CHECK);
@@ -535,6 +538,7 @@ void MainApp::initActions()
 	new SAction("txed_new_patch", "New Texture from Patch", "t_tex_newpatch", "Create a new texture from an existing patch");
 	new SAction("txed_new_file", "New Texture from File", "t_tex_newfile", "Create a new texture from an image file");
 	new SAction("txed_rename", "Rename Texture", "t_tex_rename", "Rename the selected texture(s)");
+	new SAction("txed_rename_each", "Rename Each", "t_tex_renameeach", "Rename separately all the selected textures");
 	new SAction("txed_export", "Export Texture", "t_tex_export", "Create standalone images from the selected texture(s)");
 	new SAction("txed_extract", "Extract Texture", "t_tex_extract", "Export the selected texture(s) as PNG files");
 	new SAction("txed_offsets", "Modify Offsets", "t_tex_offset", "Mass modify offsets in the selected texture(s)");
