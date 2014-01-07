@@ -10,6 +10,7 @@
 #include "Polygon2D.h"
 #include "ObjectEdit.h"
 #include "OpenGL.h"
+#include "Drawing.h"
 
 CVAR(Bool, vertex_round, true, CVAR_SAVE)
 CVAR(Int, vertex_size, 7, CVAR_SAVE)
@@ -29,8 +30,13 @@ CVAR(Float, arrow_alpha, 1.0f, CVAR_SAVE)
 CVAR(Bool, arrow_colour, false, CVAR_SAVE)
 CVAR(Bool, flats_use_vbo, true, CVAR_SAVE)
 CVAR(Int, halo_width, 5, CVAR_SAVE)
+CVAR(Float, arrowhead_angle, 0.7854f, CVAR_SAVE)
+CVAR(Float, arrowhead_length, 25.f, CVAR_SAVE)
+CVAR(Bool, action_lines, true, CVAR_SAVE)
 
 CVAR(Bool, test_ssplit, false, CVAR_SAVE)
+
+EXTERN_CVAR(Bool, use_zeth_icons)
 
 // Texture coordinates for rendering square things (since we can't just rotate these)
 float sq_thing_tc[] = { 0.0f, 1.0f,
@@ -63,7 +69,7 @@ MapRenderer2D::~MapRenderer2D()
 	if (list_lines > 0)			glDeleteLists(list_lines, 1);
 }
 
-bool MapRenderer2D::setupVertexRendering(float size_scale)
+bool MapRenderer2D::setupVertexRendering(float size_scale, bool overlay)
 {
 	// Setup rendering properties
 	float vs = vertex_size*size_scale;
@@ -77,8 +83,16 @@ bool MapRenderer2D::setupVertexRendering(float size_scale)
 	{
 		// Get appropriate vertex texture
 		GLTexture* tex;
-		if (vertex_round) tex = theMapEditor->textureManager().getEditorImage("vertex_r");
-		else tex = theMapEditor->textureManager().getEditorImage("vertex_s");
+		if (overlay)
+		{
+			if (vertex_round) tex = theMapEditor->textureManager().getEditorImage("vertex/hilight_r");
+			else tex = theMapEditor->textureManager().getEditorImage("vertex/hilight_s");
+		}
+		else
+		{
+			if (vertex_round) tex = theMapEditor->textureManager().getEditorImage("vertex/round");
+			else tex = theMapEditor->textureManager().getEditorImage("vertex/square");
+		}
 
 		// If it was found, enable point sprites
 		if (tex)
@@ -196,7 +210,7 @@ void MapRenderer2D::renderVertexHilight(int index, float fade)
 	col.set_gl();
 
 	// Setup rendering properties
-	bool point = setupVertexRendering(1.7f);
+	bool point = setupVertexRendering(1.8f + (0.6f * fade), true);
 
 	// Draw vertex
 	glBegin(GL_POINTS);
@@ -223,11 +237,11 @@ void MapRenderer2D::renderVertexSelection(vector<int>& selection, float fade)
 
 	// Set selection colour
 	rgba_t col = ColourConfiguration::getColour("map_selection");
-	col.a *= fade;
+	col.a = 255;//*= fade;
 	col.set_gl();
 
 	// Setup rendering properties
-	bool point = setupVertexRendering(1.5f);
+	bool point = setupVertexRendering(1.8f, true);
 
 	// Draw selected vertices
 	glBegin(GL_POINTS);
@@ -486,6 +500,7 @@ void MapRenderer2D::renderTaggedLines(vector<MapLine*>& lines, float fade)
 
 	// Go through tagged lines
 	double x1, y1, x2, y2;
+	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
 	for (unsigned a = 0; a < lines.size(); a++)
 	{
 		// Render line
@@ -506,6 +521,14 @@ void MapRenderer2D::renderTaggedLines(vector<MapLine*>& lines, float fade)
 		glVertex2d(mid.x, mid.y);
 		glVertex2d(tab.x, tab.y);
 		glEnd();
+
+		// Action lines
+		if (object && action_lines)
+		{
+			glLineWidth(line_width*1.5f);
+			Drawing::drawArrow(line->midPoint(), object->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			glLineWidth(line_width*3);
+		}
 	}
 }
 
@@ -525,6 +548,7 @@ void MapRenderer2D::renderTaggingLines(vector<MapLine*>& lines, float fade)
 
 	// Go through tagging lines
 	double x1, y1, x2, y2;
+	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
 	for (unsigned a = 0; a < lines.size(); a++)
 	{
 		// Render line
@@ -545,6 +569,14 @@ void MapRenderer2D::renderTaggingLines(vector<MapLine*>& lines, float fade)
 		glVertex2d(mid.x, mid.y);
 		glVertex2d(tab.x, tab.y);
 		glEnd();
+
+		// Action lines
+		if (object && action_lines)
+		{
+			glLineWidth(line_width*1.5f);
+			Drawing::drawArrow(object->midPoint(), line->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			glLineWidth(line_width*5);
+		}
 	}
 }
 
@@ -636,7 +668,12 @@ void MapRenderer2D::renderRoundThing(double x, double y, double angle, ThingType
 
 	// Check for custom thing icon
 	if (!tt->getIcon().IsEmpty() && !thing_force_dir && !things_angles)
-		tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", CHR(tt->getIcon())));
+	{
+		if (use_zeth_icons && tt->getZeth() >= 0)
+			tex = theMapEditor->textureManager().getEditorImage(S_FMT("zethicons/zeth%02d", tt->getZeth()));
+		if (!tex)
+			tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", CHR(tt->getIcon())));
+	}
 
 	if (!tex)
 	{
@@ -702,24 +739,6 @@ bool MapRenderer2D::renderSpriteThing(double x, double y, double angle, ThingTyp
 
 	// Attempt to get sprite texture
 	tex = theMapEditor->textureManager().getSprite(tt->getSprite(), tt->getTranslation(), tt->getPalette());
-
-	// Check for ? ending (0 or 1)
-	/*
-	if (!tex && tt->getSprite().EndsWith("?")) {
-		string sprite = tt->getSprite();
-		sprite.RemoveLast(1);
-		sprite = sprite + "0";
-		tex = theMapEditor->textureManager().getSprite(sprite, tt->getTranslation(), tt->getPalette());
-		if (!tex) {
-			sprite.RemoveLast(1);
-			sprite = sprite + "1";
-			tex = theMapEditor->textureManager().getSprite(sprite, tt->getTranslation(), tt->getPalette());
-		}
-
-		if (tex)
-			tt->setSprite(sprite);
-	}
-	*/
 
 	// If sprite not found, just draw as a normal, round thing
 	if (!tex)
@@ -1309,6 +1328,20 @@ void MapRenderer2D::renderTaggedThings(vector<MapThing*>& things, float fade)
 	if (point)
 		glDisable(GL_POINT_SPRITE);
 	glDisable(GL_TEXTURE_2D);
+
+	// Draw action lines
+	// Because gl state is in texture mode above, we cannot merge the loops
+	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
+	if (object && action_lines)
+	{
+		fpoint2_t dst = object->midPoint();
+		glLineWidth(line_width*1.5f);
+		for (unsigned a = 0; a < things.size(); a++)
+		{
+			MapThing* thing = things[a];
+			Drawing::drawArrow(thing->midPoint(), dst, col, false, arrowhead_angle, arrowhead_length);
+		}
+	}
 }
 
 void MapRenderer2D::renderTaggingThings(vector<MapThing*>& things, float fade)
@@ -1346,6 +1379,20 @@ void MapRenderer2D::renderTaggingThings(vector<MapThing*>& things, float fade)
 	if (point)
 		glDisable(GL_POINT_SPRITE);
 	glDisable(GL_TEXTURE_2D);
+
+	// Draw action lines
+	// Because gl state is in texture mode above, we cannot merge the loops
+	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
+	if (object && action_lines)
+	{
+		fpoint2_t src = object->midPoint();
+		glLineWidth(line_width*1.5f);
+		for (unsigned a = 0; a < things.size(); a++)
+		{
+			MapThing* thing = things[a];
+			Drawing::drawArrow(src, thing->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+		}
+	}
 }
 
 void MapRenderer2D::renderFlats(int type, bool texture, float alpha)
@@ -1768,6 +1815,7 @@ void MapRenderer2D::renderTaggedFlats(vector<MapSector*>& sectors, float fade)
 
 	// Render each sector polygon
 	glDisable(GL_TEXTURE_2D);
+	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
 	for (unsigned a = 0; a < sectors.size(); a++)
 	{
 		sectors[a]->getPolygon()->render();
@@ -1778,9 +1826,9 @@ void MapRenderer2D::renderTaggedFlats(vector<MapSector*>& sectors, float fade)
 
 		// Draw hilight
 		MapLine* line = NULL;
-		for (unsigned a = 0; a < lines.size(); a++)
+		for (unsigned b = 0; b < lines.size(); b++)
 		{
-			line = lines[a];
+			line = lines[b];
 			if (!line) continue;
 
 			// Draw line
@@ -1788,6 +1836,21 @@ void MapRenderer2D::renderTaggedFlats(vector<MapSector*>& sectors, float fade)
 			glVertex2d(line->v1()->xPos(), line->v1()->yPos());
 			glVertex2d(line->v2()->xPos(), line->v2()->yPos());
 			glEnd();
+		}
+
+		// Action lines
+		if (object && action_lines)
+		{
+			// Skip if the tagged sector is adjacent
+			if (object->getObjType() == MOBJ_LINE)
+			{
+				MapLine* line = (MapLine*)object;
+				if (line->frontSector() == sectors[a] || line->backSector() == sectors[a])
+					continue;
+			}
+
+			glLineWidth(line_width*1.5f);
+			Drawing::drawArrow(sectors[a]->midPoint(), object->midPoint(), col, false, arrowhead_angle, arrowhead_length);
 		}
 	}
 }
