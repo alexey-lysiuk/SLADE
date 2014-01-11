@@ -72,7 +72,7 @@ namespace Global
 {
 	string error = "";
 
-	string version = "3.1.0 beta 2"
+	string version = "3.1.0 beta 3"
 #ifdef GIT_DESCRIPTION
 	                 " (" GIT_DESCRIPTION ")"
 #endif
@@ -889,14 +889,14 @@ void MainApp::readConfigFile()
 		if (!token.Cmp("base_resource_paths"))
 		{
 			// Skip {
-			token = tz.getToken();
+			token = wxString::FromUTF8(tz.getToken());
 
 			// Read paths until closing brace found
 			token = tz.getToken();
 			while (token.Cmp("}"))
 			{
 				theArchiveManager->addBaseResourcePath(token);
-				token = tz.getToken();
+				token = wxString::FromUTF8(tz.getToken());
 			}
 		}
 
@@ -907,11 +907,11 @@ void MainApp::readConfigFile()
 			token = tz.getToken();
 
 			// Read files until closing brace found
-			token = tz.getToken();
+			token = wxString::FromUTF8(tz.getToken());
 			while (token != "}")
 			{
 				theArchiveManager->addRecentFile(token);
-				token = tz.getToken();
+				token = wxString::FromUTF8(tz.getToken());
 			}
 		}
 
@@ -981,13 +981,13 @@ void MainApp::saveConfigFile()
 	// Write base resource archive paths
 	file.Write("\nbase_resource_paths\n{\n");
 	for (size_t a = 0; a < theArchiveManager->numBaseResourcePaths(); a++)
-		file.Write(S_FMT("\t\"%s\"\n", theArchiveManager->getBaseResourcePath(a)));
+		file.Write(S_FMT("\t\"%s\"\n", theArchiveManager->getBaseResourcePath(a)), wxConvUTF8);
 	file.Write("}\n");
 
 	// Write recent files list (in reverse to keep proper order when reading back)
 	file.Write("\nrecent_files\n{\n");
 	for (int a = theArchiveManager->numRecentFiles()-1; a >= 0; a--)
-		file.Write(S_FMT("\t\"%s\"\n", theArchiveManager->recentFile(a)));
+		file.Write(S_FMT("\t\"%s\"\n", theArchiveManager->recentFile(a)), wxConvUTF8);
 	file.Write("}\n");
 
 	// Write keybinds

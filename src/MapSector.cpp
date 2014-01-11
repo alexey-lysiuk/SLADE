@@ -13,6 +13,7 @@ MapSector::MapSector(SLADEMap* parent) : MapObject(MOBJ_SECTOR, parent)
 {
 	// Init variables
 	poly_needsupdate = true;
+	geometry_updated = theApp->runTimer();
 }
 
 MapSector::MapSector(string f_tex, string c_tex, SLADEMap* parent) : MapObject(MOBJ_SECTOR, parent)
@@ -23,6 +24,7 @@ MapSector::MapSector(string f_tex, string c_tex, SLADEMap* parent) : MapObject(M
 	this->special = 0;
 	this->tag = 0;
 	poly_needsupdate = true;
+	geometry_updated = theApp->runTimer();
 }
 
 MapSector::~MapSector()
@@ -35,6 +37,13 @@ void MapSector::copy(MapObject* s)
 	if (s->getObjType() != MOBJ_SECTOR)
 		return;
 
+	// Update texture counts (decrement previous)
+	if (parent_map)
+	{
+		parent_map->updateFlatUsage(f_tex, -1);
+		parent_map->updateFlatUsage(c_tex, -1);
+	}
+
 	// Basic variables
 	MapSector* sector = (MapSector*)s;
 	this->f_tex = sector->f_tex;
@@ -44,6 +53,13 @@ void MapSector::copy(MapObject* s)
 	this->light = sector->light;
 	this->special = sector->special;
 	this->tag = sector->tag;
+
+	// Update texture counts (increment new)
+	if (parent_map)
+	{
+		parent_map->updateFlatUsage(f_tex, 1);
+		parent_map->updateFlatUsage(c_tex, 1);
+	}
 
 	// Other properties
 	MapObject::copy(s);
@@ -81,9 +97,17 @@ void MapSector::setStringProperty(string key, string value)
 	setModified();
 
 	if (key == "texturefloor")
+	{
+		if (parent_map) parent_map->updateFlatUsage(f_tex, -1);
 		f_tex = value;
+		if (parent_map) parent_map->updateFlatUsage(f_tex, 1);
+	}
 	else if (key == "textureceiling")
+	{
+		if (parent_map) parent_map->updateFlatUsage(c_tex, -1);
 		c_tex = value;
+		if (parent_map) parent_map->updateFlatUsage(c_tex, 1);
+	}
 	else
 		return MapObject::setStringProperty(key, value);
 }
@@ -142,6 +166,8 @@ void MapSector::updateBBox()
 		bbox.extend(line->v1()->xPos(), line->v1()->yPos());
 		bbox.extend(line->v2()->xPos(), line->v2()->yPos());
 	}
+
+	geometry_updated = theApp->runTimer();
 }
 
 bbox_t MapSector::boundingBox()
@@ -450,6 +476,7 @@ void MapSector::connectSide(MapSide* side)
 	poly_needsupdate = true;
 	bbox.reset();
 	setModified();
+	geometry_updated = theApp->runTimer();
 }
 
 void MapSector::disconnectSide(MapSide* side)
@@ -466,6 +493,7 @@ void MapSector::disconnectSide(MapSide* side)
 	setModified();
 	poly_needsupdate = true;
 	bbox.reset();
+	geometry_updated = theApp->runTimer();
 }
 
 void MapSector::writeBackup(mobj_backup_t* backup)
@@ -481,6 +509,10 @@ void MapSector::writeBackup(mobj_backup_t* backup)
 
 void MapSector::readBackup(mobj_backup_t* backup)
 {
+	// Update texture counts (decrement previous)
+	parent_map->updateFlatUsage(f_tex, -1);
+	parent_map->updateFlatUsage(c_tex, -1);
+
 	f_tex = backup->props_internal["texturefloor"].getStringValue();
 	c_tex = backup->props_internal["textureceiling"].getStringValue();
 	f_height = backup->props_internal["heightfloor"].getIntValue();
@@ -488,4 +520,8 @@ void MapSector::readBackup(mobj_backup_t* backup)
 	light = backup->props_internal["lightlevel"].getIntValue();
 	special = backup->props_internal["special"].getIntValue();
 	tag = backup->props_internal["id"].getIntValue();
+
+	// Update texture counts (increment new)
+	parent_map->updateFlatUsage(f_tex, 1);
+	parent_map->updateFlatUsage(c_tex, 1);
 }

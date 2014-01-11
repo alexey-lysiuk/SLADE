@@ -1103,6 +1103,7 @@ void MapCanvas::drawMap2d()
 		if (editor->taggingThings().size() > 0)
 			renderer_2d->renderTaggingThings(editor->taggingThings(), anim_flash_level);
 	}
+	renderer_2d->renderPathedThings(editor->pathedThings());
 
 	// Draw selection numbers if needed
 	//if (editor->selectionSize() > 0)
@@ -1817,11 +1818,17 @@ void MapCanvas::lockMouse(bool lock)
 		img.SetMask(true);
 		img.SetMaskColour(0, 0, 0);
 		SetCursor(wxCursor(img));
+#ifdef USE_SFML_RENDERWINDOW
+		setMouseCursorVisible(false);
+#endif
 	}
 	else
 	{
 		// Show cursor
 		SetCursor(wxNullCursor);
+#ifdef USE_SFML_RENDERWINDOW
+		setMouseCursorVisible(true);
+#endif
 	}
 }
 
@@ -2199,7 +2206,7 @@ void MapCanvas::changeSectorTexture()
 	editor->lockHilight();
 
 	// Open texture browser
-	MapTextureBrowser browser(theMapEditor, 1, texture);
+	MapTextureBrowser browser(theMapEditor, 1, texture, &(theMapEditor->mapEditor().getMap()));
 	browser.SetTitle(browser_title);
 	if (browser.ShowModal() == wxID_OK)
 	{
@@ -2262,7 +2269,7 @@ void MapCanvas::changeTexture3d(selection_3d_t first)
 		tex = editor->getMap().getSide(first.index)->stringProperty("texturetop");
 
 	// Open texture browser
-	MapTextureBrowser browser(theMapEditor, type, tex);
+	MapTextureBrowser browser(theMapEditor, type, tex, &(theMapEditor->mapEditor().getMap()));
 	browser.SetTitle("Browse Texture");
 	if (browser.ShowModal() == wxID_OK)
 	{

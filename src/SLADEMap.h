@@ -62,6 +62,11 @@ private:
 	// The last time the map geometry was updated
 	long	geometry_updated;
 
+	// Usage counts
+	std::map<string, int>	usage_tex;
+	std::map<string, int>	usage_flat;
+	std::map<int, int>		usage_thing_type;
+
 	// Doom format
 	bool	addVertex(doomvertex_t& v);
 	bool	addSide(doomside_t& s);
@@ -199,11 +204,14 @@ public:
 	bool				linesIntersect(MapLine* line1, MapLine* line2, double& x, double& y);
 
 	// Tags/Ids
+	MapThing* getFirstThingWithId(int id);
 	void	getSectorsByTag(int tag, vector<MapSector*>& list);
-	void	getThingsById(int id, vector<MapThing*>& list);
+	void	getThingsById(int id, vector<MapThing*>& list, unsigned start = 0, int type = 0);
 	void	getLinesById(int id, vector<MapLine*>& list);
 	void	getThingsByIdInSectorTag(int id, int tag, vector<MapThing*>& list);
-	void	getTaggingThingsById(int id, int type, vector<MapThing*>& list);
+	void	getTaggingThingsById(int id, int type, vector<MapThing*>& list, int ttype = 0);
+	void	getPathedThings(vector<MapThing*>& list);
+	void	getDragonTargets(MapThing* first, vector<MapThing*>& list);
 	void	getTaggingLinesById(int id, int type, vector<MapLine*>& list);
 	int		findUnusedSectorTag();
 	int		findUnusedThingId();
@@ -257,6 +265,17 @@ public:
 	// Cleanup/Extra
 	void	rebuildConnectedLines();
 	void	rebuildConnectedSides();
+
+	// Usage counts
+	void	clearTexUsage() { usage_tex.clear(); }
+	void	clearFlatUsage() { usage_flat.clear(); }
+	void	clearThingTypeUsage() { usage_thing_type.clear(); }
+	void	updateTexUsage(string tex, int adjust);
+	void	updateFlatUsage(string flat, int adjust);
+	void	updateThingTypeUsage(int type, int adjust);
+	int		texUsageCount(string tex);
+	int		flatUsageCount(string tex);
+	int		thingTypeUsageCount(int type);
 };
 
 #endif //__SLADEMAP_H__

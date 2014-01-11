@@ -397,6 +397,11 @@ bool SLADEMap::addSide(doomside_t& s)
 	ns->offset_x = s.x_offset;
 	ns->offset_y = s.y_offset;
 
+	// Update texture counts
+	usage_tex[ns->tex_upper] += 1;
+	usage_tex[ns->tex_middle] += 1;
+	usage_tex[ns->tex_lower] += 1;
+
 	// Add side
 	sides.push_back(ns);
 	return true;
@@ -413,6 +418,11 @@ bool SLADEMap::addSide(doom64side_t& s)
 	ns->tex_middle = theResourceManager->getTextureName(s.tex_middle);
 	ns->offset_x = s.x_offset;
 	ns->offset_y = s.y_offset;
+
+	// Update texture counts
+	usage_tex[ns->tex_upper] += 1;
+	usage_tex[ns->tex_middle] += 1;
+	usage_tex[ns->tex_lower] += 1;
 
 	// Add side
 	sides.push_back(ns);
@@ -552,6 +562,10 @@ bool SLADEMap::addSector(doomsector_t& s)
 	ns->special = s.special;
 	ns->tag = s.tag;
 
+	// Update texture counts
+	usage_flat[ns->f_tex] += 1;
+	usage_flat[ns->c_tex] += 1;
+
 	// Add sector
 	sectors.push_back(ns);
 	return true;
@@ -576,6 +590,10 @@ bool SLADEMap::addSector(doom64sector_t& s)
 	ns->properties["color_ceiling"] = s.color[2];
 	ns->properties["color_upper"] = s.color[3];
 	ns->properties["color_lower"] = s.color[4];
+
+	// Update texture counts
+	usage_flat[ns->f_tex] += 1;
+	usage_flat[ns->c_tex] += 1;
 
 	// Add sector
 	sectors.push_back(ns);
@@ -1269,6 +1287,11 @@ bool SLADEMap::addSide(ParseTreeNode* def)
 		//wxLogMessage("Property %s type %s (%s)", CHR(prop->getName()), CHR(prop->getValue().typeString()), CHR(prop->getValue().getStringValue()));
 	}
 
+	// Update texture counts
+	usage_tex[ns->tex_upper] += 1;
+	usage_tex[ns->tex_middle] += 1;
+	usage_tex[ns->tex_lower] += 1;
+
 	// Add side to map
 	sides.push_back(ns);
 
@@ -1338,6 +1361,8 @@ bool SLADEMap::addSector(ParseTreeNode* def)
 
 	// Create new sector
 	MapSector* ns = new MapSector(prop_ftex->getStringValue(), prop_ctex->getStringValue(), this);
+	usage_flat[ns->f_tex] += 1;
+	usage_flat[ns->c_tex] += 1;
 
 	// Set defaults
 	ns->f_height = 0;
@@ -2198,6 +2223,11 @@ void SLADEMap::clearMap()
 
 	// Object id 0 is always null
 	all_objects.push_back(mobj_holder_t(NULL, false));
+
+	// Clear usage counts
+	usage_flat.clear();
+	usage_tex.clear();
+	usage_thing_type.clear();
 }
 
 bool SLADEMap::removeVertex(MapVertex* vertex)
@@ -2319,6 +2349,11 @@ bool SLADEMap::removeSide(unsigned index, bool remove_from_line)
 		}
 	}
 
+	// Update texture usage
+	usage_tex[sides[index]->tex_lower] -= 1;
+	usage_tex[sides[index]->tex_middle] -= 1;
+	usage_tex[sides[index]->tex_upper] -= 1;
+
 	// Remove the side
 	removeMapObject(sides[index]);
 	sides[index] = sides.back();
@@ -2347,6 +2382,10 @@ bool SLADEMap::removeSector(unsigned index)
 	// Clear connected sides' sectors
 	//for (unsigned a = 0; a < sectors[index]->connected_sides.size(); a++)
 	//	sectors[index]->connected_sides[a]->sector = NULL;
+
+	// Update texture usage
+	usage_flat[sectors[index]->f_tex] -= 1;
+	usage_flat[sectors[index]->c_tex] -= 1;
 
 	// Remove the sector
 	removeMapObject(sectors[index]);
@@ -2730,14 +2769,26 @@ void SLADEMap::getSectorsByTag(int tag, vector<MapSector*>& list)
 	}
 }
 
-void SLADEMap::getThingsById(int id, vector<MapThing*>& list)
+void SLADEMap::getThingsById(int id, vector<MapThing*>& list, unsigned start, int type)
 {
 	// Find things with matching id
-	for (unsigned a = 0; a < things.size(); a++)
+	for (unsigned a = start; a < things.size(); a++)
 	{
-		if (things[a]->intProperty("id") == id)
+		if (things[a]->intProperty("id") == id && (type == 0 || things[a]->type == type))
 			list.push_back(things[a]);
 	}
+}
+
+MapThing* SLADEMap::getFirstThingWithId(int id)
+{
+	// Find things with matching id, but ignore dragons, we don't want them!
+	for (unsigned a = 0; a < things.size(); a++)
+	{
+		ThingType* tt = theGameConfiguration->thingType(things[a]->getType());
+		if (things[a]->intProperty("id") == id && !(tt->getFlags() & THING_DRAGON))
+			return things[a];
+	}
+	return NULL;
 }
 
 void SLADEMap::getThingsByIdInSectorTag(int id, int tag, vector<MapThing*>& list)
@@ -2756,6 +2807,41 @@ void SLADEMap::getThingsByIdInSectorTag(int id, int tag, vector<MapThing*>& list
 	}
 }
 
+WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, UsedValuesMap);
+void SLADEMap::getDragonTargets(MapThing* first, vector<MapThing*>& list)
+{
+	UsedValuesMap used;
+	list.clear();
+	list.push_back(first);
+	unsigned i = 0;
+	while (i < list.size())
+	{
+		string prop = "arg_";
+		for (int a = 0; a < 5; ++a)
+		{
+			prop[3] = ('0' + a);
+			int val = list[i]->intProperty(prop);
+			if (val && used[val] == 0)
+			{
+				used[val] = 1;
+				getThingsById(val, list);
+			}
+		}
+		++i;
+	}
+}
+
+void SLADEMap::getPathedThings(vector<MapThing*>& list)
+{
+	// Find things that need to be pathed
+	for (unsigned a = 0; a < things.size(); a++)
+	{
+		ThingType* tt = theGameConfiguration->thingType(things[a]->getType());
+		if (tt->getFlags() & THING_PATHED|THING_DRAGON)
+			list.push_back(things[a]);
+	}
+}
+
 void SLADEMap::getLinesById(int id, vector<MapLine*>& list)
 {
 	// Find lines with matching id
@@ -2766,15 +2852,16 @@ void SLADEMap::getLinesById(int id, vector<MapLine*>& list)
 	}
 }
 
-void SLADEMap::getTaggingThingsById(int id, int type, vector<MapThing*>& list)
+void SLADEMap::getTaggingThingsById(int id, int type, vector<MapThing*>& list, int ttype)
 {
 	// Find things with special affecting matching id
-	int needs_tag, tag, arg2, arg3, arg4, arg5;
+	int needs_tag, tag, arg2, arg3, arg4, arg5, tid;
 	for (unsigned a = 0; a < things.size(); a++)
 	{
-		if (things[a]->intProperty("special"))
+		ThingType* tt = theGameConfiguration->thingType(things[a]->getType());
+		if (tt->needsTag() || (things[a]->intProperty("special") && !(tt->getFlags() & THING_SCRIPT)))
 		{
-			needs_tag = theGameConfiguration->actionSpecial(things[a]->intProperty("special"))->needsTag();
+			needs_tag = tt->needsTag() ? tt->needsTag() : theGameConfiguration->actionSpecial(things[a]->intProperty("special"))->needsTag();
 			tag = things[a]->intProperty("arg0");
 			bool fits = false;
 			switch (needs_tag)
@@ -2855,6 +2942,13 @@ void SLADEMap::getTaggingThingsById(int id, int type, vector<MapThing*>& list)
 				fits = (type == SECTORS ? (IDEQ(tag)) : (IDEQ(arg2) && type == THINGS));
 				break;
 			default:
+				// Kind of a hack here. Patrol points and interpolation points only tag
+				// certain thing types with the same TID as themselves. Fortunately,
+				// the thing types in question are in the 9000 range, and the TagTypes
+				// enum is quite unlikely to reach that far. :p
+				tid = things[a]->intProperty("id");
+				ThingType* tt = theGameConfiguration->thingType(things[a]->getType());
+				fits = ((needs_tag == ttype) && (IDEQ(tid)) && (tt->needsTag() == needs_tag));
 				break;
 			}
 			if (fits) list.push_back(things[a]);
@@ -3415,6 +3509,7 @@ MapSide* SLADEMap::createSide(MapSector* sector)
 	side->tex_middle = "-";
 	side->tex_upper = "-";
 	side->tex_lower = "-";
+	usage_tex["-"] += 3;
 
 	// Add to sides
 	sides.push_back(side);
@@ -3552,6 +3647,11 @@ void SLADEMap::splitLine(unsigned line, unsigned vertex)
 		// Add side
 		s1->index = sides.size();
 		sides.push_back(s1);
+
+		// Update texture counts
+		usage_tex[s1->tex_upper] += 1;
+		usage_tex[s1->tex_middle] += 1;
+		usage_tex[s1->tex_lower] += 1;
 	}
 	if (l->side2)
 	{
@@ -3568,6 +3668,11 @@ void SLADEMap::splitLine(unsigned line, unsigned vertex)
 		// Add side
 		s2->index = sides.size();
 		sides.push_back(s2);
+
+		// Update texture counts
+		usage_tex[s2->tex_upper] += 1;
+		usage_tex[s2->tex_middle] += 1;
+		usage_tex[s2->tex_lower] += 1;
 	}
 
 	// Create and add new line
@@ -4291,4 +4396,34 @@ void SLADEMap::rebuildConnectedSides()
 		if (sides[a]->sector)
 			sides[a]->sector->connected_sides.push_back(sides[a]);
 	}
+}
+
+void SLADEMap::updateTexUsage(string tex, int adjust)
+{
+	usage_tex[tex] += adjust;
+}
+
+void SLADEMap::updateFlatUsage(string flat, int adjust)
+{
+	usage_flat[flat] += adjust;
+}
+
+void SLADEMap::updateThingTypeUsage(int type, int adjust)
+{
+	usage_thing_type[type] += adjust;
+}
+
+int SLADEMap::texUsageCount(string tex)
+{
+	return usage_tex[tex];
+}
+
+int SLADEMap::flatUsageCount(string tex)
+{
+	return usage_flat[tex];
+}
+
+int SLADEMap::thingTypeUsageCount(int type)
+{
+	return usage_thing_type[type];
 }
