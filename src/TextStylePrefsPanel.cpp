@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -565,7 +565,7 @@ void TextStylePrefsPanel::onBtnSaveStyleSet(wxCommandEvent& e)
 	name.Replace(" ", "_");
 
 	// Write set to file
-	string filename = appPath(S_FMT("text_styles/%s.sss", CHR(name)), DIR_USER);
+	string filename = appPath(S_FMT("text_styles/%s.sss", name), DIR_USER);
 	ss_temp.writeFile(filename);
 }
 

@@ -61,6 +61,8 @@ private:
 
 	// The last time the map geometry was updated
 	long	geometry_updated;
+	// The last time the thing list was modified
+	long	things_updated;
 
 	// Usage counts
 	std::map<string, int>	usage_tex;
@@ -151,7 +153,9 @@ public:
 	size_t		nSectors() { return sectors.size(); }
 	size_t		nThings() { return things.size(); }
 	long		geometryUpdated() { return geometry_updated; }
+	long		thingsUpdated() { return things_updated; }
 	void		setGeometryUpdated();
+	void		setThingsUpdated();
 
 	// MapObject id stuff (used for undo/redo)
 	void				addMapObject(MapObject* object);
@@ -202,6 +206,8 @@ public:
 	MapVertex*			lineCrossVertex(double x1, double y1, double x2, double y2);
 	void				updateGeometryInfo(long modified_time);
 	bool				linesIntersect(MapLine* line1, MapLine* line2, double& x, double& y);
+	void				findSectorTextPoint(MapSector* sector);
+	void				initSectorPolygons();
 
 	// Tags/Ids
 	MapThing* getFirstThingWithId(int id);

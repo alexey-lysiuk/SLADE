@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -233,14 +233,14 @@ bool ResArchive::open(MemChunk& mc)
 	// Check the header
 	if (magic[0] != 'R' || magic[1] != 'e' || magic[2] != 's' || magic[3] != '!')
 	{
-		wxLogMessage("ResArchive::openFile: File %s has invalid header", filename.c_str());
+		wxLogMessage("ResArchive::openFile: File %s has invalid header", filename);
 		Global::error = "Invalid res header";
 		return false;
 	}
 
 	if (dir_size % RESDIRENTRYSIZE)
 	{
-		wxLogMessage("ResArchive::openFile: File %s has invalid directory size", filename.c_str());
+		wxLogMessage("ResArchive::openFile: File %s has invalid directory size", filename);
 		Global::error = "Invalid res directory size";
 		return false;
 	}
@@ -348,7 +348,7 @@ bool ResArchive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("ResArchive::loadEntryData: Failed to open resfile %s", filename.c_str());
+		wxLogMessage("ResArchive::loadEntryData: Failed to open resfile %s", filename);
 		return false;
 	}
 
@@ -423,124 +423,6 @@ bool ResArchive::renameEntry(ArchiveEntry* entry, string name)
 	return Archive::renameEntry(entry, name);
 
 }
-
-/* ResArchive::findFirst
- * Returns the first entry matching the search criteria in [options],
- * or NULL if no matching entry was found
- *******************************************************************/
-ArchiveEntry* ResArchive::findFirst(search_options_t& options)
-{
-	// Init search variables
-	int start = 0;
-	int end = numEntries();
-	options.match_name = options.match_name.Lower();
-
-	// Begin search
-	ArchiveEntry* entry = NULL;
-	for (int a = start; a < end; a++)
-	{
-		entry = getEntry(a);
-
-		// Check type
-		if (options.match_type)
-		{
-			if (options.match_type != entry->getType())
-				continue;
-		}
-
-		// Check name
-		if (!options.match_name.IsEmpty())
-		{
-			if (!options.match_name.Matches(entry->getName().Lower()))
-				continue;
-		}
-
-		// Entry passed all checks so far, so we found a match
-		return entry;
-	}
-
-	// No match found
-	return NULL;
-}
-
-/* ResArchive::findLast
- * Returns the last entry matching the search criteria in [options],
- * or NULL if no matching entry was found
- *******************************************************************/
-ArchiveEntry* ResArchive::findLast(search_options_t& options)
-{
-	// Init search variables
-	int start = 0;
-	int end = numEntries();
-	options.match_name = options.match_name.Lower();
-
-	// Begin search (bottom-up)
-	ArchiveEntry* entry = NULL;
-	for (int a = end - 1; a >= start; a--)
-	{
-		entry = getEntry(a);
-
-		// Check type
-		if (options.match_type)
-		{
-			if (options.match_type != entry->getType())
-				continue;
-		}
-
-		// Check name
-		if (!options.match_name.IsEmpty())
-		{
-			if (!options.match_name.Matches(entry->getName().Lower()))
-				continue;
-		}
-
-		// Entry passed all checks so far, so we found a match
-		return entry;
-	}
-
-	// No match found
-	return NULL;
-}
-
-/* ResArchive::findAll
- * Returns all entries matching the search criteria in [options]
- *******************************************************************/
-vector<ArchiveEntry*> ResArchive::findAll(search_options_t& options)
-{
-	// Init search variables
-	int start = 0;
-	int end = numEntries();
-	options.match_name = options.match_name.Lower();
-	vector<ArchiveEntry*> ret;
-
-	// Begin search
-	ArchiveEntry* entry = NULL;
-	for (int a = start; a < end; a++)
-	{
-		entry = getEntry(a);
-
-		// Check type
-		if (options.match_type)
-		{
-			if (options.match_type != entry->getType())
-				continue;
-		}
-
-		// Check name
-		if (!options.match_name.IsEmpty())
-		{
-			if (!options.match_name.Matches(entry->getName().Lower()))
-				continue;
-		}
-
-		// Entry passed all checks so far, so we found a match
-		ret.push_back(entry);
-	}
-
-	// Return search result
-	return ret;
-}
-
 
 /* ResArchive::isResArchive
  * Checks if the given data is a valid A&A res archive

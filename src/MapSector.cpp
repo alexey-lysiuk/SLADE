@@ -12,6 +12,8 @@
 MapSector::MapSector(SLADEMap* parent) : MapObject(MOBJ_SECTOR, parent)
 {
 	// Init variables
+	this->special = 0;
+	this->tag = 0;
 	poly_needsupdate = true;
 	geometry_updated = theApp->runTimer();
 }
@@ -147,11 +149,20 @@ void MapSector::setIntProperty(string key, int value)
 		MapObject::setIntProperty(key, value);
 }
 
-fpoint2_t MapSector::midPoint()
+fpoint2_t MapSector::getPoint(uint8_t point)
 {
-	bbox_t bbox = boundingBox();
-	return fpoint2_t(bbox.min.x + ((bbox.max.x-bbox.min.x)*0.5),
-	                 bbox.min.y + ((bbox.max.y-bbox.min.y)*0.5));
+	if (point == MOBJ_POINT_MID)
+	{
+		bbox_t bbox = boundingBox();
+		return fpoint2_t(bbox.min.x + ((bbox.max.x-bbox.min.x)*0.5),
+			bbox.min.y + ((bbox.max.y-bbox.min.y)*0.5));
+	}
+	else
+	{
+		if (text_point.x == 0 && text_point.y == 0 && parent_map)
+			parent_map->findSectorTextPoint(this);
+		return text_point;
+	}
 }
 
 void MapSector::updateBBox()
@@ -167,6 +178,7 @@ void MapSector::updateBBox()
 		bbox.extend(line->v2()->xPos(), line->v2()->yPos());
 	}
 
+	text_point.set(0, 0);
 	geometry_updated = theApp->runTimer();
 }
 
@@ -410,7 +422,7 @@ rgba_t MapSector::getColour(int where, bool fullbright)
 	if (parent_map->currentFormat() == MAP_UDMF && S_CMPNOCASE(parent_map->udmfNamespace(), "zdoom"))
 	{
 		// Get sector light colour
-		int intcol = intProperty("lightcolor");
+		int intcol = MapObject::intProperty("lightcolor");
 		wxColour wxcol(intcol);
 
 		// Ignore light level if fullbright
@@ -418,13 +430,13 @@ rgba_t MapSector::getColour(int where, bool fullbright)
 			return rgba_t(wxcol.Blue(), wxcol.Green(), wxcol.Red(), 255);
 
 		// Get sector light level
-		int ll = intProperty("lightlevel");
+		int ll = light;
 
 		// Get specific light level
 		if (where == 1)
 		{
 			// Floor
-			int fl = intProperty("lightfloor");
+			int fl = MapObject::intProperty("lightfloor");
 			if (boolProperty("lightfloorabsolute"))
 				ll = fl;
 			else
@@ -433,7 +445,7 @@ rgba_t MapSector::getColour(int where, bool fullbright)
 		else if (where == 2)
 		{
 			// Ceiling
-			int cl = intProperty("lightceiling");
+			int cl = MapObject::intProperty("lightceiling");
 			if (boolProperty("lightceilingabsolute"))
 				ll = cl;
 			else

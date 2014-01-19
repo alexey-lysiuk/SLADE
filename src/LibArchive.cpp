@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -288,7 +288,7 @@ bool LibArchive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("LibArchive::loadEntryData: Failed to open libfile %s", filename.c_str());
+		wxLogMessage("LibArchive::loadEntryData: Failed to open libfile %s", filename);
 		return false;
 	}
 

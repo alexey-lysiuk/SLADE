@@ -1,6 +1,6 @@
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -134,29 +134,14 @@ public:
 	{
 		string location = "[unknown location] ";
 		if (frame.HasSourceLocation())
-			location = S_FMT("(%s:%d) ", frame.GetFileName().c_str(), frame.GetLine());
+			location = S_FMT("(%s:%d) ", frame.GetFileName(), frame.GetLine());
 
 		wxUIntPtr address = wxPtrToUInt(frame.GetAddress());
 		string func_name = frame.GetName();
 		if (func_name.IsEmpty())
 			func_name = S_FMT("[unknown:%d]", address);
 
-		//string parameters = wxEmptyString;
-		/*
-		for (size_t a = 0; a < frame.GetParamCount(); a++) {
-			string type = wxEmptyString;
-			string name = wxEmptyString;
-			string value = wxEmptyString;
-			frame.GetParam(a, &type, &name, &value);
-
-			parameters.Append(s_fmt("%s %s = %s", type.c_str(), name.c_str(), value.c_str()));
-
-			if (a < frame.GetParamCount() - 1)
-				parameters.Append(", );
-		}
-		*/
-
-		stack_trace.Append(S_FMT("%d: %s%s\n", frame.GetLevel(), CHR(location), CHR(func_name)));
+		stack_trace.Append(S_FMT("%d: %s%s\n", frame.GetLevel(), location, func_name));
 	}
 };
 
@@ -182,11 +167,11 @@ public:
 		sizer->Add(new wxStaticText(this, -1, message), 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 4);
 
 		// Setup stack trace string
-		string trace = S_FMT("Version: %s\n", CHR(Global::version));
+		string trace = S_FMT("Version: %s\n", Global::version);
 		if (current_action.IsEmpty())
 			trace += "No current action\n";
 		else
-			trace += S_FMT("Current action: %s", CHR(current_action));
+			trace += S_FMT("Current action: %s", current_action);
 		trace += "\n";
 		trace += st.getTraceString();
 
@@ -256,7 +241,7 @@ string appPath(string filename, int dir)
 		{
 			if (!wxMkdir(dir_temp))
 			{
-				wxLogMessage("Unable to create temp directory \"%s\"", CHR(dir_temp));
+				wxLogMessage("Unable to create temp directory \"%s\"", dir_temp);
 				temp_fail_count++;
 				return appPath(filename, dir);
 			}
@@ -273,14 +258,8 @@ string appPath(string filename, int dir)
  * SLADELOG CLASS FUNCTIONS
  *******************************************************************/
 
-// How fun. DoLogString() does not work with 2.9.1, and DoLogText() with 2.9.0.
-#if (wxMAJOR_VERSION == 2 && wxMINOR_VERSION == 9 && wxRELEASE_NUMBER == 0)
-void SLADELog::DoLogString(const wxString& msg, time_t time)
-{
-#else
 void SLADELog::DoLogText(const wxString& msg)
 {
-#endif
 	if (!exiting)
 		theConsole->logMessage(msg);
 }
@@ -365,7 +344,7 @@ bool MainApp::initDirectories()
 	{
 		if (!wxMkdir(dir_user))
 		{
-			wxMessageBox(S_FMT("Unable to create user directory \"%s\"", dir_user.c_str()), "Error", wxICON_ERROR);
+			wxMessageBox(S_FMT("Unable to create user directory \"%s\"", dir_user), "Error", wxICON_ERROR);
 			return false;
 		}
 	}
@@ -390,8 +369,8 @@ void MainApp::initLogFile()
 	// Write logfile header
 	string year = wxNow().Right(4);
 	wxLogMessage("SLADE - It's a Doom Editor");
-	wxLogMessage("Version %s", Global::version.c_str());
-	wxLogMessage("Written by Simon Judd, 2008-%s", year.c_str());
+	wxLogMessage("Version %s", Global::version);
+	wxLogMessage("Written by Simon Judd, 2008-%s", year);
 #ifdef SFML_VERSION_MAJOR
 	wxLogMessage("Compiled with wxWidgets %i.%i.%i and SFML %i.%i", wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER, SFML_VERSION_MAJOR, SFML_VERSION_MINOR);
 #else
@@ -827,7 +806,7 @@ int MainApp::OnExit()
 	while (files)
 	{
 		if (!wxRemoveFile(appPath(filename, DIR_TEMP)))
-			wxLogMessage("Warning: Could not clean up temporary file \"%s\"", CHR(filename));
+			wxLogMessage("Warning: Could not clean up temporary file \"%s\"", filename);
 		files = temp.GetNext(&filename);
 	}
 
@@ -889,14 +868,14 @@ void MainApp::readConfigFile()
 		if (!token.Cmp("base_resource_paths"))
 		{
 			// Skip {
-			token = wxString::FromUTF8(tz.getToken());
+			token = wxString::FromUTF8(CHR(tz.getToken()));
 
 			// Read paths until closing brace found
 			token = tz.getToken();
 			while (token.Cmp("}"))
 			{
 				theArchiveManager->addBaseResourcePath(token);
-				token = wxString::FromUTF8(tz.getToken());
+				token = wxString::FromUTF8(CHR(tz.getToken()));
 			}
 		}
 
@@ -907,11 +886,11 @@ void MainApp::readConfigFile()
 			token = tz.getToken();
 
 			// Read files until closing brace found
-			token = wxString::FromUTF8(tz.getToken());
+			token = wxString::FromUTF8(CHR(tz.getToken()));
 			while (token != "}")
 			{
 				theArchiveManager->addRecentFile(token);
-				token = wxString::FromUTF8(tz.getToken());
+				token = wxString::FromUTF8(CHR(tz.getToken()));
 			}
 		}
 
@@ -1039,7 +1018,7 @@ bool MainApp::doAction(string id)
 
 	// Warn if nothing handled it
 	if (!handled)
-		wxLogMessage("Warning: Action \"%s\" not handled", CHR(id));
+		wxLogMessage("Warning: Action \"%s\" not handled", id);
 
 	// Return true if handled
 	return handled;

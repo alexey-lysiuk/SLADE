@@ -1,6 +1,6 @@
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -435,7 +435,7 @@ bool TextureXList::readTEXTUREXData(ArchiveEntry* texturex, PatchTable& patch_ta
 			}
 			if (patch.IsEmpty())
 			{
-				//wxLogMessage("Warning: Texture %s contains patch %d which is invalid - may be incorrect PNAMES entry", CHR(tex->getName()), pdef.patch);
+				//wxLogMessage("Warning: Texture %s contains patch %d which is invalid - may be incorrect PNAMES entry", tex->getName(), pdef.patch);
 				patch = S_FMT("INVPATCH%04d", pdef.patch);
 			}
 
@@ -704,6 +704,14 @@ bool TextureXList::readTEXTURESData(ArchiveEntry* entry)
 		{
 			CTexture* tex = new CTexture();
 			if (tex->parse(tz, "Flat"))
+				addTexture(tex);
+		}
+
+		// Old HIRESTEX "Define"
+		if (S_CMPNOCASE(token, "Define"))
+		{
+			CTexture* tex = new CTexture();
+			if (tex->parseDefine(tz))
 				addTexture(tex);
 		}
 

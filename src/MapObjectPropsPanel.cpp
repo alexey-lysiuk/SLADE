@@ -353,6 +353,7 @@ void MapObjectPropsPanel::setupType(int objtype)
 	pg_props_side1->Clear();
 	pg_props_side2->Clear();
 	properties.clear();
+	btn_add->Show(false);
 
 	// Remove side1/2 tabs if they exist
 	while (tabs_sections->GetPageCount() > 1)
@@ -599,6 +600,7 @@ void MapObjectPropsPanel::setupTypeUDMF(int objtype)
 	pg_props_side1->Clear();
 	pg_props_side2->Clear();
 	properties.clear();
+	btn_add->Show();
 
 	// Remove side1/2 tabs if they exist
 	while (tabs_sections->GetPageCount() > 1)
@@ -737,7 +739,7 @@ void MapObjectPropsPanel::openObjects(vector<MapObject*>& objects)
 					if (!group_custom)
 						group_custom = pg_properties->Append(new wxPropertyCategory("Custom"));
 
-					//LOG_MESSAGE(2, "Add custom property \"%s\"", CHR(objprops[b].name));
+					//LOG_MESSAGE(2, "Add custom property \"%s\"", objprops[b].name);
 
 					// Add property
 					switch (objprops[b].value.getType())
@@ -880,7 +882,7 @@ void MapObjectPropsPanel::onBtnAdd(wxCommandEvent& e)
 		{
 			if (properties[a]->getPropName() == propname)
 			{
-				wxMessageBox(S_FMT("Property \"%s\" already exists", CHR(propname)), "Error");
+				wxMessageBox(S_FMT("Property \"%s\" already exists", propname), "Error");
 				return;
 			}
 		}

@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -75,6 +75,9 @@
 CVAR(Int, autosave_entry_changes, 2, CVAR_SAVE)	// 0=no, 1=yes, 2=ask
 CVAR(Bool, confirm_entry_delete, true, CVAR_SAVE)
 CVAR(Bool, context_submenus, true, CVAR_SAVE)
+CVAR(String, last_colour, "RGB(255, 0, 0)", CVAR_SAVE)
+CVAR(String, last_tint_colour, "RGB(255, 0, 0)", CVAR_SAVE)
+CVAR(Int, last_tint_amount, 50, CVAR_SAVE)
 EXTERN_CVAR(String, path_pngout);
 EXTERN_CVAR(String, path_pngcrush);
 EXTERN_CVAR(String, path_deflopt);
@@ -321,7 +324,7 @@ bool ArchivePanel::saveEntryChanges()
 	// Ask if needed
 	if (autosave_entry_changes > 1)
 	{
-		int result = wxMessageBox(S_FMT("Save changes to entry \"%s\"?", cur_area->getEntry()->getName().c_str()),
+		int result = wxMessageBox(S_FMT("Save changes to entry \"%s\"?", cur_area->getEntry()->getName()),
 		                          "Unsaved Changes", wxYES_NO|wxICON_QUESTION);
 
 		// Stop if user clicked no
@@ -463,7 +466,7 @@ bool ArchivePanel::save()
 	if (!archive->save())
 	{
 		// If there was an error pop up a message box
-		wxMessageBox(S_FMT("Error:\n%s", Global::error.c_str()), "Error", wxICON_ERROR);
+		wxMessageBox(S_FMT("Error:\n%s", Global::error), "Error", wxICON_ERROR);
 		return false;
 	}
 
@@ -490,7 +493,7 @@ bool ArchivePanel::saveAs()
 		if (!archive->save(info.filenames[0]))
 		{
 			// If there was an error pop up a message box
-			wxMessageBox(S_FMT("Error:\n%s", Global::error.c_str()), "Error", wxICON_ERROR);
+			wxMessageBox(S_FMT("Error:\n%s", Global::error), "Error", wxICON_ERROR);
 			return false;
 		}
 	}
@@ -799,7 +802,7 @@ bool ArchivePanel::renameEntry(bool each)
 		string old_name = selected_dirs[a]->getName();
 
 		// Prompt for a new name
-		string new_name = wxGetTextFromUser("Enter new directory name:", S_FMT("Rename Directory %s", old_name.c_str()), old_name);
+		string new_name = wxGetTextFromUser("Enter new directory name:", S_FMT("Rename Directory %s", old_name), old_name);
 
 		// Do nothing if no name was entered
 		if (new_name.IsEmpty())
@@ -846,7 +849,7 @@ bool ArchivePanel::deleteEntry(bool confirm)
 		else if (num > 0)
 			item = S_FMT("these %d items", num);
 
-		if (wxMessageBox(S_FMT("Are you sure you want to delete %s?", CHR(item)), "Delete Confirmation", wxYES_NO|wxICON_QUESTION) == wxNO)
+		if (wxMessageBox(S_FMT("Are you sure you want to delete %s?", item), "Delete Confirmation", wxYES_NO|wxICON_QUESTION) == wxNO)
 			return false;
 	}
 
@@ -1039,7 +1042,7 @@ bool ArchivePanel::crc32()
 	for (unsigned a = 0; a < selection.size(); a++)
 	{
 		uint32_t crc = selection[a]->getMCData().crc();
-		checksums += S_FMT("%s:\t%x\n", CHR(selection[a]->getName()), crc);
+		checksums += S_FMT("%s:\t%x\n", selection[a]->getName(), crc);
 	}
 	wxLogMessage(checksums);
 	wxMessageBox(checksums);
@@ -1111,7 +1114,7 @@ bool ArchivePanel::importEntry()
 					wxMessageDialog md(this,
 					                   S_FMT("Image %s had offset [%d, %d], imported file has offset [%d, %d]. "
 					                         "Do you want to keep the old offset and override the new?",
-					                         CHR(selection[a]->getName()), offset.x, offset.y, noffset.x, noffset.y),
+					                         selection[a]->getName(), offset.x, offset.y, noffset.x, noffset.y),
 					                   "Conflicting Offsets", wxYES_NO);
 					int result = md.ShowModal();
 					if (result != wxID_YES)
@@ -1121,7 +1124,7 @@ bool ArchivePanel::importEntry()
 				if (ok && !si.getFormat()->writeOffset(si, selection[a], offset))
 					wxLogMessage("Old offset information [%d, %d] couldn't be "
 					             "preserved in the new image format for image %s.",
-					             offset.x, offset.y, CHR(selection[a]->getName()));
+					             offset.x, offset.y, selection[a]->getName());
 			}
 
 			// Set extension by type
@@ -1376,7 +1379,7 @@ bool ArchivePanel::gfxRemap()
 
 				// Write modified image data
 				if (!temp.getFormat()->saveImage(temp, mc, pal))
-					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", CHR(entry->getName()));
+					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", entry->getName());
 				else
 					entry->importMemChunk(mc);
 			}
@@ -1404,6 +1407,7 @@ bool ArchivePanel::gfxColourise()
 	// Create colourise dialog
 	Palette8bit* pal = theMainWindow->getPaletteChooser()->getSelectedPalette();
 	GfxColouriseDialog gcd(this, selection[0], pal);
+	gcd.setColour(last_colour);
 
 	// Run dialog
 	if (gcd.ShowModal() == wxID_OK)
@@ -1427,7 +1431,7 @@ bool ArchivePanel::gfxColourise()
 
 				// Write modified image data
 				if (!temp.getFormat()->saveImage(temp, mc, pal))
-					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", CHR(entry->getName()));
+					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", entry->getName());
 				else
 					entry->importMemChunk(mc);
 			}
@@ -1436,6 +1440,8 @@ bool ArchivePanel::gfxColourise()
 		// Finish recording undo level
 		undo_manager->endRecord(true);
 	}
+	rgba_t gcdcol = gcd.getColour();
+	last_colour = S_FMT("RGB(%d, %d, %d)", gcdcol.r, gcdcol.g, gcdcol.b);
 	theActivePanel->callRefresh();
 
 	return true;
@@ -1452,6 +1458,7 @@ bool ArchivePanel::gfxTint()
 	// Create colourise dialog
 	Palette8bit* pal = theMainWindow->getPaletteChooser()->getSelectedPalette();
 	GfxTintDialog gtd(this, selection[0], pal);
+	gtd.setValues(last_tint_colour, last_tint_amount);
 
 	// Run dialog
 	if (gtd.ShowModal() == wxID_OK)
@@ -1475,7 +1482,7 @@ bool ArchivePanel::gfxTint()
 
 				// Write modified image data
 				if (!temp.getFormat()->saveImage(temp, mc, pal))
-					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", CHR(entry->getName()));
+					wxLogMessage("Error: Could not write image data to entry %s, unsupported format for writing", entry->getName());
 				else
 					entry->importMemChunk(mc);
 			}
@@ -1484,6 +1491,9 @@ bool ArchivePanel::gfxTint()
 		// Finish recording undo level
 		undo_manager->endRecord(true);
 	}
+	rgba_t gtdcol = gtd.getColour();
+	last_tint_colour = S_FMT("RGB(%d, %d, %d)", gtdcol.r, gtdcol.g, gtdcol.b);
+	last_tint_amount = (int)(gtd.getAmount() * 100.0f);
 	theActivePanel->callRefresh();
 
 	return true;
@@ -1544,7 +1554,7 @@ bool ArchivePanel::gfxExportPNG()
 			// If a filename was selected, export it
 			if (!EntryOperations::exportAsPNG(selection[0], info.filenames[0]))
 			{
-				wxMessageBox(S_FMT("Error: %s", CHR(Global::error)), "Error", wxOK|wxICON_ERROR);
+				wxMessageBox(S_FMT("Error: %s", Global::error), "Error", wxOK|wxICON_ERROR);
 				return false;
 			}
 		}
@@ -1705,7 +1715,7 @@ bool ArchivePanel::wavDSndConvert()
 			// Attempt conversion
 			if (!Conversions::wavToDoomSnd(selection[a]->getMCData(), dsnd))
 			{
-				wxLogMessage("Error: Unable to convert entry %s: %s", CHR(selection[a]->getName()), CHR(Global::error));
+				wxLogMessage("Error: Unable to convert entry %s: %s", selection[a]->getName(), Global::error);
 				continue;
 			}
 			undo_manager->recordUndoStep(new EntryDataUS(selection[a]));	// Create undo step
@@ -1763,7 +1773,7 @@ bool ArchivePanel::dSndWavConvert()
 		}
 		else
 		{
-			wxLogMessage("Error: Unable to convert entry %s: %s", CHR(selection[a]->getName()), CHR(Global::error));
+			wxLogMessage("Error: Unable to convert entry %s: %s", selection[a]->getName(), Global::error);
 			continue;
 		}
 	}
@@ -1958,7 +1968,7 @@ bool ArchivePanel::openEntry(ArchiveEntry* entry, bool force)
 		// Check it exists (really should)
 		if (!dir)
 		{
-			wxLogMessage("Error: Trying to open nonexistant directory %s", CHR(name));
+			wxLogMessage("Error: Trying to open nonexistant directory %s", name);
 			return false;
 		}
 		entry_list->setDir(dir);
@@ -1992,12 +2002,12 @@ bool ArchivePanel::openEntry(ArchiveEntry* entry, bool force)
 		else if (!entry->getType()->getEditor().Cmp("default"))
 			new_area = default_area;
 		else
-			wxLogMessage("Entry editor %s does not exist, using default editor", entry->getType()->getEditor().c_str());
+			wxLogMessage("Entry editor %s does not exist, using default editor", entry->getType()->getEditor());
 
 		// Load the entry into the panel
 		if (!new_area->openEntry(entry))
 		{
-			wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error.c_str()), "Error", wxOK|wxICON_ERROR);
+			wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error), "Error", wxOK|wxICON_ERROR);
 		}
 
 		// Show the new entry panel
@@ -2025,7 +2035,7 @@ bool ArchivePanel::openEntryAsText(ArchiveEntry* entry)
 	// Load the current entry into the panel
 	if (!cur_area->openEntry(entry))
 	{
-		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error.c_str()), "Error", wxOK|wxICON_ERROR);
+		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error), "Error", wxOK|wxICON_ERROR);
 	}
 
 	return true;
@@ -2047,7 +2057,7 @@ bool ArchivePanel::openEntryAsHex(ArchiveEntry* entry)
 	// Load the current entry into the panel
 	if (!cur_area->openEntry(entry))
 	{
-		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error.c_str()), "Error", wxOK|wxICON_ERROR);
+		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error), "Error", wxOK|wxICON_ERROR);
 	}
 
 	return true;
@@ -2884,8 +2894,9 @@ void ArchivePanel::onEntryListActivated(wxListEvent& e)
 
 	// Texture list
 	else if (entry->getType()->getFormat() == "texturex" ||
+		     entry->getType() == EntryType::getType("pnames") ||
 	         entry->getType() == EntryType::getType("zdtextures"))
-		theMainWindow->openTextureEditor(archive);
+		theMainWindow->openTextureEditor(archive, entry);
 
 	// Map
 	// TODO: Needs to filter the game/port lists in the dialog by the map format
@@ -2911,7 +2922,7 @@ void ArchivePanel::onEntryListActivated(wxListEvent& e)
 				else
 				{
 					theMapEditor->Hide();
-					wxMessageBox(S_FMT("Unable to open map %s: %s", CHR(entry->getName()), CHR(Global::error)), "Invalid map error", wxICON_ERROR);
+					wxMessageBox(S_FMT("Unable to open map %s: %s", entry->getName(), Global::error), "Invalid map error", wxICON_ERROR);
 				}
 			}
 		}
@@ -3338,7 +3349,7 @@ CONSOLE_COMMAND(cd, 1, true)
 		}
 		else
 		{
-			wxLogMessage("Error: Trying to open nonexistant directory %s", CHR(args[0]));
+			wxLogMessage("Error: Trying to open nonexistant directory %s", args[0]);
 		}
 
 	}

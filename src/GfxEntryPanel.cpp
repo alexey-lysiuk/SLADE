@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -50,6 +50,9 @@
  * VARIABLES
  *******************************************************************/
 EXTERN_CVAR(Bool, gfx_arc)
+EXTERN_CVAR(String, last_colour)
+EXTERN_CVAR(String, last_tint_colour)
+EXTERN_CVAR(Int, last_tint_amount)
 
 class GfxCropDialog : public wxDialog
 {
@@ -122,8 +125,8 @@ GfxEntryPanel::GfxEntryPanel(wxWindow* parent)
 	gfx_canvas->allowScroll(true);
 
 	// Offsets
-	spin_xoffset = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, SHRT_MIN, SHRT_MAX, 0);
-	spin_yoffset = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, SHRT_MIN, SHRT_MAX, 0);
+	spin_xoffset = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxTE_PROCESS_ENTER, SHRT_MIN, SHRT_MAX, 0);
+	spin_yoffset = new wxSpinCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxTE_PROCESS_ENTER, SHRT_MIN, SHRT_MAX, 0);
 	spin_xoffset->SetMinSize(wxSize(64, -1));
 	spin_yoffset->SetMinSize(wxSize(64, -1));
 	sizer_bottom->Add(new wxStaticText(this, -1, "Offsets:"), 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -178,6 +181,8 @@ GfxEntryPanel::GfxEntryPanel(wxWindow* parent)
 	slider_zoom->Bind(wxEVT_COMMAND_SLIDER_UPDATED, &GfxEntryPanel::onZoomChanged, this);
 	spin_xoffset->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED, &GfxEntryPanel::onXOffsetChanged, this);
 	spin_yoffset->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED, &GfxEntryPanel::onYOffsetChanged, this);
+	spin_xoffset->Bind(wxEVT_COMMAND_TEXT_ENTER, &GfxEntryPanel::onTextXOffsetChanged, this);
+	spin_yoffset->Bind(wxEVT_COMMAND_TEXT_ENTER, &GfxEntryPanel::onTextYOffsetChanged, this);
 	choice_offset_type->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &GfxEntryPanel::onOffsetTypeChanged, this);
 	cb_tile->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &GfxEntryPanel::onTileChanged, this);
 	cb_arc->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &GfxEntryPanel::onARCChanged, this);
@@ -271,7 +276,7 @@ bool GfxEntryPanel::saveEntry()
 		if (format == SIFormat::unknownFormat())
 			error = "Image is of unknown format";
 		else if (writable == SIFormat::NOTWRITABLE)
-			error = S_FMT("Writing unsupported for format \"%s\"", CHR(format->getName()));
+			error = S_FMT("Writing unsupported for format \"%s\"", format->getName());
 		else
 		{
 			// Convert image if necessary (using default options)
@@ -380,7 +385,7 @@ bool GfxEntryPanel::extractAll()
 	int pos = 0;
 	for (int i = 0; i < getImage()->getSize(); ++i)
 	{
-		string newname = S_FMT("%s_%i.png", CHR(name), i);
+		string newname = S_FMT("%s_%i.png", name, i);
 		Misc::loadImageFromEntry(getImage(), entry, i);
 
 		// Only process images that actually contain some pixels
@@ -464,12 +469,6 @@ void GfxEntryPanel::refresh()
 
 	// Apply offset view type
 	applyViewType();
-
-	//// Enable save changes button depending on if the entry is locked
-	//if (entry->isLocked())
-	//	btn_save->Enable(false);
-	//else
-	//	btn_save->Enable(true);
 
 	// Reset display offsets in graphics mode
 	if (gfx_canvas->getViewType() != GFXVIEW_SPRITE)
@@ -731,6 +730,7 @@ bool GfxEntryPanel::handleAction(string id)
 	{
 		Palette8bit* pal = theMainWindow->getPaletteChooser()->getSelectedPalette();
 		GfxColouriseDialog gcd(theMainWindow, entry, pal);
+		gcd.setColour(last_colour);
 
 		// Show colourise dialog
 		if (gcd.ShowModal() == wxID_OK)
@@ -747,6 +747,8 @@ bool GfxEntryPanel::handleAction(string id)
 			Refresh();
 			setModified();
 		}
+		rgba_t gcdcol = gcd.getColour();
+		last_colour = S_FMT("RGB(%d, %d, %d)", gcdcol.r, gcdcol.g, gcdcol.b);
 	}
 
 	// Tint
@@ -754,6 +756,7 @@ bool GfxEntryPanel::handleAction(string id)
 	{
 		Palette8bit* pal = theMainWindow->getPaletteChooser()->getSelectedPalette();
 		GfxTintDialog gtd(theMainWindow, entry, pal);
+		gtd.setValues(last_tint_colour, last_tint_amount);
 
 		// Show tint dialog
 		if (gtd.ShowModal() == wxID_OK)
@@ -770,6 +773,9 @@ bool GfxEntryPanel::handleAction(string id)
 			Refresh();
 			setModified();
 		}
+		rgba_t gtdcol = gtd.getColour();
+		last_tint_colour = S_FMT("RGB(%d, %d, %d)", gtdcol.r, gtdcol.g, gtdcol.b);
+		last_tint_amount = (int)(gtd.getAmount() * 100.0);
 	}
 
 	// Crop
@@ -932,9 +938,22 @@ void GfxEntryPanel::onZoomChanged(wxCommandEvent& e)
 	gfx_canvas->Refresh();
 }
 
-/* GfxEntryPanel::textXOffsetChanged
+/* GfxEntryPanel::onTextXOffsetChanged
  * Called when enter is pressed within the x offset text entry
  *******************************************************************/
+void GfxEntryPanel::onTextXOffsetChanged(wxCommandEvent& e)
+{
+	// Change the image x-offset
+	int offset = spin_xoffset->GetValue();
+	getImage()->setXOffset(offset);
+
+	// Update variables
+	setModified();
+
+	// Refresh canvas
+	gfx_canvas->Refresh();
+}
+
 void GfxEntryPanel::onXOffsetChanged(wxSpinEvent& e)
 {
 	// Change the image x-offset
@@ -948,9 +967,22 @@ void GfxEntryPanel::onXOffsetChanged(wxSpinEvent& e)
 	gfx_canvas->Refresh();
 }
 
-/* GfxEntryPanel::textYOffsetChanged
+/* GfxEntryPanel::onTextYOffsetChanged
  * Called when enter is pressed within the y offset text entry
  *******************************************************************/
+void GfxEntryPanel::onTextYOffsetChanged(wxCommandEvent& e)
+{
+	// Change the image y-offset
+	int offset = spin_yoffset->GetValue();
+	getImage()->setYOffset(offset);
+
+	// Update variables
+	setModified();
+
+	// Refresh canvas
+	gfx_canvas->Refresh();
+}
+
 void GfxEntryPanel::onYOffsetChanged(wxSpinEvent& e)
 {
 	// Change image y-offset

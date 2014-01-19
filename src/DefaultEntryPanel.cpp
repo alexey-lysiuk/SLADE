@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -110,7 +110,7 @@ DefaultEntryPanel::~DefaultEntryPanel()
 bool DefaultEntryPanel::loadEntry(ArchiveEntry* entry)
 {
 	// Update labels
-	label_type->SetLabel(S_FMT("Entry Type: %s", CHR(entry->getTypeString())));
+	label_type->SetLabel(S_FMT("Entry Type: %s", entry->getTypeString()));
 	label_size->SetLabel(S_FMT("Entry Size: %d bytes", entry->getSize()));
 
 	// Setup actions frame
@@ -150,7 +150,7 @@ bool DefaultEntryPanel::loadEntries(vector<ArchiveEntry*>& entries)
 	unsigned size = 0;
 	for (unsigned a = 0; a < entries.size(); a++)
 		size += entries[a]->getSize();
-	label_size->SetLabel(S_FMT("Total Size: %s", CHR(Misc::sizeAsString(size))));
+	label_size->SetLabel(S_FMT("Total Size: %s", Misc::sizeAsString(size)));
 
 	// Setup actions frame
 	btn_gfx_convert->Show(false);
@@ -233,5 +233,5 @@ void DefaultEntryPanel::onBtnGfxModifyOffsets(wxCommandEvent& e)
  *******************************************************************/
 void DefaultEntryPanel::onBtnTextureEdit(wxCommandEvent& e)
 {
-	theMainWindow->openTextureEditor(entry->getParent());
+	theMainWindow->openTextureEditor(entry->getParent(), entry);
 }

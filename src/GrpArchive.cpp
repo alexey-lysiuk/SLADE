@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -124,7 +124,7 @@ bool GrpArchive::open(MemChunk& mc)
 	// Check the header
 	if (!(S_CMP(wxString::FromAscii(ken_magic), "KenSilverman")))
 	{
-		wxLogMessage("GrpArchive::openFile: File %s has invalid header", filename.c_str());
+		wxLogMessage("GrpArchive::openFile: File %s has invalid header", filename);
 		Global::error = "Invalid grp header";
 		return false;
 	}
@@ -293,7 +293,7 @@ bool GrpArchive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("GrpArchive::loadEntryData: Failed to open grpfile %s", filename.c_str());
+		wxLogMessage("GrpArchive::loadEntryData: Failed to open grpfile %s", filename);
 		return false;
 	}
 

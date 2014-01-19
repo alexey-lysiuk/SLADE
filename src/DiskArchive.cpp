@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -255,7 +255,7 @@ bool DiskArchive::write(MemChunk& mc, bool update)
 		// The leading "GAME:\" part of the name means there is only 58 usable characters for path
 		if (name.Len() > 58)
 		{
-			wxLogMessage("Warning: Entry %s path is too long (> 58 characters), putting it in the root directory", CHR(name));
+			wxLogMessage("Warning: Entry %s path is too long (> 58 characters), putting it in the root directory", name);
 			wxFileName fn(name);
 			name = fn.GetFullName();
 			if (name.Len() > 57)
@@ -330,7 +330,7 @@ bool DiskArchive::loadEntryData(ArchiveEntry* entry)
 	// Check it opened
 	if (!file.IsOpened())
 	{
-		wxLogMessage("DiskArchive::loadEntryData: Unable to open archive file %s", CHR(filename));
+		wxLogMessage("DiskArchive::loadEntryData: Unable to open archive file %s", filename);
 		return false;
 	}
 

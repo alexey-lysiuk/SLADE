@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -92,6 +92,15 @@ AudioEntryPanel::AudioEntryPanel(wxWindow* parent) : EntryPanel(parent, "audio")
 	slider_volume = new wxSlider(this, -1, 0, 0, 100, wxDefaultPosition, wxSize(128, -1));
 	slider_volume->SetValue(snd_volume);
 	sizer_gb->Add(slider_volume, wxGBPosition(1, 5));
+
+	// Set volume
+	sound.setVolume(snd_volume);
+	music.setVolume(snd_volume);
+	theMIDIPlayer->setVolume(snd_volume);
+	media_ctrl->SetVolume(snd_volume*0.01);
+#ifndef NOLIBMODPLUG
+	mod.setVolume(snd_volume);
+#endif
 
 	// Disable general entrypanel buttons
 	media_ctrl->Show(false);

@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -496,7 +496,7 @@ bool TextLanguage::readLanguageDefinition(MemChunk& mc, string source)
 			if (inherit)
 				inherit->copyTo(lang);
 			else
-				wxLogMessage("Warning: Language %s inherits from undefined language %s", CHR(node->getName()), CHR(node->getInherit()));
+				wxLogMessage("Warning: Language %s inherits from undefined language %s", node->getName(), node->getInherit());
 		}
 
 		// Parse language info

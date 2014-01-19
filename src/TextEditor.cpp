@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -715,7 +715,7 @@ void TextEditor::openJumpToDialog()
 
 				// Numbered block, add block name
 				if (name.IsNumber())
-					name = S_FMT("%s %s", CHR(language->jumpBlock(a)), CHR(name));
+					name = S_FMT("%s %s", language->jumpBlock(a), name);
 				// Unnamed block, use block name
 				if (name == "{" || name == ";")
 					name = language->jumpBlock(a);
@@ -1057,9 +1057,6 @@ void TextEditor::onMouseDown(wxMouseEvent& e)
 {
 	e.Skip();
 
-// CharPositionFromPointClose() does not seem to exist in 2.9.0.
-#if (wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9 && wxRELEASE_NUMBER > 0)
-
 	// No language, no checks
 	if (!language)
 		return;
@@ -1108,7 +1105,6 @@ void TextEditor::onMouseDown(wxMouseEvent& e)
 			CallTipCancel();
 		}
 	}
-#endif
 }
 
 /* TextEditor::onFocusLoss
@@ -1139,7 +1135,7 @@ void TextEditor::onFRDBtnFindNext(wxCommandEvent& e)
 
 	// Do find
 	if (!findNext(find))
-		wxLogMessage("No text matching \"%s\" found.", CHR(find));
+		wxLogMessage("No text matching \"%s\" found.", find);
 }
 
 /* TextEditor::onFRDBtnReplace

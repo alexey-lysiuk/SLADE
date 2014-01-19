@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -222,7 +222,7 @@ void EntryPanel::updateStatus()
 {
 	// Basic info
 	if (entry)
-		theMainWindow->SetStatusText(S_FMT("%s, %d bytes, %s", CHR(entry->getName()), entry->getSize(), CHR(entry->getType()->getName())), 1);
+		theMainWindow->SetStatusText(S_FMT("%s, %d bytes, %s", entry->getName(), entry->getSize(), entry->getType()->getName()), 1);
 	else
 		theMainWindow->SetStatusText("", 1);
 

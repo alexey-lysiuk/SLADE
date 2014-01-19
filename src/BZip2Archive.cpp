@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -160,7 +160,7 @@ bool BZip2Archive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("BZip2Archive::loadEntryData: Failed to open gzip file %s", filename.c_str());
+		wxLogMessage("BZip2Archive::loadEntryData: Failed to open gzip file %s", filename);
 		return false;
 	}
 

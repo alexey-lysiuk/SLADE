@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -77,7 +77,7 @@ bool Tokenizer::openFile(string filename, uint32_t offset, uint32_t length)
 	// Check file opened
 	if (!file.IsOpened())
 	{
-		wxLogMessage("Tokenizer::openFile: Unable to open file %s", filename.c_str());
+		wxLogMessage("Tokenizer::openFile: Unable to open file %s", filename);
 		return false;
 	}
 

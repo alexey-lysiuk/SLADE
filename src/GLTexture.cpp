@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -54,6 +54,8 @@ GLTexture::GLTexture(bool allow_split)
 	this->allow_split = allow_split;
 	this->filter = NEAREST;
 	this->tiling = true;
+	this->scale_x = 1.0;
+	this->scale_y = 1.0;
 }
 
 /* GLTexture::~GLTexture
@@ -152,6 +154,8 @@ bool GLTexture::loadData(const uint8_t* data, uint32_t width, uint32_t height, b
 	loaded = true;
 	this->width = width;
 	this->height = height;
+	this->scale_x = 1.0;
+	this->scale_y = 1.0;
 	tex.push_back(ntex);
 
 	return true;
@@ -213,6 +217,7 @@ bool GLTexture::loadRawData(const uint8_t* data, uint32_t w, uint32_t h)
 		// Update variables
 		width = w;
 		height = h;
+		scale_x = scale_y = 1.0;
 
 		return true;
 	}
@@ -272,6 +277,7 @@ bool GLTexture::loadImage(SImage* image, Palette8bit* pal)
 		// Update variables
 		width = image->getWidth();
 		height = image->getHeight();
+		scale_x = scale_y = 1.0;
 
 		return true;
 	}
@@ -348,6 +354,7 @@ bool GLTexture::loadImagePortion(SImage* image, rect_t rect, Palette8bit* pal, b
 		// Free buffer
 		delete[] buf;
 	}
+	scale_x = scale_y = 1.0;
 
 	// Generate texture from rgba data
 	return loadData(portion.getData(), rect.width(), rect.height(), add);
@@ -367,6 +374,7 @@ bool GLTexture::clear()
 	width = 0;
 	height = 0;
 	loaded = false;
+	scale_x = scale_y = 1.0;
 
 	return true;
 }
@@ -431,6 +439,7 @@ bool GLTexture::genChequeredTexture(uint8_t block_size, rgba_t col1, rgba_t col2
 
 	// Clean up
 	delete[] data;
+	scale_x = scale_y = 1.0;
 
 	return true;
 }
@@ -442,7 +451,7 @@ bool GLTexture::genChequeredTexture(uint8_t block_size, rgba_t col1, rgba_t col2
 bool GLTexture::bind()
 {
 	// Check texture is loaded
-	if (!loaded || tex.size() == 0)
+	if (!loaded || tex.empty())
 		return false;
 
 	// Bind the texture
@@ -458,7 +467,7 @@ bool GLTexture::bind()
 bool GLTexture::draw2d(double x, double y, bool flipx, bool flipy)
 {
 	// Can't draw if texture not loaded
-	if (!loaded)
+	if (!loaded || tex.empty())
 		return false;
 
 	// Flipping?
@@ -513,16 +522,19 @@ bool GLTexture::draw2d(double x, double y, bool flipx, bool flipy)
 			double left = 0;
 			while (left < width && left >= 0)
 			{
-				// Bind the texture
-				glBindTexture(GL_TEXTURE_2D, tex[tex_index].id);
+				if (tex_index < tex.size())
+				{
+					// Bind the texture
+					glBindTexture(GL_TEXTURE_2D, tex[tex_index].id);
 
-				// Draw
-				glBegin(GL_QUADS);
-				glTexCoord2d(0, 0);	glVertex2d(left, top);
-				glTexCoord2d(0, 1);	glVertex2d(left, top+stepy);
-				glTexCoord2d(1, 1);	glVertex2d(left+stepx, top+stepy);
-				glTexCoord2d(1, 0); glVertex2d(left+stepx, top);
-				glEnd();
+					// Draw
+					glBegin(GL_QUADS);
+					glTexCoord2d(0, 0);	glVertex2d(left, top);
+					glTexCoord2d(0, 1);	glVertex2d(left, top+stepy);
+					glTexCoord2d(1, 1);	glVertex2d(left+stepx, top+stepy);
+					glTexCoord2d(1, 0); glVertex2d(left+stepx, top);
+					glEnd();
+				}
 
 				// Move right 128px
 				left += stepx;
@@ -546,7 +558,7 @@ bool GLTexture::draw2d(double x, double y, bool flipx, bool flipy)
 bool GLTexture::draw2dTiled(uint32_t width, uint32_t height)
 {
 	// Can't draw if texture not loaded
-	if (!loaded)
+	if (!loaded || tex.empty())
 		return false;
 
 	// If the texture isn't split, just draw it straight
@@ -598,7 +610,7 @@ bool GLTexture::draw2dTiled(uint32_t width, uint32_t height)
 rgba_t GLTexture::averageColour(rect_t area)
 {
 	// Check texture is loaded
-	if (!loaded)
+	if (!loaded || tex.empty())
 		return COL_BLACK;
 
 	// Empty area rect means full texture

@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -331,7 +331,7 @@ bool BSPArchive::loadEntryData(ArchiveEntry* entry)
 	// Check it opened
 	if (!file.IsOpened())
 	{
-		wxLogMessage("BSPArchive::loadEntryData: Unable to open archive file %s", CHR(filename));
+		wxLogMessage("BSPArchive::loadEntryData: Unable to open archive file %s", filename);
 		return false;
 	}
 

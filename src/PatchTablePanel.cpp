@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -122,33 +122,6 @@ void PatchTableListView::updateItemAttr(long item) const
 {
 	// Just set normal text colour
 	item_attr->SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
-
-	/*
-	// Init attributes (to error colour)
-	item_attr->SetTextColour(ListView::colourError());
-
-	// Check patch table exists
-	if (!patch_table)
-		return;
-
-	// Check index is ok
-	if (item < 0 || (unsigned)item > patch_table->nPatches())
-		return;
-
-	// Get associated patch
-	patch_t patch = patch_table->patch(item);
-
-	// Set normal colour if patch is ok
-	if (patch.entry)
-		item_attr->SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
-	/*else {
-		// Attempt to find the patch's entry
-		patch_table->updatePatchEntry(item);
-
-		// If it was found set normal colour
-		if (patch.entry)
-			item_attr->SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
-	}*/
 }
 
 /* PatchTableListView::updateList
@@ -344,14 +317,14 @@ void PatchTablePanel::onBtnPatchFromFile(wxCommandEvent& e)
 			// If it's not a valid image type, ignore this file
 			if (!entry->getType()->extraProps().propertyExists("image"))
 			{
-				wxLogMessage("%s is not a valid image file", CHR(files[a]));
+				wxLogMessage("%s is not a valid image file", files[a]);
 				continue;
 			}
 
 			// Ask for name for patch
 			wxFileName fn(files[a]);
 			string name = fn.GetName().Upper().Truncate(8);
-			name = wxGetTextFromUser(S_FMT("Enter a patch name for %s:", CHR(fn.GetFullName())), "New Patch", name);
+			name = wxGetTextFromUser(S_FMT("Enter a patch name for %s:", fn.GetFullName()), "New Patch", name);
 			name = name.Truncate(8);
 
 			// Add patch to archive
@@ -389,7 +362,7 @@ void PatchTablePanel::onBtnRemovePatch(wxCommandEvent& e)
 		if (patch.used_in.size() > 0)
 		{
 			// In use, ask if it's ok to remove the patch
-			int answer = wxMessageBox(S_FMT("The patch \"%s\" is currently used by %d texture(s), are you sure you wish to remove it?", CHR(patch.name), patch.used_in.size()), "Confirm Remove Patch", wxYES_NO|wxCANCEL|wxICON_QUESTION, this);
+			int answer = wxMessageBox(S_FMT("The patch \"%s\" is currently used by %d texture(s), are you sure you wish to remove it?", patch.name, patch.used_in.size()), "Confirm Remove Patch", wxYES_NO|wxCANCEL|wxICON_QUESTION, this);
 			if (answer == wxYES)
 			{
 				// Answered yes, remove the patch

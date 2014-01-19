@@ -116,7 +116,7 @@ void MapRenderer3D::refresh()
 	skytex1 = minf.sky1;
 	skytex2 = minf.sky2;
 	skycol_top.a = 0;
-	//wxLogMessage("sky1: %s, sky2: %s", CHR(skytex1), CHR(skytex2));
+	//wxLogMessage("sky1: %s, sky2: %s", skytex1, skytex2);
 }
 
 void MapRenderer3D::clearData()
@@ -327,14 +327,17 @@ void MapRenderer3D::cameraApplyGravity(double mult)
 
 void MapRenderer3D::setupView(int width, int height)
 {
+	// Calculate aspect ratio
+	float aspect = (1.6f / 1.333333f) * ((float)width / (float)height);
+	float fovy = 2 * MathStuff::radToDeg(atan(tan(MathStuff::degToRad(90) / 2) / aspect));
+
 	// Setup projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	float aspect = (float)width / (float)height;
 	float max = render_max_dist * 1.5f;
 	if (max < 100) max = 20000;
-	gluPerspective(60.0f, aspect, 0.5f, max);
+	gluPerspective(fovy, aspect, 0.5f, max);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -649,8 +652,8 @@ void MapRenderer3D::updateFlatTexCoords(unsigned index, bool floor)
 	// Get scaling/offset info
 	double ox = 0;
 	double oy = 0;
-	double sx = 1;
-	double sy = 1;
+	double sx = floor ? floors[index].texture->getScaleX() : ceilings[index].texture->getScaleX();
+	double sy = floor ? floors[index].texture->getScaleY() : ceilings[index].texture->getScaleY();
 	double rot = 0;
 
 	// Check for UDMF + ZDoom extensions
@@ -660,16 +663,16 @@ void MapRenderer3D::updateFlatTexCoords(unsigned index, bool floor)
 		{
 			ox = sector->floatProperty("xpanningfloor");
 			oy = sector->floatProperty("ypanningfloor");
-			sx = sector->floatProperty("xscalefloor");
-			sy = sector->floatProperty("yscalefloor");
+			sx *= sector->floatProperty("xscalefloor");
+			sy *= sector->floatProperty("yscalefloor");
 			rot = sector->floatProperty("rotationfloor");
 		}
 		else
 		{
 			ox = sector->floatProperty("xpanningceiling");
 			oy = sector->floatProperty("ypanningceiling");
-			sx = sector->floatProperty("xscaleceiling");
-			sy = sector->floatProperty("yscaleceiling");
+			sx *= sector->floatProperty("xscaleceiling");
+			sy *= sector->floatProperty("yscaleceiling");
 			rot = sector->floatProperty("rotationceiling");
 		}
 	}
@@ -965,6 +968,9 @@ void MapRenderer3D::setupQuadTexCoords(MapRenderer3D::quad_3d_t* quad, int lengt
 		y2 = top + quad->texture->getHeight();
 		y1 = y2 - height;
 	}
+
+	sx *= quad->texture->getScaleX();
+	sy *= quad->texture->getScaleY();
 
 	// Set texture coordinates
 	quad->points[0].tx = x1 / (quad->texture->getWidth() * sx);
@@ -1529,7 +1535,7 @@ void MapRenderer3D::updateThing(unsigned index, MapThing* thing)
 			things[index].flags |= ZETH;
 		}
 		if (!things[index].sprite)
-			things[index].sprite = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", CHR(things[index].type->getIcon())));
+			things[index].sprite = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", things[index].type->getIcon()));
 		things[index].flags |= ICON;
 	}
 	else theight = things[index].type->getScaleY() * things[index].sprite->getHeight();

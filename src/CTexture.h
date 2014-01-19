@@ -28,7 +28,6 @@ public:
 	int16_t			yOffset() { return offset_y; }
 
 	void	setName(string name) { this->name = name; }
-	void	searchEntry(Archive* parent);
 	void	setOffsetX(int16_t offset) { offset_x = offset; }
 	void	setOffsetY(int16_t offset) { offset_y = offset; }
 
@@ -110,13 +109,16 @@ private:
 	int					index;
 
 	// Extended (TEXTURES) info
-	bool	extended;
 	string	type;
+	bool	extended;
+	bool	defined;
 	bool	optional;
 	bool	no_decals;
 	bool	null_texture;
 	int16_t	offset_x;
 	int16_t	offset_y;
+	int16_t	def_width;
+	int16_t	def_height;
 
 	// Editor info
 	uint8_t			state;
@@ -173,6 +175,7 @@ public:
 	bool	swapPatches(size_t p1, size_t p2);
 
 	bool	parse(Tokenizer& tz, string type);
+	bool	parseDefine(Tokenizer& tz);
 	string	asText();
 
 	bool	convertExtended();

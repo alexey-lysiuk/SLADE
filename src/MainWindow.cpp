@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -63,6 +63,7 @@ CVAR(Int, mw_height, 768, CVAR_SAVE);
 CVAR(Int, mw_left, -1, CVAR_SAVE);
 CVAR(Int, mw_top, -1, CVAR_SAVE);
 CVAR(Bool, mw_maximized, true, CVAR_SAVE);
+CVAR(Int, tab_style, 1, CVAR_SAVE);
 
 
 /*******************************************************************
@@ -153,17 +154,17 @@ void MainWindow::saveLayout()
 	// Console pane
 	file.Write("\"console\" ");
 	string pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("console"));
-	file.Write(S_FMT("\"%s\"\n", CHR(pinf)));
+	file.Write(S_FMT("\"%s\"\n", pinf));
 
 	// Archive Manager pane
 	file.Write("\"archive_manager\" ");
 	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("archive_manager"));
-	file.Write(S_FMT("\"%s\"\n", CHR(pinf)));
+	file.Write(S_FMT("\"%s\"\n", pinf));
 
 	// Undo History pane
 	file.Write("\"undo_history\" ");
 	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("undo_history"));
-	file.Write(S_FMT("\"%s\"\n", CHR(pinf)));
+	file.Write(S_FMT("\"%s\"\n", pinf));
 
 	// Close file
 	file.Close();
@@ -187,7 +188,10 @@ void MainWindow::setupLayout()
 
 	// -- Editor Area --
 	notebook_tabs = new wxAuiNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE|wxNO_BORDER|wxAUI_NB_WINDOWLIST_BUTTON|wxNB_FLAT);
-	notebook_tabs->SetArtProvider(new clAuiTabArt());
+	if (tab_style == 1)
+		notebook_tabs->SetArtProvider(new clAuiTabArt());
+	else if (tab_style == 2)
+		notebook_tabs->SetArtProvider(new clAuiSimpleTabArt());
 
 	// Setup panel info & add panel
 	p_inf.CenterPane();
@@ -526,9 +530,9 @@ vector<ArchiveEntry*> MainWindow::getCurrentEntrySelection()
 /* MainWindow::openTextureEditor
  * Opens the texture editor for the current archive tab
  *******************************************************************/
-void MainWindow::openTextureEditor(Archive* archive)
+void MainWindow::openTextureEditor(Archive* archive, ArchiveEntry* entry)
 {
-	panel_archivemanager->openTextureTab(theArchiveManager->archiveIndex(archive));
+	panel_archivemanager->openTextureTab(theArchiveManager->archiveIndex(archive), entry);
 }
 
 /* MainWindow::openMapEditor
@@ -555,7 +559,7 @@ void MainWindow::openMapEditor(Archive* archive)
 		if (!theMapEditor->openMap(md))
 		{
 			theMapEditor->Hide();
-			wxMessageBox(S_FMT("Unable to open map %s: %s", CHR(md.name), CHR(Global::error)), "Invalid map error", wxICON_ERROR);
+			wxMessageBox(S_FMT("Unable to open map %s: %s", md.name, Global::error), "Invalid map error", wxICON_ERROR);
 		}
 	}
 }
@@ -675,7 +679,7 @@ bool MainWindow::handleAction(string id)
 		wxRemoveFile(icon_filename);
 
 		string year = wxNow().Right(4);
-		info.SetCopyright(S_FMT("(C) 2008-%s Simon Judd <sirjuddington@gmail.com>", year.c_str()));
+		info.SetCopyright(S_FMT("(C) 2008-%s Simon Judd <sirjuddington@gmail.com>", year));
 
 		wxAboutBox(info);
 
@@ -743,6 +747,13 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 		else if (href.EndsWith("reloadstartpage"))
 			createStartPage();
 		html_startpage->Reload();
+	}
+	else if (wxFileExists(href))
+	{
+		// Navigating to file, open it
+		if (href != appPath("startpage.htm", DIR_TEMP))
+			theArchiveManager->openArchive(href);
+		ev.Veto();
 	}
 }
 

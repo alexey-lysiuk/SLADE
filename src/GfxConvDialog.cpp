@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -423,7 +423,7 @@ void GfxConvDialog::updatePreviewGfx()
 	getConvertOptions(opt);
 
 	// Do conversion
-	//wxLogMessage("Converting to %s", CHR(current_format.format->getName()));
+	//wxLogMessage("Converting to %s", current_format.format->getName());
 	current_format.format->convertWritable(*(gfx_target->getImage()), opt);
 
 

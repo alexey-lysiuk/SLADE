@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -204,15 +204,6 @@ TextureXEditor::TextureXEditor(wxWindow* parent) : wxPanel(parent, -1)
 	tabs->SetArtProvider(new clAuiTabArt());
 	sizer->Add(tabs, 1, wxEXPAND|wxALL, 4);
 
-	//// Bottom bar
-	//wxBoxSizer* hbox = new wxBoxSizer(wxHORIZONTAL);
-	//sizer->Add(hbox, 0, wxEXPAND|wxALL, 4);
-
-	//// Add save changes button
-	//btn_save = new wxButton(this, -1, "Save Changes");
-	//hbox->AddStretchSpacer();
-	//hbox->Add(btn_save, 0, wxEXPAND|wxALL, 4);
-
 	// Bind events
 	//btn_save->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXEditor::onSaveClicked, this);
 	Bind(wxEVT_SHOW, &TextureXEditor::onShow, this);
@@ -310,6 +301,7 @@ bool TextureXEditor::openArchive(Archive* archive)
 			tx_entries[a]->lock();
 
 			// Add it to the list of editors, and a tab
+			tx_panel->SetName("textures");
 			texture_editors.push_back(tx_panel);
 			tabs->AddPage(tx_panel, tx_entries[a]->getName());
 		}
@@ -322,6 +314,7 @@ bool TextureXEditor::openArchive(Archive* archive)
 	{
 		PatchTablePanel* ptp = new PatchTablePanel(this, &patch_table);
 		tabs->AddPage(ptp, "Patch Table (PNAMES)");
+		ptp->SetName("pnames");
 	}
 
 	// Search archive for TEXTURES entries
@@ -345,6 +338,7 @@ bool TextureXEditor::openArchive(Archive* archive)
 			ztx_entries[a]->lock();
 
 			// Add it to the list of editors, and a tab
+			tx_panel->SetName("textures");
 			texture_editors.push_back(tx_panel);
 			tabs->AddPage(tx_panel, ztx_entries[a]->getName());
 		}
@@ -401,7 +395,8 @@ void TextureXEditor::saveChanges()
 
 	// Save TEXTUREx entries
 	for (unsigned a = 0; a < texture_editors.size(); a++)
-		texture_editors[a]->saveTEXTUREX();
+		if (texture_editors[a]->isModified())
+			texture_editors[a]->saveTEXTUREX();
 
 	// Save PNAMES if it exists
 	if (patch_table.nPatches() > 0)
@@ -565,7 +560,7 @@ bool TextureXEditor::checkTextures()
 					ArchiveEntry* fentry = theResourceManager->getFlatEntry(tex->getPatch(p)->getName());
 					CTexture* ptex = theResourceManager->getTexture(tex->getPatch(p)->getName());
 					if (!pentry && !fentry && !ptex)
-						problems += S_FMT("Texture %s contains invalid/unknown patch %s\n", CHR(tex->getName()), CHR(tex->getPatch(p)->getName()));
+						problems += S_FMT("Texture %s contains invalid/unknown patch %s\n", tex->getName(), tex->getPatch(p)->getName());
 				}
 			}
 			else
@@ -574,7 +569,7 @@ bool TextureXEditor::checkTextures()
 				for (unsigned p = 0; p < tex->nPatches(); p++)
 				{
 					if (patch_table.patchIndex(tex->getPatch(p)->getName()) == -1)
-						problems += S_FMT("Texture %s contains invalid/unknown patch %s\n", CHR(tex->getName()), CHR(tex->getPatch(p)->getName()));
+						problems += S_FMT("Texture %s contains invalid/unknown patch %s\n", tex->getName(), tex->getPatch(p)->getName());
 				}
 			}
 		}
@@ -589,7 +584,7 @@ bool TextureXEditor::checkTextures()
 
 		if (!entry)
 		{
-			problems += S_FMT("Patch %s cannot be found in any open archive\n", CHR(patch.name));
+			problems += S_FMT("Patch %s cannot be found in any open archive\n", patch.name);
 		}
 		else
 		{
@@ -599,7 +594,7 @@ bool TextureXEditor::checkTextures()
 			EntryType* type = entry->getType();
 
 			if (!type->extraProps().propertyExists("patch"))
-				problems += S_FMT("Patch %s is of type \"%s\", which is not a valid gfx format for patches. Convert it to either Doom Gfx or PNG\n", CHR(patch.name), CHR(type->getName()));
+				problems += S_FMT("Patch %s is of type \"%s\", which is not a valid gfx format for patches. Convert it to either Doom Gfx or PNG\n", patch.name, type->getName());
 		}
 	}
 
@@ -615,6 +610,36 @@ bool TextureXEditor::checkTextures()
 	}
 	else
 		return false;
+}
+
+/* TextureXEditor::setSelection
+ * Sets the active tab to be the one corresponding to the given
+ * entry index or entry.
+ *******************************************************************/
+void TextureXEditor::setSelection(size_t index)
+{
+	if (index < tabs->GetPageCount() && index != tabs->GetSelection())
+		tabs->SetSelection(index);
+}
+void TextureXEditor::setSelection(ArchiveEntry* entry)
+{
+	for (size_t a = 0; a < tabs->GetPageCount(); a++)
+	{
+		if (S_CMPNOCASE(tabs->GetPage(a)->GetName(), "pnames") && (entry == pnames))
+		{
+			tabs->SetSelection(a);
+			return;
+		}
+		else if (S_CMPNOCASE(tabs->GetPage(a)->GetName(), "textures"))
+		{
+			TextureXPanel* txp = (TextureXPanel*)tabs->GetPage(a);
+			if (txp->txEntry() == entry)
+			{
+				tabs->SetSelection(a);
+				return;
+			}
+		}
+	}
 }
 
 /* TextureXEditor::onAnnouncement

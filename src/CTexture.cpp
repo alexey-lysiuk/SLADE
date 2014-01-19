@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -79,50 +79,6 @@ CTPatch::CTPatch(CTPatch* copy)
  *******************************************************************/
 CTPatch::~CTPatch()
 {
-}
-
-/* CTPatch::searchEntry
- * Search for a patch's entry in the given archive or its parents
- *******************************************************************/
-void CTPatch::searchEntry(Archive* parent)
-{
-	/*
-	// Attempt to find patch entry
-	Archive::search_options_t options;	options.match_name = name;
-
-	// First, search parent archive (patches namespace > global namespace > graphics namespace)
-	// TODO 1: search order should be patches > global for treeless archives, patches > graphics for others.
-	// TODO 2: For ZDoom textures, if the keyword "Graphic" is used instead of "Patch" in the texture
-	// definition, then priority order should be graphics > patches instead.
-	if (parent) {
-		options.match_namespace = "patches";
-		entry = parent->findLast(options);
-
-		if (!entry) {
-			options.match_namespace = "";
-			entry = parent->findLast(options);
-		}
-
-		if (!entry) {
-			options.match_namespace = "graphic";
-			entry = parent->findLast(options);
-		}
-	}
-
-	// Next, search open resource archives + base resource archive
-	if (!entry) {
-		options.match_namespace = "patches";
-		entry = theArchiveManager->findResourceEntry(options, parent);
-	}
-	if (!entry) {
-		options.match_namespace = "";
-		entry = theArchiveManager->findResourceEntry(options, parent);
-	}
-	if (!entry) {
-		options.match_namespace = "graphic";
-		entry = theArchiveManager->findResourceEntry(options, parent);
-	}
-	*/
 }
 
 /* CTPatch::getPatchEntry
@@ -353,7 +309,7 @@ bool CTPatchEx::parse(Tokenizer& tz, uint8_t type)
 						colour.b = tz.getDouble()*255;
 						if (tz.peekToken() != ",")
 						{
-							wxLogMessage("Invalid TEXTURES definition, expected ',', got '%s'", CHR(tz.getToken()));
+							wxLogMessage("Invalid TEXTURES definition, expected ',', got '%s'", tz.getToken());
 							return false;
 						}
 						tz.getToken();	// Skip ,
@@ -388,7 +344,7 @@ string CTPatchEx::asText()
 	// Init text string
 	string typestring = "Patch";
 	if (type == PTYPE_GRAPHIC) typestring = "Graphic";
-	string text = S_FMT("\t%s %s, %d, %d\n", CHR(typestring), CHR(name), offset_x, offset_y);
+	string text = S_FMT("\t%s %s, %d, %d\n", typestring, name, offset_x, offset_y);
 
 	// Check if we need to write any extra properties
 	if (!flip_x && !flip_y && !use_offsets && rotation == 0 && blendtype == 0 && alpha == 1.0f && S_CMPNOCASE(style, "Copy"))
@@ -414,7 +370,7 @@ string CTPatchEx::asText()
 	if (blendtype >= 2)
 	{
 		wxColour col(colour.r, colour.g, colour.b);
-		text += S_FMT("\t\tBlend \"%s\"", CHR(col.GetAsString(wxC2S_HTML_SYNTAX)));
+		text += S_FMT("\t\tBlend \"%s\"", col.GetAsString(wxC2S_HTML_SYNTAX));
 
 		if (blendtype == 3)
 			text += S_FMT(", %1.1f\n", (double)colour.a / 255.0);
@@ -424,7 +380,7 @@ string CTPatchEx::asText()
 	if (alpha < 1.0f)
 		text += S_FMT("\t\tAlpha %1.2f\n", alpha);
 	if (!(S_CMPNOCASE(style, "Copy")))
-		text += S_FMT("\t\tStyle %s\n", CHR(style));
+		text += S_FMT("\t\tStyle %s\n", style);
 
 	// Write ending
 	text += "\t}\n";
@@ -444,11 +400,14 @@ CTexture::CTexture(bool extended)
 {
 	this->width = 0;
 	this->height = 0;
+	this->def_width = 0;
+	this->def_height = 0;
 	this->name = "";
 	this->scale_x = 1.0;
 	this->scale_y = 1.0;
 	this->world_panning = false;
 	this->extended = extended;
+	this->defined = false;
 	this->optional = false;
 	this->no_decals = false;
 	this->null_texture = false;
@@ -487,10 +446,16 @@ void CTexture::copyTexture(CTexture* tex, bool keep_type)
 	this->name = tex->name;
 	this->width = tex->width;
 	this->height = tex->height;
+	this->def_width = tex->def_width;
+	this->def_height = tex->def_height;
 	this->scale_x = tex->scale_x;
 	this->scale_y = tex->scale_y;
 	this->world_panning = tex->world_panning;
-	if (!keep_type) this->extended = tex->extended;
+	if (!keep_type)
+	{
+		this->extended = tex->extended;
+		this->defined = tex->defined;
+	}
 	this->optional = tex->optional;
 	this->no_decals = tex->no_decals;
 	this->null_texture = tex->null_texture;
@@ -549,8 +514,11 @@ void CTexture::clear()
 	this->name = "";
 	this->width = 0;
 	this->height = 0;
+	this->def_width = 0;
+	this->def_height = 0;
 	this->scale_x = 1.0;
 	this->scale_y = 1.0;
+	this->defined = false;
 	this->world_panning = false;
 	this->optional = false;
 	this->no_decals = false;
@@ -583,6 +551,9 @@ bool CTexture::addPatch(string patch, int16_t offset_x, int16_t offset_y, int in
 	else
 		patches.push_back(np);
 
+	// Cannot be a simple define anymore
+	this->defined = false;
+
 	// Announce
 	announce("patches_modified");
 
@@ -602,6 +573,9 @@ bool CTexture::removePatch(size_t index)
 	// Remove the patch
 	delete patches[index];
 	patches.erase(patches.begin() + index);
+
+	// Cannot be a simple define anymore
+	this->defined = false;
 
 	// Announce
 	announce("patches_modified");
@@ -629,6 +603,9 @@ bool CTexture::removePatch(string patch)
 		else
 			i++;
 	}
+
+	// Cannot be a simple define anymore
+	this->defined = false;
 
 	if (removed)
 		announce("patches_modified");
@@ -680,6 +657,9 @@ bool CTexture::duplicatePatch(size_t index, int16_t offset_x, int16_t offset_y)
 	patches[index+1]->setOffsetX(dp->xOffset() + offset_x);
 	patches[index+1]->setOffsetY(dp->yOffset() + offset_y);
 
+	// Cannot be a simple define anymore
+	this->defined = false;
+
 	// Announce
 	announce("patches_modified");
 
@@ -722,6 +702,7 @@ bool CTexture::parse(Tokenizer& tz, string type)
 	// Read basic info
 	this->type = type;
 	this->extended = true;
+	this->defined = false;
 	name = tz.getToken().Upper();
 	tz.getToken();	// Skip ,
 	width = tz.getInteger();
@@ -740,7 +721,7 @@ bool CTexture::parse(Tokenizer& tz, string type)
 			// Check if end of text is reached (error)
 			if (property.IsEmpty())
 			{
-				wxLogMessage("Error parsing texture %s: End of text found, missing } perhaps?", CHR(name));
+				wxLogMessage("Error parsing texture %s: End of text found, missing } perhaps?", name);
 				return false;
 			}
 
@@ -796,6 +777,36 @@ bool CTexture::parse(Tokenizer& tz, string type)
 	return true;
 }
 
+/* CTexture::parseDefine
+ * Parses a HIRESTEX define block
+ *******************************************************************/
+bool CTexture::parseDefine(Tokenizer& tz)
+{
+	this->type = "Define";
+	this->extended = true;
+	this->defined = true;
+	name = tz.getToken().Upper();
+	def_width = tz.getInteger();
+	def_height = tz.getInteger();
+	width = def_width;
+	height = def_height;
+	ArchiveEntry* entry = theResourceManager->getPatchEntry(name);
+	if (entry)
+	{
+		SImage image;
+		if (image.open(entry->getMCData()))
+		{
+			width = image.getWidth();
+			height = image.getHeight();
+			scale_x = (double)width / (double)def_width;
+			scale_y = (double)height / (double)def_height;
+		}
+	}
+	CTPatchEx* patch = new CTPatchEx(name);
+	patches.push_back(patch);
+	return true;
+}
+
 /* CTexture::asText
  * Returns a string representation of the texture, in ZDoom TEXTURES
  * format
@@ -806,12 +817,16 @@ string CTexture::asText()
 	if (!extended)
 		return "";
 
+	// Define block
+	if (defined)
+		return S_FMT("define %s %d %d", name, def_width, def_height);
+
 	// Init text string
 	string text;
 	if (optional)
-		text = S_FMT("%s Optional %s, %d, %d\n{\n", CHR(type), CHR(name), width, height);
+		text = S_FMT("%s Optional %s, %d, %d\n{\n", type, name, width, height);
 	else
-		text = S_FMT("%s %s, %d, %d\n{\n", CHR(type), CHR(name), width, height);
+		text = S_FMT("%s %s, %d, %d\n{\n", type, name, width, height);
 
 	// Write texture properties
 	if (scale_x != 1.0)
@@ -842,6 +857,10 @@ string CTexture::asText()
  *******************************************************************/
 bool CTexture::convertExtended()
 {
+	// Simple conversion system for defines
+	if (defined)
+		defined = false;
+
 	// Don't convert if already extended
 	if (extended)
 		return true;
@@ -893,6 +912,7 @@ bool CTexture::convertRegular()
 
 	// Unset extended flag
 	extended = false;
+	defined = false;
 
 	return true;
 }
@@ -911,7 +931,19 @@ bool CTexture::toImage(SImage& image, Archive* parent, Palette8bit* pal, bool fo
 	SImage p_img(PALMASK);
 	si_drawprops_t dp;
 	dp.src_alpha = false;
-	if (extended)
+	if (defined)
+	{
+		CTPatchEx* patch = (CTPatchEx*)patches[0];
+		if (!loadPatchImage(0, p_img, parent, pal))
+			return false;
+		width = p_img.getWidth();
+		height = p_img.getHeight();
+		image.resize(width, height);
+		scale_x = (double)width / (double)def_width;
+		scale_y = (double)height / (double)def_height;
+		image.drawImage(p_img, 0, 0, dp, pal, pal);
+	}
+	else if (extended)
 	{
 		// Extended texture
 

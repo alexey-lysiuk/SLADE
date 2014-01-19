@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -456,7 +456,7 @@ void HexEditorPanel::onCellSelected(wxGridEvent& e)
 		label_byte->SetLabel(S_FMT("Signed Byte: %d", vbyte));
 		label_ubyte->SetLabel(S_FMT("Unsigned Byte: %u", vubyte));
 		if (vubyte <= 128)
-			label_ascii->SetLabel(S_FMT("ASCII: %s", CHR(CodePages::fromASCII(vubyte))));
+			label_ascii->SetLabel(S_FMT("ASCII: %s", CodePages::fromASCII(vubyte)));
 
 		if (size > 1)
 		{

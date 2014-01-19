@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -70,11 +70,7 @@ EXTERN_CVAR(String, dir_last)
  * instead, the filters are always shown if any are defined.
  *******************************************************************/
 			WMFileBrowser::WMFileBrowser(wxWindow* parent, ArchiveManagerPanel* wm, int id)
-#if (wxMAJOR_VERSION >= 3 || (wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 && wxRELEASE_NUMBER >= 4))
 			: wxGenericDirCtrl(parent, id, wxDirDialogDefaultFolderStr, wxDefaultPosition, wxDefaultSize, 0,
-#else
-			: wxGenericDirCtrl(parent, id, wxDirDialogDefaultFolderStr, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_SHOW_FILTERS,
-#endif
 			"Any Supported Archive File (*.wad; *.zip; *.pk3; *.pke; *.lib; *.dat)|*.wad;*.zip;*.pk3;*.pke;*.lib;*.dat|Doom Wad files (*.wad)|*.wad|Zip files (*.zip)|*.zip|Pk3 (zip) files (*.pk3)|*.pk3|All Files (*.*)|*.*")
 {
 	// Set the parent
@@ -628,7 +624,7 @@ void ArchiveManagerPanel::closeTab(int archive_index)
  * Opens a new texture editor tab for the archive at <archive_index>
  * in the archive manager
  *******************************************************************/
-void ArchiveManagerPanel::openTextureTab(int archive_index)
+void ArchiveManagerPanel::openTextureTab(int archive_index, ArchiveEntry* entry)
 {
 	Archive* archive = theArchiveManager->getArchive(archive_index);
 
@@ -647,6 +643,7 @@ void ArchiveManagerPanel::openTextureTab(int archive_index)
 			{
 				// Selected archive already has its texture editor open, so show that tab
 				notebook_archives->SetSelection(a);
+				txed->setSelection(entry);
 				return;
 			}
 		}
@@ -660,9 +657,10 @@ void ArchiveManagerPanel::openTextureTab(int archive_index)
 			return;
 		}
 
-		notebook_archives->AddPage(txed, S_FMT("Texture Editor (%s)", archive->getFilename(false).c_str()), true);
+		notebook_archives->AddPage(txed, S_FMT("Texture Editor (%s)", archive->getFilename(false)), true);
 		notebook_archives->SetPageBitmap(notebook_archives->GetPageCount() - 1, getIcon("e_texturex"));
 		txed->SetName("texture");
+		txed->setSelection(entry);
 		txed->Show(true);
 		// Select the new tab
 		for (size_t a = 0; a < notebook_archives->GetPageCount(); a++)
@@ -749,7 +747,7 @@ void ArchiveManagerPanel::openEntryTab(ArchiveEntry* entry)
 	}
 
 	// Create new tab for the EntryPanel
-	notebook_archives->AddPage(ep, S_FMT("%s/%s", CHR(entry->getParent()->getFilename(false)), CHR(entry->getName())), true);
+	notebook_archives->AddPage(ep, S_FMT("%s/%s", entry->getParent()->getFilename(false), entry->getName()), true);
 	notebook_archives->SetPageBitmap(notebook_archives->GetPageCount() - 1, getIcon(entry->getType()->getIcon()));
 	ep->SetName("entry");
 	ep->Show(true);
@@ -820,7 +818,7 @@ void ArchiveManagerPanel::openFile(string filename)
 	if (!new_archive)
 	{
 		// If archive didn't open ok, show error message
-		wxMessageBox(S_FMT("Error opening %s:\n%s", filename.c_str(), Global::error.c_str()), "Error", wxICON_ERROR);
+		wxMessageBox(S_FMT("Error opening %s:\n%s", filename, Global::error), "Error", wxICON_ERROR);
 	}
 }
 
@@ -906,7 +904,7 @@ void ArchiveManagerPanel::saveAll()
 			if (!archive->save())
 			{
 				// If there was an error pop up a message box
-				wxMessageBox(S_FMT("Error: %s", Global::error.c_str()), "Error", wxICON_ERROR);
+				wxMessageBox(S_FMT("Error: %s", Global::error), "Error", wxICON_ERROR);
 			}
 		}
 		else
@@ -924,7 +922,7 @@ void ArchiveManagerPanel::saveAll()
 				if (!archive->save(filename))
 				{
 					// If there was an error pop up a message box
-					wxMessageBox(S_FMT("Error: %s", Global::error.c_str()), "Error", wxICON_ERROR);
+					wxMessageBox(S_FMT("Error: %s", Global::error), "Error", wxICON_ERROR);
 				}
 
 				// Save 'dir_last'
@@ -991,7 +989,7 @@ bool ArchiveManagerPanel::saveArchive(Archive* archive)
 		if (!archive->save())
 		{
 			// If there was an error pop up a message box
-			wxMessageBox(S_FMT("Error: %s", Global::error.c_str()), "Error", wxICON_ERROR);
+			wxMessageBox(S_FMT("Error: %s", Global::error), "Error", wxICON_ERROR);
 			return false;
 		}
 
@@ -1025,7 +1023,7 @@ bool ArchiveManagerPanel::saveArchiveAs(Archive* archive)
 		if (!archive->save(filename))
 		{
 			// If there was an error pop up a message box
-			wxMessageBox(S_FMT("Error: %s", Global::error.c_str()), "Error", wxICON_ERROR);
+			wxMessageBox(S_FMT("Error: %s", Global::error), "Error", wxICON_ERROR);
 			return false;
 		}
 
@@ -1674,25 +1672,6 @@ void ArchiveManagerPanel::onListBookmarksRightClick(wxListEvent& e)
  *******************************************************************/
 void ArchiveManagerPanel::onArchiveTabChanging(wxAuiNotebookEvent& e)
 {
-	/*
-	// Page is about to change, remove any custom menus if needed
-	int selection = notebook_archives->GetSelection();
-
-	// ArchivePanel
-	if (isArchivePanel(selection)) {
-		ArchivePanel* ap = (ArchivePanel*)notebook_archives->GetPage(selection);
-		ap->removeMenus();
-	}
-
-	// EntryPanel
-	wxWindow* page = notebook_archives->GetPage(selection);
-	if (page && page->GetName() == "entry") {
-		EntryPanel* ep = (EntryPanel*)page;
-		ep->removeCustomMenu();
-		ep->removeCustomToolBar();
-	}
-	*/
-
 	e.Skip();
 }
 
@@ -1736,8 +1715,6 @@ void ArchiveManagerPanel::onArchiveTabClose(wxAuiNotebookEvent& e)
 {
 	// Get tab that is closing
 	int tabindex = e.GetSelection();
-	if (wxMAJOR_VERSION == 2 && wxMINOR_VERSION <= 9 && wxRELEASE_NUMBER < 2)	// For wxWidgets 2.9.1 and earlier compatibility
-		tabindex = e.GetInt();
 	if (tabindex < 0)
 		return;
 

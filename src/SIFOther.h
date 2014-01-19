@@ -108,7 +108,7 @@ protected:
 		uint8_t* img_mask = imageMask(image);
 		for (int h = 0, i = 4; h < info.width; ++h, i+=2)
 		{
-			int colstart = READ_L16(data.getData(), i);
+			int colstart = READ_L16(data, i);
 			if (colstart)
 			{
 				int start		= data[colstart];
@@ -144,7 +144,7 @@ public:
 
 	bool isThisFormat(MemChunk& mc)
 	{
-		if (EntryDataFormat::getFormat("img_scsprite")->isThisFormat(mc) >= EDF_PROBABLY)
+		if (EntryDataFormat::getFormat("img_scsprite")->isThisFormat(mc) >= EDF_UNLIKELY)
 			return true;
 		else
 			return false;
@@ -152,10 +152,11 @@ public:
 
 	SImage::info_t getInfo(MemChunk& mc, int index)
 	{
+		int size = mc.getSize();
 		SImage::info_t info;
 
 		// Get image width
-		info.width = READ_L16(mc.getData(), 2);
+		info.width = READ_L16(mc, 2);
 
 		if (info.width == 0)
 			return info;
@@ -163,18 +164,21 @@ public:
 		// Get image height
 		for (int j = 0; j < info.width; ++j)
 		{
-			int colstart = READ_L16(mc.getData(), ((j<<1)+4));
+			int pos = (j<<1)+4;
+			if (pos +2 >= size)
+				return info;
+			int colstart = READ_L16(mc, pos);
 
 			// Columns with a null offset are skipped
 			if (colstart == 0) continue;
 
-			if (colstart < 0 || mc.getSize() < (unsigned)colstart+2 || colstart < (info.width*2+4))
+			if (colstart < 0 || size < colstart+2 || colstart < (info.width*2+4))
 				return info;
 
 			int start		= mc[colstart];
 			int stop		= mc[colstart+1];
 			int colheight	= start - stop;
-			if (colheight < 0 || mc.getSize() < (unsigned)colstart+colheight+1)
+			if (colheight < 0 || size < colstart+colheight+1)
 				return info;
 
 			if (start > info.height)
@@ -529,18 +533,18 @@ private:
 
 		// Determine total number of images
 		int i = 9;
-		while (i < 25 && mc[i] != 0) ++i;
+		while ((i < 25) && (READ_L32(mc, (i<<2)) != 0)) ++i;
 		info.numimages = i - 9;
 
 		// Set other info
-		info.width = wxUINT32_SWAP_ON_BE(mc[index+9]);
-		info.height = wxUINT32_SWAP_ON_BE(mc[index+25]);
+		info.width = READ_L32(mc, ((index+9)<<2));
+		info.height = READ_L32(mc, ((index+25)<<2));
 		info.colformat = PALMASK;
 		info.has_palette = true;
 		info.format = id;
 
 		// Return offset to mip level
-		return wxUINT32_SWAP_ON_BE(mc[index+41]);
+		return READ_L32(mc, ((index+41)<<2));
 	}
 
 protected:
@@ -613,17 +617,17 @@ private:
 
 		// Determine total number of images
 		int i = 129;
-		while (i < 145 && mc[i] != 0) ++i;
+		while ((i < 145) && (READ_L32(mc, (i<<2)) != 0)) ++i;
 		info.numimages = i - 129;
 
 		// Set other info
-		info.width = wxUINT32_SWAP_ON_BE(mc[index+129]);
-		info.height = wxUINT32_SWAP_ON_BE(mc[index+145]);
+		info.width = READ_L32(mc, ((index+129)<<2));
+		info.height = READ_L32(mc, ((index+145)<<2));
 		info.colformat = RGBA;
 		info.format = id;
 
 		// Return offset to mip level
-		return wxUINT32_SWAP_ON_BE(mc[index+161]);
+		return READ_L32(mc, ((index+161)<<2));
 	}
 
 protected:

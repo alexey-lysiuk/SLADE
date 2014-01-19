@@ -353,7 +353,7 @@ void MapRenderer2D::renderLinesImmediate(bool show_direction, float alpha)
 		// Direction tab
 		if (show_direction)
 		{
-			fpoint2_t mid = line->midPoint();
+			fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 			fpoint2_t tab = line->dirTabPoint();
 			glVertex2d(mid.x, mid.y);
 			glVertex2d(tab.x, tab.y);
@@ -434,7 +434,7 @@ void MapRenderer2D::renderLineHilight(int index, float fade)
 	glEnd();
 
 	// Direction tab
-	fpoint2_t mid = line->midPoint();
+	fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 	fpoint2_t tab = line->dirTabPoint();
 	glBegin(GL_LINES);
 	glVertex2d(mid.x, mid.y);
@@ -478,7 +478,7 @@ void MapRenderer2D::renderLineSelection(vector<int>& selection, float fade)
 		glVertex2d(x2, y2);
 
 		// Direction tab
-		fpoint2_t mid = line->midPoint();
+		fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 		fpoint2_t tab = line->dirTabPoint();
 		glVertex2d(mid.x, mid.y);
 		glVertex2d(tab.x, tab.y);
@@ -517,7 +517,7 @@ void MapRenderer2D::renderTaggedLines(vector<MapLine*>& lines, float fade)
 		glEnd();
 
 		// Direction tab
-		fpoint2_t mid = line->midPoint();
+		fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 		fpoint2_t tab = line->dirTabPoint();
 		glBegin(GL_LINES);
 		glVertex2d(mid.x, mid.y);
@@ -528,7 +528,7 @@ void MapRenderer2D::renderTaggedLines(vector<MapLine*>& lines, float fade)
 		if (object && action_lines)
 		{
 			glLineWidth(line_width*1.5f);
-			Drawing::drawArrow(line->midPoint(), object->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			Drawing::drawArrow(line->getPoint(MOBJ_POINT_WITHIN), object->getPoint(MOBJ_POINT_WITHIN), col, false, arrowhead_angle, arrowhead_length);
 			glLineWidth(line_width*3);
 		}
 	}
@@ -565,7 +565,7 @@ void MapRenderer2D::renderTaggingLines(vector<MapLine*>& lines, float fade)
 		glEnd();
 
 		// Direction tab
-		fpoint2_t mid = line->midPoint();
+		fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 		fpoint2_t tab = line->dirTabPoint();
 		glBegin(GL_LINES);
 		glVertex2d(mid.x, mid.y);
@@ -576,7 +576,7 @@ void MapRenderer2D::renderTaggingLines(vector<MapLine*>& lines, float fade)
 		if (object && action_lines)
 		{
 			glLineWidth(line_width*1.5f);
-			Drawing::drawArrow(object->midPoint(), line->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			Drawing::drawArrow(object->getPoint(MOBJ_POINT_WITHIN), line->getPoint(MOBJ_POINT_WITHIN), col, false, arrowhead_angle, arrowhead_length);
 			glLineWidth(line_width*5);
 		}
 	}
@@ -674,7 +674,7 @@ void MapRenderer2D::renderRoundThing(double x, double y, double angle, ThingType
 		if (use_zeth_icons && tt->getZeth() >= 0)
 			tex = theMapEditor->textureManager().getEditorImage(S_FMT("zethicons/zeth%02d", tt->getZeth()));
 		if (!tex)
-			tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", CHR(tt->getIcon())));
+			tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/%s", tt->getIcon()));
 	}
 
 	if (!tex)
@@ -729,18 +729,35 @@ void MapRenderer2D::renderRoundThing(double x, double y, double angle, ThingType
 		glPopMatrix();
 }
 
-bool MapRenderer2D::renderSpriteThing(double x, double y, double angle, ThingType* tt, float alpha, bool fitradius)
+bool MapRenderer2D::renderSpriteThing(double x, double y, double angle, ThingType* tt, unsigned index, float alpha, bool fitradius)
 {
 	// Ignore if no type given (shouldn't happen)
 	if (!tt)
 		return false;
 
+	// Refresh sprites list if needed
+	if (thing_sprites.size() != map->nThings())
+	{
+		thing_sprites.clear();
+		for (unsigned a = 0; a < map->nThings(); a++)
+			thing_sprites.push_back(NULL);
+	}
+
 	// --- Determine texture to use ---
 	bool show_angle = false;
-	GLTexture* tex = NULL;
+	GLTexture* tex = index < thing_sprites.size() ? thing_sprites[index] : NULL;
 
 	// Attempt to get sprite texture
-	tex = theMapEditor->textureManager().getSprite(tt->getSprite(), tt->getTranslation(), tt->getPalette());
+	if (!tex)
+	{
+		tex = theMapEditor->textureManager().getSprite(tt->getSprite(), tt->getTranslation(), tt->getPalette());
+
+		if (index < thing_sprites.size())
+		{
+			thing_sprites[index] = tex;
+			thing_sprites_updated = theApp->runTimer();
+		}
+	}
 
 	// If sprite not found, just draw as a normal, round thing
 	if (!tex)
@@ -825,7 +842,7 @@ bool MapRenderer2D::renderSquareThing(double x, double y, double angle, ThingTyp
 
 	// Check for custom thing icon
 	if (!tt->getIcon().IsEmpty() && showicon && !thing_force_dir && !things_angles)
-		tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/square/%s", CHR(tt->getIcon())));
+		tex = theMapEditor->textureManager().getEditorImage(S_FMT("thing/square/%s", tt->getIcon()));
 
 	// Otherwise, no icon
 	int tc_start = 0;
@@ -1085,8 +1102,12 @@ void MapRenderer2D::renderThingsImmediate(float alpha)
 		// Draw thing depending on 'things_drawtype' cvar
 		if (thing_drawtype == TDT_SPRITE)  		// Drawtype 2: Sprites
 		{
+			// Reset thing sprite if modified
+			if (thing->modifiedTime() > thing_sprites_updated && thing_sprites.size() > a)
+				thing_sprites[a] = NULL;
+
 			// Check if we need to draw the direction arrow for this thing
-			if (renderSpriteThing(x, y, angle, tt, talpha))
+			if (renderSpriteThing(x, y, angle, tt, a, talpha))
 				things_arrows.push_back(a);
 		}
 		else if (thing_drawtype == TDT_ROUND)	// Drawtype 1: Round
@@ -1120,7 +1141,7 @@ void MapRenderer2D::renderThingsImmediate(float alpha)
 			else
 				talpha = alpha;
 
-			if (renderSpriteThing(x, y, thing->getAngle(), tt, talpha, true))
+			if (renderSpriteThing(x, y, thing->getAngle(), tt, a, talpha, true))
 				things_arrows.push_back(a);
 		}
 	}
@@ -1336,12 +1357,12 @@ void MapRenderer2D::renderTaggedThings(vector<MapThing*>& things, float fade)
 	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
 	if (object && action_lines)
 	{
-		fpoint2_t dst = object->midPoint();
+		fpoint2_t dst = object->getPoint(MOBJ_POINT_WITHIN);
 		glLineWidth(line_width*1.5f);
 		for (unsigned a = 0; a < things.size(); a++)
 		{
 			MapThing* thing = things[a];
-			Drawing::drawArrow(thing->midPoint(), dst, col, false, arrowhead_angle, arrowhead_length);
+			Drawing::drawArrow(thing->getPoint(MOBJ_POINT_WITHIN), dst, col, false, arrowhead_angle, arrowhead_length);
 		}
 	}
 }
@@ -1387,121 +1408,189 @@ void MapRenderer2D::renderTaggingThings(vector<MapThing*>& things, float fade)
 	MapObject* object = theMapEditor->mapEditor().getHilightedObject();
 	if (object && action_lines)
 	{
-		fpoint2_t src = object->midPoint();
+		fpoint2_t src = object->getPoint(MOBJ_POINT_WITHIN);
 		glLineWidth(line_width*1.5f);
 		for (unsigned a = 0; a < things.size(); a++)
 		{
 			MapThing* thing = things[a];
-			Drawing::drawArrow(src, thing->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			Drawing::drawArrow(src, thing->getPoint(MOBJ_POINT_WITHIN), col, false, arrowhead_angle, arrowhead_length);
 		}
 	}
 }
 
 void MapRenderer2D::renderPathedThings(vector<MapThing*>& things)
 {
-	// Skip if action lines are not desired
-	if (!action_lines)
+	// Skip if action lines are not desired, or if there's nothing to do
+	if (!action_lines || things.size() == 0)
 		return;
 
-	// Find things that need to be pathed
+	// Check if paths need updating
+	bool update = false;
+	if (thing_paths.size() == 0)
+		update = true;
+	else if (map->thingsUpdated() > thing_paths_updated)
+	{
+		for (unsigned a = 0; a < things.size(); a++)
+		{
+			if (things[a]->modifiedTime() > thing_paths_updated)
+			{
+				update = true;
+				break;
+			}
+		}
+		if (!update)
+			thing_paths_updated = theApp->runTimer();
+	}
+
+	// Get colours
 	wxColour col(arrow_pathed_color);
 	rgba_t pathedcol(col.Red(), col.Green(), col.Blue(), col.Alpha());
 	col.Set(arrow_dragon_color);
 	rgba_t dragoncol(col.Red(), col.Green(), col.Blue(), col.Alpha());
-	glLineWidth(line_width*1.5f);
-	for (unsigned a = 0; a < things.size(); ++a)
+
+	if (update)
 	{
-		MapThing* thing = things[a];
-		ThingType* tt = theGameConfiguration->thingType(thing->getType());
-		if (tt->getFlags() & THING_DRAGON)
+		thing_paths.clear();
+
+		// Find things that need to be pathed
+		for (unsigned a = 0; a < things.size(); ++a)
 		{
-			MapThing* first = map->getFirstThingWithId(thing->intProperty("id"));
-			if (first)
+			MapThing* thing = things[a];
+			tpath_t path;
+			path.from_index = 0;
+			path.to_index = 0;
+			
+			ThingType* tt = theGameConfiguration->thingType(thing->getType());
+
+			// Dragon Path
+			if (tt->getFlags() & THING_DRAGON)
 			{
-				Drawing::drawArrow(first->midPoint(), thing->midPoint(), dragoncol, false, arrowhead_angle, arrowhead_length);
-				vector<MapThing*> dragon_things;
-				dragon_things.clear();
-				map->getDragonTargets(first, dragon_things);
-				for (unsigned d = 0; d < dragon_things.size(); ++d)
+				MapThing* first = map->getFirstThingWithId(thing->intProperty("id"));
+				if (first)
 				{
-					int id1 = dragon_things[d]->intProperty("id");
-					int a11 = dragon_things[d]->intProperty("arg0");
-					int a12 = dragon_things[d]->intProperty("arg1");
-					int a13 = dragon_things[d]->intProperty("arg2");
-					int a14 = dragon_things[d]->intProperty("arg3");
-					int a15 = dragon_things[d]->intProperty("arg4");
-					ThingType* tt1 = theGameConfiguration->thingType(dragon_things[d]->getType());
-					for (unsigned e = d + 1; e < dragon_things.size(); ++e)
+					path.from_index = thing->getIndex();
+					path.to_index = first->getIndex();
+					path.type = PATH_DRAGON;
+					thing_paths.push_back(path);
+
+					vector<MapThing*> dragon_things;
+					dragon_things.clear();
+					map->getDragonTargets(first, dragon_things);
+					for (unsigned d = 0; d < dragon_things.size(); ++d)
 					{
-						int id2 = dragon_things[e]->intProperty("id");
-						int a21 = dragon_things[e]->intProperty("arg0");
-						int a22 = dragon_things[e]->intProperty("arg1");
-						int a23 = dragon_things[e]->intProperty("arg2");
-						int a24 = dragon_things[e]->intProperty("arg3");
-						int a25 = dragon_things[e]->intProperty("arg4");
-						ThingType* tt2 = theGameConfiguration->thingType(dragon_things[e]->getType());
-						bool l1to2 = ((a11 == id2) || (a12 == id2) || (a13 == id2) || (a14 == id2) || (a15 == id2));
-						bool l2to1 = ((a21 == id1) || (a22 == id1) || (a23 == id1) || (a24 == id1) || (a25 == id1));
-						if (!((tt1->getFlags()|tt2->getFlags()) & THING_DRAGON))
+						int id1 = dragon_things[d]->intProperty("id");
+						int a11 = dragon_things[d]->intProperty("arg0");
+						int a12 = dragon_things[d]->intProperty("arg1");
+						int a13 = dragon_things[d]->intProperty("arg2");
+						int a14 = dragon_things[d]->intProperty("arg3");
+						int a15 = dragon_things[d]->intProperty("arg4");
+						ThingType* tt1 = theGameConfiguration->thingType(dragon_things[d]->getType());
+						for (unsigned e = d + 1; e < dragon_things.size(); ++e)
 						{
-							if (l1to2)
-								Drawing::drawArrow(dragon_things[e]->midPoint(), dragon_things[d]->midPoint(), 
-													dragoncol, l2to1, arrowhead_angle, arrowhead_length);
-							else if (l2to1)
-								Drawing::drawArrow(dragon_things[d]->midPoint(), dragon_things[e]->midPoint(), 
-													dragoncol, false, arrowhead_angle, arrowhead_length);
+							int id2 = dragon_things[e]->intProperty("id");
+							int a21 = dragon_things[e]->intProperty("arg0");
+							int a22 = dragon_things[e]->intProperty("arg1");
+							int a23 = dragon_things[e]->intProperty("arg2");
+							int a24 = dragon_things[e]->intProperty("arg3");
+							int a25 = dragon_things[e]->intProperty("arg4");
+							ThingType* tt2 = theGameConfiguration->thingType(dragon_things[e]->getType());
+							bool l1to2 = ((a11 == id2) || (a12 == id2) || (a13 == id2) || (a14 == id2) || (a15 == id2));
+							bool l2to1 = ((a21 == id1) || (a22 == id1) || (a23 == id1) || (a24 == id1) || (a25 == id1));
+							if (!((tt1->getFlags()|tt2->getFlags()) & THING_DRAGON))
+							{
+								tpath_t dpath;
+								if (l1to2)
+								{
+									dpath.from_index = dragon_things[e]->getIndex();
+									dpath.to_index = dragon_things[d]->getIndex();
+									dpath.type = l2to1 ? PATH_DRAGON_BOTH : PATH_DRAGON;
+								}
+								else if (l2to1)
+								{
+									dpath.from_index = dragon_things[d]->getIndex();
+									dpath.to_index = dragon_things[e]->getIndex();
+									dpath.type = PATH_DRAGON;
+								}
+								thing_paths.push_back(dpath);
+							}
 						}
 					}
 				}
+				continue;
 			}
-			continue;
-		}
-		int tid = -1, tid2 = -1;
-		int nexttype = tt->getNextType();
-		int nextargs = tt->getNextArgs();
-		if (nextargs)
-		{
-			int pos = nextargs % 10;
-			string na = "arg_";
-			na[3] = ('0' + pos - 1);
-			tid = thing->intProperty(na);
-		}
-		if (nextargs >= 10)
-		{
-			int pos = nextargs / 10;
-			string na = "arg_";
-			na[3] = ('0' + pos - 1);
-			tid += (256 * thing->intProperty(na));
-		}
-		for (unsigned b = a + 1; b < things.size(); ++b)
-		{
-			MapThing* thing2 = things[b];
-			if (thing2->getType() == nexttype)
+
+			// Normal Path
+			int tid = -1, tid2 = -1;
+			int nexttype = tt->getNextType();
+			int nextargs = tt->getNextArgs();
+			if (nextargs)
 			{
-				ThingType* tt2 = theGameConfiguration->thingType(thing2->getType());
-				nextargs = tt2->getNextArgs();
-				if (nextargs)
-				{
-					int pos = nextargs % 10;
-					string na = "arg_";
-					na[3] = ('0' + pos - 1);
-					tid2 = thing2->intProperty(na);
-				}
-				if (nextargs >= 10)
-				{
-					int pos = nextargs / 10;
-					string na = "arg_";
-					na[3] = ('0' + pos - 1);
-					tid2 += (256 * thing2->intProperty(na));
-				}
-				if (thing2->intProperty("id") == tid)
-					Drawing::drawArrow(thing2->midPoint(), thing->midPoint(), pathedcol, 
-										tid2 == thing->intProperty("id"), arrowhead_angle, arrowhead_length);
-				else if (thing->intProperty("id") == tid2)
-					Drawing::drawArrow(thing->midPoint(), thing2->midPoint(), pathedcol, 
-										false, arrowhead_angle, arrowhead_length);
+				int pos = nextargs % 10;
+				string na = "arg_";
+				na[3] = ('0' + pos - 1);
+				tid = thing->intProperty(na);
 			}
+			if (nextargs >= 10)
+			{
+				int pos = nextargs / 10;
+				string na = "arg_";
+				na[3] = ('0' + pos - 1);
+				tid += (256 * thing->intProperty(na));
+			}
+			for (unsigned b = a + 1; b < things.size(); ++b)
+			{
+				MapThing* thing2 = things[b];
+				if (thing2->getType() == nexttype)
+				{
+					ThingType* tt2 = theGameConfiguration->thingType(thing2->getType());
+					nextargs = tt2->getNextArgs();
+					if (nextargs)
+					{
+						int pos = nextargs % 10;
+						string na = "arg_";
+						na[3] = ('0' + pos - 1);
+						tid2 = thing2->intProperty(na);
+					}
+					if (nextargs >= 10)
+					{
+						int pos = nextargs / 10;
+						string na = "arg_";
+						na[3] = ('0' + pos - 1);
+						tid2 += (256 * thing2->intProperty(na));
+					}
+					if (thing2->intProperty("id") == tid)
+					{
+						path.from_index = thing->getIndex();
+						path.to_index = thing2->getIndex();
+						path.type = (tid2 == thing->intProperty("id")) ? PATH_NORMAL_BOTH : PATH_NORMAL;
+					}
+					else if (thing->intProperty("id") == tid2)
+					{
+						path.from_index = thing2->getIndex();
+						path.to_index = thing->getIndex();
+						path.type = PATH_NORMAL;
+					}
+					thing_paths.push_back(path);
+				}
+			}
+
 		}
+		thing_paths_updated = theApp->runTimer();
+	}
+
+	// Setup GL stuff
+	glLineWidth(line_width*1.5f);
+
+	for (unsigned a = 0; a < thing_paths.size(); a++)
+	{
+		if (thing_paths[a].from_index == thing_paths[a].to_index)
+			continue;
+
+		Drawing::drawArrow(map->getThing(thing_paths[a].to_index)->getPoint(MOBJ_POINT_MID),
+			map->getThing(thing_paths[a].from_index)->getPoint(MOBJ_POINT_MID),
+			(thing_paths[a].type == PATH_DRAGON_BOTH || thing_paths[a].type == PATH_DRAGON) ? dragoncol : pathedcol, 
+			(thing_paths[a].type == PATH_NORMAL_BOTH || thing_paths[a].type == PATH_DRAGON_BOTH), 
+			arrowhead_angle, arrowhead_length);
 	}
 }
 
@@ -1591,8 +1680,8 @@ void MapRenderer2D::renderFlatsImmediate(int type, bool texture, float alpha)
 			// Get scaling/offset info
 			double ox = 0;
 			double oy = 0;
-			double sx = 1;
-			double sy = 1;
+			double sx = tex->getScaleX();
+			double sy = tex->getScaleY();
 			double rot = 0;
 			// Check for UDMF + ZDoom extensions
 			if (theMapEditor->currentMapDesc().format == MAP_UDMF && S_CMPNOCASE(theGameConfiguration->udmfNamespace(), "zdoom"))
@@ -1602,8 +1691,8 @@ void MapRenderer2D::renderFlatsImmediate(int type, bool texture, float alpha)
 				{
 					ox = sector->floatProperty("xpanningfloor");
 					oy = sector->floatProperty("ypanningfloor");
-					sx = sector->floatProperty("xscalefloor");
-					sy = sector->floatProperty("yscalefloor");
+					sx *= sector->floatProperty("xscalefloor");
+					sy *= sector->floatProperty("yscalefloor");
 					rot = sector->floatProperty("rotationfloor");
 				}
 				// Ceiling
@@ -1611,8 +1700,8 @@ void MapRenderer2D::renderFlatsImmediate(int type, bool texture, float alpha)
 				{
 					ox = sector->floatProperty("xpanningceiling");
 					oy = sector->floatProperty("ypanningceiling");
-					sx = sector->floatProperty("xscaleceiling");
-					sy = sector->floatProperty("yscaleceiling");
+					sx *= sector->floatProperty("xscaleceiling");
+					sy *= sector->floatProperty("yscaleceiling");
 					rot = sector->floatProperty("rotationceiling");
 				}
 			}
@@ -1722,8 +1811,8 @@ void MapRenderer2D::renderFlatsVBO(int type, bool texture, float alpha)
 			// Get scaling/offset info
 			double ox = 0;
 			double oy = 0;
-			double sx = 1;
-			double sy = 1;
+			double sx = tex->getScaleX();
+			double sy = tex->getScaleY();
 			double rot = 0;
 			// Check for UDMF + ZDoom extensions
 			if (theMapEditor->currentMapDesc().format == MAP_UDMF && S_CMPNOCASE(theGameConfiguration->udmfNamespace(), "zdoom"))
@@ -1733,8 +1822,8 @@ void MapRenderer2D::renderFlatsVBO(int type, bool texture, float alpha)
 				{
 					ox = sector->floatProperty("xpanningfloor");
 					oy = sector->floatProperty("ypanningfloor");
-					sx = sector->floatProperty("xscalefloor");
-					sy = sector->floatProperty("yscalefloor");
+					sx *= sector->floatProperty("xscalefloor");
+					sy *= sector->floatProperty("yscalefloor");
 					rot = sector->floatProperty("rotationfloor");
 				}
 				// Ceiling
@@ -1742,8 +1831,8 @@ void MapRenderer2D::renderFlatsVBO(int type, bool texture, float alpha)
 				{
 					ox = sector->floatProperty("xpanningceiling");
 					oy = sector->floatProperty("ypanningceiling");
-					sx = sector->floatProperty("xscaleceiling");
-					sy = sector->floatProperty("yscaleceiling");
+					sx *= sector->floatProperty("xscaleceiling");
+					sy *= sector->floatProperty("yscaleceiling");
 					rot = sector->floatProperty("rotationceiling");
 				}
 			}
@@ -1839,6 +1928,12 @@ void MapRenderer2D::renderFlatHilight(int index, float fade)
 		glLineWidth(1.0f);
 		map->getSector(index)->getPolygon()->renderWireframe();
 	}
+
+	//// TEST draw text point
+	//glPointSize(8.0f);
+	//glBegin(GL_POINTS);
+	//glVertex2d(map->getSector(index)->getPoint(MOBJ_POINT_WITHIN).x, map->getSector(index)->getPoint(MOBJ_POINT_WITHIN).y);
+	//glEnd();
 }
 
 void MapRenderer2D::renderFlatSelection(vector<int>& selection, float fade)
@@ -1960,7 +2055,7 @@ void MapRenderer2D::renderTaggedFlats(vector<MapSector*>& sectors, float fade)
 			}
 
 			glLineWidth(line_width*1.5f);
-			Drawing::drawArrow(sectors[a]->midPoint(), object->midPoint(), col, false, arrowhead_angle, arrowhead_length);
+			Drawing::drawArrow(sectors[a]->getPoint(MOBJ_POINT_WITHIN), object->getPoint(MOBJ_POINT_WITHIN), col, false, arrowhead_angle, arrowhead_length);
 		}
 	}
 }
@@ -2164,7 +2259,7 @@ void MapRenderer2D::renderMovingThings(vector<int>& things, fpoint2_t move_vec)
 
 		// Draw thing depending on 'things_drawtype' cvar
 		if (thing_drawtype == TDT_SPRITE)		// Drawtype 2: Sprites
-			renderSpriteThing(x, y, angle, tt, 1.0f);
+			renderSpriteThing(x, y, angle, tt, a, 1.0f);
 		else if (thing_drawtype == TDT_ROUND)	// Drawtype 1: Round
 			renderRoundThing(x, y, angle, tt, 1.0f);
 		else							// Drawtype 0 (or other): Square
@@ -2185,7 +2280,7 @@ void MapRenderer2D::renderMovingThings(vector<int>& things, fpoint2_t move_vec)
 			y = thing->yPos() + move_vec.y;
 			angle = thing->getAngle();
 
-			renderSpriteThing(x, y, angle, tt, 1.0f, true);
+			renderSpriteThing(x, y, angle, tt, a, 1.0f, true);
 		}
 	}
 
@@ -2240,7 +2335,7 @@ void MapRenderer2D::renderPasteThings(vector<MapThing*>& things, fpoint2_t pos)
 
 		// Draw thing depending on 'things_drawtype' cvar
 		if (thing_drawtype == TDT_SPRITE)		// Drawtype 2: Sprites
-			renderSpriteThing(x, y, angle, tt, 1.0f);
+			renderSpriteThing(x, y, angle, tt, wxUINT32_MAX, 1.0f);
 		else if (thing_drawtype == TDT_ROUND)	// Drawtype 1: Round
 			renderRoundThing(x, y, angle, tt, 1.0f);
 		else							// Drawtype 0 (or other): Square
@@ -2261,7 +2356,7 @@ void MapRenderer2D::renderPasteThings(vector<MapThing*>& things, fpoint2_t pos)
 			y = thing->yPos() + pos.y;
 			angle = thing->getAngle();
 
-			renderSpriteThing(x, y, angle, tt, 1.0f, true);
+			renderSpriteThing(x, y, angle, tt, wxUINT32_MAX, 1.0f, true);
 		}
 	}
 
@@ -2380,7 +2475,7 @@ void MapRenderer2D::renderObjectEditGroup(ObjectEditGroup* group)
 
 			// Draw thing depending on 'things_drawtype' cvar
 			if (thing_drawtype == TDT_SPRITE)		// Drawtype 2: Sprites
-				renderSpriteThing(x, y, angle, tt, 1.0f);
+				renderSpriteThing(x, y, angle, tt, thing->getIndex(), 1.0f);
 			else if (thing_drawtype == TDT_ROUND)	// Drawtype 1: Round
 				renderRoundThing(x, y, angle, tt, 1.0f);
 			else							// Drawtype 0 (or other): Square
@@ -2401,7 +2496,7 @@ void MapRenderer2D::renderObjectEditGroup(ObjectEditGroup* group)
 				y = things[a].position.y;
 				angle = thing->getAngle();
 
-				renderSpriteThing(x, y, angle, tt, 1.0f, true);
+				renderSpriteThing(x, y, angle, tt, thing->getIndex(), 1.0f, true);
 			}
 		}
 
@@ -2498,7 +2593,7 @@ void MapRenderer2D::updateLinesVBO(bool show_direction, float base_alpha)
 		// Direction tab if needed
 		if (show_direction)
 		{
-			fpoint2_t mid = line->midPoint();
+			fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 			fpoint2_t tab = line->dirTabPoint();
 			lines[v+2].x = mid.x;
 			lines[v+2].y = mid.y;
@@ -2625,6 +2720,7 @@ void MapRenderer2D::forceUpdate(float line_alpha)
 	// Update variables
 	this->view_scale_inv = 1.0 / view_scale;
 	tex_flats.clear();
+	thing_sprites.clear();
 
 	if (OpenGL::vboSupport())
 	{

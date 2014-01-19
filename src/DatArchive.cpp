@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -553,7 +553,7 @@ bool DatArchive::write(MemChunk& mc, bool update)
 		entry = getEntry(l);
 		if (nameoffsets[l])
 		{
-			mc.write(entry->getName(), entry->getName().length());
+			mc.write(CHR(entry->getName()), entry->getName().length());
 			mc.write(&zero, 1);
 		}
 	}
@@ -589,7 +589,7 @@ bool DatArchive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("DatArchive::loadEntryData: Failed to open datfile %s", filename.c_str());
+		wxLogMessage("DatArchive::loadEntryData: Failed to open datfile %s", filename);
 		return false;
 	}
 

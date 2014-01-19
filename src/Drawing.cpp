@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -61,6 +61,7 @@ CVAR(Bool, hud_bob, 0, CVAR_SAVE)
 namespace Drawing
 {
 	sf::RenderWindow*	render_target = NULL;
+	bool				text_state_reset = true;
 };
 #endif
 
@@ -634,26 +635,14 @@ void Drawing::drawText(string text, int x, int y, rgba_t colour, int font, int a
 	// Draw the string
 	if (render_target)
 	{
-		// Push related states
-		glPushMatrix();
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glPushAttrib(GL_VIEWPORT_BIT);
-		render_target->resetGLStates();
+		if (text_state_reset)
+			setTextState(true);
 
 		// Draw
 		render_target->draw(sf_str);
 
-		// Pop related states
-		glPopAttrib();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_TEXTURE);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
+		if (text_state_reset)
+			setTextState(false);
 	}
 }
 
@@ -747,6 +736,41 @@ fpoint2_t Drawing::textExtents(string text, int font)
 
 #endif
 
+void Drawing::enableTextStateReset(bool enable)
+{
+#ifdef USE_SFML_RENDERWINDOW
+	text_state_reset = enable;
+#endif
+}
+
+void Drawing::setTextState(bool set)
+{
+#ifdef USE_SFML_RENDERWINDOW
+	if (set)
+	{
+		// Push related states
+		glPushMatrix();
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glPushAttrib(GL_VIEWPORT_BIT);
+		render_target->resetGLStates();
+	}
+	else
+	{
+		// Pop related states
+		glPopAttrib();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_TEXTURE);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
+#endif
+}
+
 /* Drawing::drawHud
  * Draws doom hud offset guide lines, from the center
  *******************************************************************/
@@ -834,55 +858,12 @@ wxColour Drawing::getPanelBGColour()
 
 wxColour Drawing::getMenuTextColour()
 {
-	/*#ifdef __WXGTK__
-		static bool     intitialized(false);
-		static wxColour textColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT));
-
-		if( !intitialized ) {
-			// try to get the text colour from a menu
-			GtkWidget *menuBar = gtk_menu_new();
-			GtkStyle   *def = gtk_rc_get_style( menuBar );
-			if(!def)
-				def = gtk_widget_get_default_style();
-
-			if(def) {
-				GdkColor col = def->text[GTK_STATE_NORMAL];
-				textColour = wxColour(col);
-			}
-			gtk_widget_destroy( menuBar );
-			intitialized = true;
-		}
-		return textColour;
-	#else*/
 	return wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
-//#endif
 }
 
 wxColour Drawing::getMenuBarBGColour()
 {
-	/*
-	#ifdef __WXGTK__
-		static bool     intitialized(false);
-		static wxColour textColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
-
-		if( !intitialized ) {
-			// try to get the background colour from a menu
-			GtkWidget *menuBar = gtk_menu_bar_new();
-			GtkStyle   *def = gtk_rc_get_style( menuBar );
-			if(!def)
-				def = gtk_widget_get_default_style();
-
-			if(def) {
-				GdkColor col = def->bg[GTK_STATE_NORMAL];
-				textColour = wxColour(col);
-			}
-			gtk_widget_destroy( menuBar );
-			intitialized = true;
-		}
-		return textColour;
-	#else*/
 	return wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
-//#endif
 }
 
 wxColour Drawing::lightColour(const wxColour& colour, float percent)
@@ -924,7 +905,7 @@ wxColour Drawing::darkColour(const wxColour& colour, float percent)
 
 /*
 CONSOLE_COMMAND(d_testfont, 1) {
-	ArchiveEntry* entry = theArchiveManager->programResourceArchive()->entryAtPath(S_FMT("fonts/%s.ttf", CHR(args[0])));
+	ArchiveEntry* entry = theArchiveManager->programResourceArchive()->entryAtPath(S_FMT("fonts/%s.ttf", args[0]));
 	if (entry) {
 		if (Drawing::font_condensed) {
 			delete Drawing::font_condensed;

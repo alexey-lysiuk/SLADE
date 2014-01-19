@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -373,7 +373,7 @@ void ResourceManager::listAllPatches()
 	EntryResourceMap::iterator i = patches.begin();
 	while (i != patches.end())
 	{
-		wxLogMessage("%s (%d)", CHR(i->first), i->second.length());
+		wxLogMessage("%s (%d)", i->first, i->second.length());
 		i++;
 	}
 }

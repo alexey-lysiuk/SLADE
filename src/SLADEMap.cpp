@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -38,6 +38,7 @@
 #include "WadArchive.h"
 #include "UndoRedo.h"
 #include "SectorBuilder.h"
+#include "SplashWindow.h"
 #include <wx/colour.h>
 
 #define IDEQ(x) (((x) != 0) && ((x) == id))
@@ -125,6 +126,11 @@ MapObject* SLADEMap::getObject(uint8_t type, unsigned index)
 void SLADEMap::setGeometryUpdated()
 {
 	geometry_updated = theApp->runTimer();
+}
+
+void SLADEMap::setThingsUpdated()
+{
+	things_updated = theApp->runTimer();
 }
 
 void SLADEMap::refreshIndices()
@@ -368,6 +374,8 @@ bool SLADEMap::readMap(Archive::mapdesc_t map)
 
 	opened_time = theApp->runTimer() + 10;
 
+	initSectorPolygons();
+
 	return ok;
 }
 
@@ -398,9 +406,9 @@ bool SLADEMap::addSide(doomside_t& s)
 	ns->offset_y = s.y_offset;
 
 	// Update texture counts
-	usage_tex[ns->tex_upper] += 1;
-	usage_tex[ns->tex_middle] += 1;
-	usage_tex[ns->tex_lower] += 1;
+	usage_tex[ns->tex_upper.Upper()] += 1;
+	usage_tex[ns->tex_middle.Upper()] += 1;
+	usage_tex[ns->tex_lower.Upper()] += 1;
 
 	// Add side
 	sides.push_back(ns);
@@ -420,9 +428,9 @@ bool SLADEMap::addSide(doom64side_t& s)
 	ns->offset_y = s.y_offset;
 
 	// Update texture counts
-	usage_tex[ns->tex_upper] += 1;
-	usage_tex[ns->tex_middle] += 1;
-	usage_tex[ns->tex_lower] += 1;
+	usage_tex[ns->tex_upper.Upper()] += 1;
+	usage_tex[ns->tex_middle.Upper()] += 1;
+	usage_tex[ns->tex_lower.Upper()] += 1;
 
 	// Add side
 	sides.push_back(ns);
@@ -563,8 +571,8 @@ bool SLADEMap::addSector(doomsector_t& s)
 	ns->tag = s.tag;
 
 	// Update texture counts
-	usage_flat[ns->f_tex] += 1;
-	usage_flat[ns->c_tex] += 1;
+	usage_flat[ns->f_tex.Upper()] += 1;
+	usage_flat[ns->c_tex.Upper()] += 1;
 
 	// Add sector
 	sectors.push_back(ns);
@@ -592,8 +600,8 @@ bool SLADEMap::addSector(doom64sector_t& s)
 	ns->properties["color_lower"] = s.color[4];
 
 	// Update texture counts
-	usage_flat[ns->f_tex] += 1;
-	usage_flat[ns->c_tex] += 1;
+	usage_flat[ns->f_tex.Upper()] += 1;
+	usage_flat[ns->c_tex.Upper()] += 1;
 
 	// Add sector
 	sectors.push_back(ns);
@@ -647,8 +655,13 @@ bool SLADEMap::readDoomVertexes(ArchiveEntry* entry)
 	}
 
 	doomvertex_t* vert_data = (doomvertex_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doomvertex_t); a++)
+	unsigned nv = entry->getSize() / sizeof(doomvertex_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < nv; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / nv) * 0.2f);
 		addVertex(vert_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d vertices", vertices.size());
 
@@ -672,8 +685,13 @@ bool SLADEMap::readDoomSidedefs(ArchiveEntry* entry)
 	}
 
 	doomside_t* side_data = (doomside_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doomside_t); a++)
+	unsigned ns = entry->getSize() / sizeof(doomside_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < ns; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / ns) * 0.2f);
 		addSide(side_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d sides", sides.size());
 
@@ -697,8 +715,11 @@ bool SLADEMap::readDoomLinedefs(ArchiveEntry* entry)
 	}
 
 	doomline_t* line_data = (doomline_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doomline_t); a++)
+	unsigned nl = entry->getSize() / sizeof(doomline_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < nl; a++)
 	{
+		theSplashWindow->setProgress(p + ((float)a / nl) * 0.2f);
 		if (!addLine(line_data[a]))
 			LOG_MESSAGE(2, "Line %d invalid, not added", a);
 	}
@@ -725,8 +746,13 @@ bool SLADEMap::readDoomSectors(ArchiveEntry* entry)
 	}
 
 	doomsector_t* sect_data = (doomsector_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doomsector_t); a++)
+	unsigned ns = entry->getSize() / sizeof(doomsector_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < ns; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / ns) * 0.2f);
 		addSector(sect_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d sectors", sectors.size());
 
@@ -750,8 +776,13 @@ bool SLADEMap::readDoomThings(ArchiveEntry* entry)
 	}
 
 	doomthing_t* thng_data = (doomthing_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doomthing_t); a++)
+	unsigned nt = entry->getSize() / sizeof(doomthing_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < nt; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / nt) * 0.2f);
 		addThing(thng_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d things", things.size());
 
@@ -787,24 +818,37 @@ bool SLADEMap::readDoomMap(Archive::mapdesc_t map)
 	}
 
 	// ---- Read vertices ----
+	theSplashWindow->setProgressMessage("Reading Vertices");
+	theSplashWindow->setProgress(0.0f);
 	if (!readDoomVertexes(v))
 		return false;
 
 	// ---- Read sectors ----
+	theSplashWindow->setProgressMessage("Reading Sectors");
+	theSplashWindow->setProgress(0.2f);
 	if (!readDoomSectors(se))
 		return false;
 
 	// ---- Read sides ----
+	theSplashWindow->setProgressMessage("Reading Sides");
+	theSplashWindow->setProgress(0.4f);
 	if (!readDoomSidedefs(si))
 		return false;
 
 	// ---- Read lines ----
+	theSplashWindow->setProgressMessage("Reading Lines");
+	theSplashWindow->setProgress(0.6f);
 	if (!readDoomLinedefs(l))
 		return false;
 
 	// ---- Read things ----
+	theSplashWindow->setProgressMessage("Reading Things");
+	theSplashWindow->setProgress(0.8f);
 	if (!readDoomThings(t))
 		return false;
+
+	theSplashWindow->setProgressMessage("Init Map Data");
+	theSplashWindow->setProgress(1.0f);
 
 	// Remove detached vertices
 	mapOpenChecks();
@@ -936,8 +980,13 @@ bool SLADEMap::readHexenLinedefs(ArchiveEntry* entry)
 	}
 
 	hexenline_t* line_data = (hexenline_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(hexenline_t); a++)
+	unsigned nl = entry->getSize() / sizeof(hexenline_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < nl; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / nl) * 0.2f);
 		addLine(line_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d lines", lines.size());
 
@@ -960,8 +1009,13 @@ bool SLADEMap::readHexenThings(ArchiveEntry* entry)
 	}
 
 	hexenthing_t* thng_data = (hexenthing_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(hexenthing_t); a++)
+	unsigned nt = entry->getSize() / sizeof(hexenthing_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < nt; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / nt) * 0.2f);
 		addThing(thng_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d things", things.size());
 
@@ -997,24 +1051,37 @@ bool SLADEMap::readHexenMap(Archive::mapdesc_t map)
 	}
 
 	// ---- Read vertices ----
+	theSplashWindow->setProgressMessage("Reading Vertices");
+	theSplashWindow->setProgress(0.0f);
 	if (!readDoomVertexes(v))
 		return false;
 
 	// ---- Read sectors ----
+	theSplashWindow->setProgressMessage("Reading Sectors");
+	theSplashWindow->setProgress(0.2f);
 	if (!readDoomSectors(se))
 		return false;
 
 	// ---- Read sides ----
+	theSplashWindow->setProgressMessage("Reading Sides");
+	theSplashWindow->setProgress(0.4f);
 	if (!readDoomSidedefs(si))
 		return false;
 
 	// ---- Read lines ----
+	theSplashWindow->setProgressMessage("Reading Lines");
+	theSplashWindow->setProgress(0.6f);
 	if (!readHexenLinedefs(l))
 		return false;
 
 	// ---- Read things ----
+	theSplashWindow->setProgressMessage("Reading Things");
+	theSplashWindow->setProgress(0.8f);
 	if (!readHexenThings(t))
 		return false;
+
+	theSplashWindow->setProgressMessage("Init Map Data");
+	theSplashWindow->setProgress(1.0f);
 
 	// Remove detached vertices
 	mapOpenChecks();
@@ -1045,8 +1112,13 @@ bool SLADEMap::readDoom64Vertexes(ArchiveEntry* entry)
 	}
 
 	doom64vertex_t* vert_data = (doom64vertex_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doom64vertex_t); a++)
+	unsigned n = entry->getSize() / sizeof(doom64vertex_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < n; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / n) * 0.2f);
 		addVertex(vert_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d vertices", vertices.size());
 
@@ -1069,8 +1141,13 @@ bool SLADEMap::readDoom64Sidedefs(ArchiveEntry* entry)
 	}
 
 	doom64side_t* side_data = (doom64side_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doom64side_t); a++)
+	unsigned n = entry->getSize() / sizeof(doom64side_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < n; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / n) * 0.2f);
 		addSide(side_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d sides", sides.size());
 
@@ -1093,8 +1170,13 @@ bool SLADEMap::readDoom64Linedefs(ArchiveEntry* entry)
 	}
 
 	doom64line_t* line_data = (doom64line_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doom64line_t); a++)
+	unsigned n = entry->getSize() / sizeof(doom64line_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < n; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / n) * 0.2f);
 		addLine(line_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d lines", lines.size());
 
@@ -1117,8 +1199,13 @@ bool SLADEMap::readDoom64Sectors(ArchiveEntry* entry)
 	}
 
 	doom64sector_t* sect_data = (doom64sector_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doom64sector_t); a++)
+	unsigned n = entry->getSize() / sizeof(doom64sector_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < n; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / n) * 0.2f);
 		addSector(sect_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d sectors", sectors.size());
 
@@ -1141,8 +1228,13 @@ bool SLADEMap::readDoom64Things(ArchiveEntry* entry)
 	}
 
 	doom64thing_t* thng_data = (doom64thing_t*)entry->getData(true);
-	for (size_t a = 0; a < entry->getSize() / sizeof(doom64thing_t); a++)
+	unsigned n = entry->getSize() / sizeof(doom64thing_t);
+	float p = theSplashWindow->getProgress();
+	for (size_t a = 0; a < n; a++)
+	{
+		theSplashWindow->setProgress(p + ((float)a / n) * 0.2f);
 		addThing(thng_data[a]);
+	}
 
 	LOG_MESSAGE(3, "Read %d things", things.size());
 
@@ -1178,24 +1270,37 @@ bool SLADEMap::readDoom64Map(Archive::mapdesc_t map)
 	}
 
 	// ---- Read vertices ----
+	theSplashWindow->setProgressMessage("Reading Vertices");
+	theSplashWindow->setProgress(0.0f);
 	if (!readDoom64Vertexes(v))
 		return false;
 
 	// ---- Read sectors ----
+	theSplashWindow->setProgressMessage("Reading Sectors");
+	theSplashWindow->setProgress(0.2f);
 	if (!readDoom64Sectors(se))
 		return false;
 
 	// ---- Read sides ----
+	theSplashWindow->setProgressMessage("Reading Sides");
+	theSplashWindow->setProgress(0.4f);
 	if (!readDoom64Sidedefs(si))
 		return false;
 
 	// ---- Read lines ----
+	theSplashWindow->setProgressMessage("Reading Lines");
+	theSplashWindow->setProgress(0.6f);
 	if (!readDoom64Linedefs(l))
 		return false;
 
 	// ---- Read things ----
+	theSplashWindow->setProgressMessage("Reading Things");
+	theSplashWindow->setProgress(0.8f);
 	if (!readDoom64Things(t))
 		return false;
+
+	theSplashWindow->setProgressMessage("Init Map Data");
+	theSplashWindow->setProgress(1.0f);
 
 	// Remove detached vertices
 	mapOpenChecks();
@@ -1284,13 +1389,13 @@ bool SLADEMap::addSide(ParseTreeNode* def)
 			ns->offset_y = prop->getIntValue();
 		else
 			ns->properties[prop->getName()] = prop->getValue();
-		//wxLogMessage("Property %s type %s (%s)", CHR(prop->getName()), CHR(prop->getValue().typeString()), CHR(prop->getValue().getStringValue()));
+		//wxLogMessage("Property %s type %s (%s)", prop->getName(), prop->getValue().typeString(), prop->getValue().getStringValue());
 	}
 
 	// Update texture counts
-	usage_tex[ns->tex_upper] += 1;
-	usage_tex[ns->tex_middle] += 1;
-	usage_tex[ns->tex_lower] += 1;
+	usage_tex[ns->tex_upper.Upper()] += 1;
+	usage_tex[ns->tex_middle.Upper()] += 1;
+	usage_tex[ns->tex_lower.Upper()] += 1;
 
 	// Add side to map
 	sides.push_back(ns);
@@ -1361,8 +1466,8 @@ bool SLADEMap::addSector(ParseTreeNode* def)
 
 	// Create new sector
 	MapSector* ns = new MapSector(prop_ftex->getStringValue(), prop_ctex->getStringValue(), this);
-	usage_flat[ns->f_tex] += 1;
-	usage_flat[ns->c_tex] += 1;
+	usage_flat[ns->f_tex.Upper()] += 1;
+	usage_flat[ns->c_tex.Upper()] += 1;
 
 	// Set defaults
 	ns->f_height = 0;
@@ -1442,6 +1547,8 @@ bool SLADEMap::readUDMFMap(Archive::mapdesc_t map)
 	ArchiveEntry* textmap = map.head->nextEntry();
 
 	// --- Parse UDMF text ---
+	theSplashWindow->setProgressMessage("Parsing TEXTMAP");
+	theSplashWindow->setProgress(-100.0f);
 	Parser parser;
 	if (!parser.parseText(textmap->getMCData()))
 		return false;
@@ -1452,6 +1559,7 @@ bool SLADEMap::readUDMFMap(Archive::mapdesc_t map)
 	// be created in the correct order (verts->sides->lines->sectors->things),
 	// even if they aren't defined in that order.
 	// Unknown definitions are also kept, just in case
+	theSplashWindow->setProgressMessage("Sorting definitions");
 	ParseTreeNode* root = parser.parseTreeRoot();
 	vector<ParseTreeNode*> defs_vertices;
 	vector<ParseTreeNode*> defs_lines;
@@ -1461,6 +1569,8 @@ bool SLADEMap::readUDMFMap(Archive::mapdesc_t map)
 	vector<ParseTreeNode*> defs_other;
 	for (unsigned a = 0; a < root->nChildren(); a++)
 	{
+		theSplashWindow->setProgress((float)a / root->nChildren());
+
 		ParseTreeNode* node = (ParseTreeNode*)root->getChild(a);
 
 		// Vertex definition
@@ -1495,24 +1605,46 @@ bool SLADEMap::readUDMFMap(Archive::mapdesc_t map)
 	// Now create map structures from parsed data, in the right order
 
 	// Create vertices from parsed data
+	theSplashWindow->setProgressMessage("Reading Vertices");
 	for (unsigned a = 0; a < defs_vertices.size(); a++)
+	{
+		theSplashWindow->setProgress(((float)a / defs_vertices.size()) * 0.2f);
 		addVertex(defs_vertices[a]);
+	}
 
 	// Create sectors from parsed data
+	theSplashWindow->setProgressMessage("Reading Sectors");
 	for (unsigned a = 0; a < defs_sectors.size(); a++)
+	{
+		theSplashWindow->setProgress(0.2f + ((float)a / defs_sectors.size()) * 0.2f);
 		addSector(defs_sectors[a]);
+	}
 
 	// Create sides from parsed data
+	theSplashWindow->setProgressMessage("Reading Sides");
 	for (unsigned a = 0; a < defs_sides.size(); a++)
+	{
+		theSplashWindow->setProgress(0.4f + ((float)a / defs_sides.size()) * 0.2f);
 		addSide(defs_sides[a]);
+	}
 
 	// Create lines from parsed data
+	theSplashWindow->setProgressMessage("Reading Lines");
 	for (unsigned a = 0; a < defs_lines.size(); a++)
+	{
+		theSplashWindow->setProgress(0.6f + ((float)a / defs_lines.size()) * 0.2f);
 		addLine(defs_lines[a]);
+	}
 
 	// Create things from parsed data
+	theSplashWindow->setProgressMessage("Reading Things");
 	for (unsigned a = 0; a < defs_things.size(); a++)
+	{
+		theSplashWindow->setProgress(0.8f + ((float)a / defs_things.size()) * 0.2f);
 		addThing(defs_things[a]);
+	}
+
+	theSplashWindow->setProgressMessage("Init map data");
 
 	// Remove detached vertices
 	mapOpenChecks();
@@ -2057,7 +2189,7 @@ bool SLADEMap::writeUDMFMap(ArchiveEntry* textmap)
 
 	// Write map namespace
 	tempfile.Write("// Written by SLADE3\n");
-	tempfile.Write(S_FMT("namespace=\"%s\";\n", CHR(udmf_namespace)));
+	tempfile.Write(S_FMT("namespace=\"%s\";\n", udmf_namespace));
 
 	//sf::Clock clock;
 
@@ -2126,11 +2258,11 @@ bool SLADEMap::writeUDMFMap(ArchiveEntry* textmap)
 		// Basic properties
 		object_def += S_FMT("sector=%d;\n", sides[a]->sector->getIndex());
 		if (sides[a]->tex_upper != "-")
-			object_def += S_FMT("texturetop=\"%s\";\n", CHR(sides[a]->tex_upper));
+			object_def += S_FMT("texturetop=\"%s\";\n", sides[a]->tex_upper);
 		if (sides[a]->tex_middle != "-")
-			object_def += S_FMT("texturemiddle=\"%s\";\n", CHR(sides[a]->tex_middle));
+			object_def += S_FMT("texturemiddle=\"%s\";\n", sides[a]->tex_middle);
 		if (sides[a]->tex_lower != "-")
-			object_def += S_FMT("texturebottom=\"%s\";\n", CHR(sides[a]->tex_lower));
+			object_def += S_FMT("texturebottom=\"%s\";\n", sides[a]->tex_lower);
 		if (sides[a]->offset_x != 0)
 			object_def += S_FMT("offsetx=%d;\n", sides[a]->offset_x);
 		if (sides[a]->offset_y != 0)
@@ -2176,7 +2308,7 @@ bool SLADEMap::writeUDMFMap(ArchiveEntry* textmap)
 		object_def = S_FMT("sector//#%d\n{\n", a);
 
 		// Basic properties
-		object_def += S_FMT("texturefloor=\"%s\";\ntextureceiling=\"%s\";", CHR(sectors[a]->f_tex), CHR(sectors[a]->c_tex));
+		object_def += S_FMT("texturefloor=\"%s\";\ntextureceiling=\"%s\";", sectors[a]->f_tex, sectors[a]->c_tex);
 		if (sectors[a]->f_height != 0) object_def += S_FMT("heightfloor=%d;\n", sectors[a]->f_height);
 		if (sectors[a]->c_height != 0) object_def += S_FMT("heightceiling=%d;\n", sectors[a]->c_height);
 		if (sectors[a]->light != 0) object_def += S_FMT("lightlevel=%d;\n", sectors[a]->light);
@@ -2350,9 +2482,9 @@ bool SLADEMap::removeSide(unsigned index, bool remove_from_line)
 	}
 
 	// Update texture usage
-	usage_tex[sides[index]->tex_lower] -= 1;
-	usage_tex[sides[index]->tex_middle] -= 1;
-	usage_tex[sides[index]->tex_upper] -= 1;
+	usage_tex[sides[index]->tex_lower.Upper()] -= 1;
+	usage_tex[sides[index]->tex_middle.Upper()] -= 1;
+	usage_tex[sides[index]->tex_upper.Upper()] -= 1;
 
 	// Remove the side
 	removeMapObject(sides[index]);
@@ -2384,8 +2516,8 @@ bool SLADEMap::removeSector(unsigned index)
 	//	sectors[index]->connected_sides[a]->sector = NULL;
 
 	// Update texture usage
-	usage_flat[sectors[index]->f_tex] -= 1;
-	usage_flat[sectors[index]->c_tex] -= 1;
+	usage_flat[sectors[index]->f_tex.Upper()] -= 1;
+	usage_flat[sectors[index]->c_tex.Upper()] -= 1;
 
 	// Remove the sector
 	removeMapObject(sectors[index]);
@@ -2418,6 +2550,8 @@ bool SLADEMap::removeThing(unsigned index)
 	things[index]->index = index;
 	//things[index]->modified_time = theApp->runTimer();
 	things.pop_back();
+
+	things_updated = theApp->runTimer();
 
 	return true;
 }
@@ -2759,8 +2893,76 @@ bool SLADEMap::linesIntersect(MapLine* line1, MapLine* line2, double& x, double&
 		line2->vertex1->x, line2->vertex1->y, line2->vertex2->x, line2->vertex2->y, x, y);
 }
 
+void SLADEMap::findSectorTextPoint(MapSector* sector)
+{
+	// Check sector
+	if (!sector)
+		return;
+
+	// Check if actual sector midpoint can be used
+	sector->text_point = sector->getPoint(MOBJ_POINT_MID);
+	if (sector->isWithin(sector->text_point.x, sector->text_point.y))
+		return;
+
+	if (sector->connected_sides.size() == 0)
+		return;
+
+	// Find nearest line to sector midpoint (that is also part of the sector)
+	double min_dist = 9999999999;
+	MapSide* mid_side = sector->connected_sides[0];
+	for (unsigned a = 0; a < sector->connected_sides.size(); a++)
+	{
+		MapLine* l = sector->connected_sides[a]->parent;
+		double dist = MathStuff::distanceToLineFast(sector->text_point.x, sector->text_point.y, l->x1(), l->y1(), l->x2(), l->y2());
+
+		if (dist < min_dist)
+		{
+			min_dist = dist;
+			mid_side = sector->connected_sides[a];
+		}
+	}
+
+	// Calculate ray
+	fpoint2_t r_o = mid_side->parent->getPoint(MOBJ_POINT_MID);
+	fpoint2_t r_d = mid_side->parent->frontVector();
+	if (mid_side == mid_side->parent->side1)
+		r_d.set(-r_d.x, -r_d.y);
+
+	// Find nearest intersecting line
+	min_dist = 9999999999;
+	for (unsigned a = 0; a < sector->connected_sides.size(); a++)
+	{
+		if (sector->connected_sides[a] == mid_side)
+			continue;
+
+		MapLine* line = sector->connected_sides[a]->parent;
+		double dist = MathStuff::distanceRayLine(r_o, r_o + r_d, line->x1(), line->y1(), line->x2(), line->y2());
+
+		if (dist > 0 && dist < min_dist)
+			min_dist = dist;
+	}
+
+	// Set text point to halfway between the two lines
+	sector->text_point.set(r_o.x + (r_d.x * min_dist * 0.5), r_o.y + (r_d.y * min_dist * 0.5));
+}
+
+void SLADEMap::initSectorPolygons()
+{
+	theSplashWindow->setProgressMessage("Building sector polygons");
+	theSplashWindow->setProgress(0.0f);
+	for (unsigned a = 0; a < sectors.size(); a++)
+	{
+		theSplashWindow->setProgress((float)a / (float)sectors.size());
+		sectors[a]->getPolygon();
+	}
+	theSplashWindow->setProgress(1.0f);
+}
+
 void SLADEMap::getSectorsByTag(int tag, vector<MapSector*>& list)
 {
+	if (tag == 0)
+		return;
+
 	// Find sectors with matching tag
 	for (unsigned a = 0; a < sectors.size(); a++)
 	{
@@ -2771,6 +2973,9 @@ void SLADEMap::getSectorsByTag(int tag, vector<MapSector*>& list)
 
 void SLADEMap::getThingsById(int id, vector<MapThing*>& list, unsigned start, int type)
 {
+	if (id == 0)
+		return;
+
 	// Find things with matching id
 	for (unsigned a = start; a < things.size(); a++)
 	{
@@ -2781,6 +2986,9 @@ void SLADEMap::getThingsById(int id, vector<MapThing*>& list, unsigned start, in
 
 MapThing* SLADEMap::getFirstThingWithId(int id)
 {
+	if (id == 0)
+		return NULL;
+
 	// Find things with matching id, but ignore dragons, we don't want them!
 	for (unsigned a = 0; a < things.size(); a++)
 	{
@@ -2793,6 +3001,9 @@ MapThing* SLADEMap::getFirstThingWithId(int id)
 
 void SLADEMap::getThingsByIdInSectorTag(int id, int tag, vector<MapThing*>& list)
 {
+	if (id==0 && tag==0)
+		return;
+
 	// Find things with matching id contained in sector with matching tag
 	for (unsigned a = 0; a < things.size(); a++)
 	{
@@ -2837,13 +3048,16 @@ void SLADEMap::getPathedThings(vector<MapThing*>& list)
 	for (unsigned a = 0; a < things.size(); a++)
 	{
 		ThingType* tt = theGameConfiguration->thingType(things[a]->getType());
-		if (tt->getFlags() & THING_PATHED|THING_DRAGON)
+		if (tt->getFlags() & (THING_PATHED|THING_DRAGON))
 			list.push_back(things[a]);
 	}
 }
 
 void SLADEMap::getLinesById(int id, vector<MapLine*>& list)
 {
+	if (id == 0)
+		return;
+
 	// Find lines with matching id
 	for (unsigned a = 0; a < lines.size(); a++)
 	{
@@ -3198,7 +3412,7 @@ string SLADEMap::getAdjacentLineTexture(MapVertex* vertex, int tex_part)
 MapSector* SLADEMap::getLineSideSector(MapLine* line, bool front)
 {
 	// Get mid and direction points
-	fpoint2_t mid = line->midPoint();
+	fpoint2_t mid = line->getPoint(MOBJ_POINT_MID);
 	fpoint2_t dir = line->frontVector();
 	if (front)
 		dir = mid - dir;
@@ -3477,6 +3691,7 @@ MapThing* SLADEMap::createThing(double x, double y)
 
 	// Add to things
 	things.push_back(nt);
+	things_updated = theApp->runTimer();
 
 	return nt;
 }
@@ -3649,9 +3864,9 @@ void SLADEMap::splitLine(unsigned line, unsigned vertex)
 		sides.push_back(s1);
 
 		// Update texture counts
-		usage_tex[s1->tex_upper] += 1;
-		usage_tex[s1->tex_middle] += 1;
-		usage_tex[s1->tex_lower] += 1;
+		usage_tex[s1->tex_upper.Upper()] += 1;
+		usage_tex[s1->tex_middle.Upper()] += 1;
+		usage_tex[s1->tex_lower.Upper()] += 1;
 	}
 	if (l->side2)
 	{
@@ -3670,9 +3885,9 @@ void SLADEMap::splitLine(unsigned line, unsigned vertex)
 		sides.push_back(s2);
 
 		// Update texture counts
-		usage_tex[s2->tex_upper] += 1;
-		usage_tex[s2->tex_middle] += 1;
-		usage_tex[s2->tex_lower] += 1;
+		usage_tex[s2->tex_upper.Upper()] += 1;
+		usage_tex[s2->tex_middle.Upper()] += 1;
+		usage_tex[s2->tex_lower.Upper()] += 1;
 	}
 
 	// Create and add new line
@@ -4036,11 +4251,17 @@ MapLine* SLADEMap::mergeOverlappingLines(MapLine* line1, MapLine* line2)
 	if (remove->vertex1 == keep->vertex1)
 	{
 		// Set keep front sector to remove front sector
-		setLineSector(keep->index, remove->side1->sector->index);
+		if (remove->side1)
+			setLineSector(keep->index, remove->side1->sector->index);
+		else
+			setLineSector(keep->index, -1);
 	}
 	else
 	{
-		setLineSector(keep->index, remove->side2->sector->index);
+		if (remove->side2)
+			setLineSector(keep->index, remove->side2->sector->index);
+		else
+			setLineSector(keep->index, -1);
 	}
 
 	return remove;
@@ -4072,7 +4293,7 @@ void SLADEMap::correctSectors(vector<MapLine*> lines, bool existing_only)
 		else
 		{
 			edges.push_back(me_ls_t(lines[a], true));
-			fpoint2_t mid = lines[a]->midPoint();
+			fpoint2_t mid = lines[a]->getPoint(MOBJ_POINT_MID);
 			if (sectorAt(mid.x, mid.y) >= 0)
 				edges.push_back(me_ls_t(lines[a], false));
 		}
@@ -4400,12 +4621,12 @@ void SLADEMap::rebuildConnectedSides()
 
 void SLADEMap::updateTexUsage(string tex, int adjust)
 {
-	usage_tex[tex] += adjust;
+	usage_tex[tex.Upper()] += adjust;
 }
 
 void SLADEMap::updateFlatUsage(string flat, int adjust)
 {
-	usage_flat[flat] += adjust;
+	usage_flat[flat.Upper()] += adjust;
 }
 
 void SLADEMap::updateThingTypeUsage(int type, int adjust)
@@ -4415,12 +4636,12 @@ void SLADEMap::updateThingTypeUsage(int type, int adjust)
 
 int SLADEMap::texUsageCount(string tex)
 {
-	return usage_tex[tex];
+	return usage_tex[tex.Upper()];
 }
 
 int SLADEMap::flatUsageCount(string tex)
 {
-	return usage_flat[tex];
+	return usage_flat[tex.Upper()];
 }
 
 int SLADEMap::thingTypeUsageCount(int type)

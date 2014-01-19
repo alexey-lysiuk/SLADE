@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -199,7 +199,7 @@ string TextStyle::getDefinition(unsigned tabs)
 	if (!font.IsEmpty())
 	{
 		for (unsigned t = 0; t < tabs; t++) ret += "\t";
-		ret += S_FMT("font = \"%s\";\n", CHR(font));
+		ret += S_FMT("font = \"%s\";\n", font);
 	}
 
 	// Write size
@@ -406,7 +406,7 @@ bool StyleSet::writeFile(string filename)
 	file.Write("styleset {\n");
 
 	// Name
-	file.Write(S_FMT("\tname = \"%s\";\n\n", CHR(name)));
+	file.Write(S_FMT("\tname = \"%s\";\n\n", name));
 
 	// Default style
 	file.Write("\tdefault {\n");

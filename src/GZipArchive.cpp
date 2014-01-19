@@ -1,7 +1,7 @@
 
 /*******************************************************************
  * SLADE - It's a Doom Editor
- * Copyright (C) 2008-2012 Simon Judd
+ * Copyright (C) 2008-2014 Simon Judd
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
@@ -167,7 +167,7 @@ bool GZipArchive::open(MemChunk& mc)
 			++mds;
 		}
 		while (c != 0 && size > mds);
-		wxLogMessage("Archive %s says:\n %s", CHR(getFilename(true)), CHR(comment));
+		wxLogMessage("Archive %s says:\n %s", getFilename(true), comment);
 	}
 
 	// Skip past CRC 16 check
@@ -336,7 +336,7 @@ bool GZipArchive::loadEntryData(ArchiveEntry* entry)
 	// Check if opening the file failed
 	if (!file.IsOpened())
 	{
-		wxLogMessage("GZipArchive::loadEntryData: Failed to open gzip file %s", filename.c_str());
+		wxLogMessage("GZipArchive::loadEntryData: Failed to open gzip file %s", filename);
 		return false;
 	}
 

@@ -62,6 +62,25 @@ private:
 
 	vector<GLTexture*>	tex_flats;
 	int					last_flat_type;
+	vector<GLTexture*>	thing_sprites;
+	long				thing_sprites_updated;
+
+	// Thing paths
+	enum
+	{
+		PATH_NORMAL,
+		PATH_NORMAL_BOTH,
+		PATH_DRAGON,
+		PATH_DRAGON_BOTH
+	};
+	struct tpath_t
+	{
+		unsigned	from_index;
+		unsigned	to_index;
+		uint8_t		type;
+	};
+	vector<tpath_t>		thing_paths;
+	long				thing_paths_updated;
 
 public:
 	MapRenderer2D(SLADEMap* map);
@@ -89,7 +108,7 @@ public:
 	bool	setupThingOverlay();
 	void	renderThingOverlay(double x, double y, double radius, bool point);
 	void	renderRoundThing(double x, double y, double angle, ThingType* type, float alpha = 1.0f);
-	bool	renderSpriteThing(double x, double y, double angle, ThingType* type, float alpha = 1.0f, bool fitradius = false);
+	bool	renderSpriteThing(double x, double y, double angle, ThingType* type, unsigned index, float alpha = 1.0f, bool fitradius = false);
 	void	renderSimpleSquareThing(double x, double y, double angle, ThingType* type, float alpha = 1.0f);
 	bool	renderSquareThing(double x, double y, double angle, ThingType* type, float alpha = 1.0f, bool showicon = true, bool framed = false);
 	void	renderThings(float alpha = 1.0f, bool force_dir = false);
