@@ -39,6 +39,7 @@
 EXTERN_CVAR(String, path_pngout)
 EXTERN_CVAR(String, path_pngcrush)
 EXTERN_CVAR(String, path_deflopt)
+CVAR(String, dir_last_pngtool, "", CVAR_SAVE)
 
 /*******************************************************************
  * PNGPREFSPANEL CLASS FUNCTIONS
@@ -88,9 +89,9 @@ PNGPrefsPanel::PNGPrefsPanel(wxWindow* parent) : PrefsPanelBase(parent)
 	sizer->Add(hbox, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 4);
 
 	// Bind events
-	btn_browse_pngoutpath->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &PNGPrefsPanel::onBtnBrowsePNGoutPath, this);
-	btn_browse_pngcrushpath->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &PNGPrefsPanel::onBtnBrowsePNGCrushPath, this);
-	btn_browse_defloptpath->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &PNGPrefsPanel::onBtnBrowseDeflOptPath, this);
+	btn_browse_pngoutpath->Bind(wxEVT_BUTTON, &PNGPrefsPanel::onBtnBrowsePNGoutPath, this);
+	btn_browse_pngcrushpath->Bind(wxEVT_BUTTON, &PNGPrefsPanel::onBtnBrowsePNGCrushPath, this);
+	btn_browse_defloptpath->Bind(wxEVT_BUTTON, &PNGPrefsPanel::onBtnBrowseDeflOptPath, this);
 }
 
 /* PNGPrefsPanel::~PNGPrefsPanel
@@ -137,9 +138,12 @@ void PNGPrefsPanel::onBtnBrowsePNGoutPath(wxCommandEvent& e)
 #endif
 
 	// Open file dialog
-	wxFileDialog fd(this, "Browse for PNGout Executable", wxEmptyString, pngout_exe, pngout_exe);
+	wxFileDialog fd(this, "Browse for PNGout Executable", dir_last_pngtool, pngout_exe, pngout_exe);
 	if (fd.ShowModal() == wxID_OK)
+	{
 		text_pngoutpath->SetValue(fd.GetPath());
+		dir_last_pngtool = fd.GetPath();
+	}
 }
 
 /* PNGPrefsPanel::onBtnBrowsePNGCrushPath
@@ -154,9 +158,12 @@ void PNGPrefsPanel::onBtnBrowsePNGCrushPath(wxCommandEvent& e)
 #endif
 
 	// Open file dialog
-	wxFileDialog fd(this, "Browse for PNGCrush Executable", wxEmptyString, pngcrush_exe, pngcrush_exe);
+	wxFileDialog fd(this, "Browse for PNGCrush Executable", dir_last_pngtool, pngcrush_exe, pngcrush_exe);
 	if (fd.ShowModal() == wxID_OK)
+	{
 		text_pngcrushpath->SetValue(fd.GetPath());
+		dir_last_pngtool = fd.GetPath();
+	}
 }
 
 /* PNGPrefsPanel::onBtnBrowseDeflOptPath
@@ -171,7 +178,10 @@ void PNGPrefsPanel::onBtnBrowseDeflOptPath(wxCommandEvent& e)
 #endif
 
 	// Open file dialog
-	wxFileDialog fd(this, "Browse for DeflOpt Executable", wxEmptyString, deflopt_exe, deflopt_exe);
+	wxFileDialog fd(this, "Browse for DeflOpt Executable", dir_last_pngtool, deflopt_exe, deflopt_exe);
 	if (fd.ShowModal() == wxID_OK)
+	{
 		text_defloptpath->SetValue(fd.GetPath());
+		dir_last_pngtool = fd.GetPath();
+	}
 }

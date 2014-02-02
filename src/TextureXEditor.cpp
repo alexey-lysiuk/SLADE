@@ -102,8 +102,8 @@ public:
 		m_vbox->Add(CreateButtonSizer(wxOK|wxCANCEL), 0, wxEXPAND|wxALL, 4);
 
 		// Bind events
-		rb_new->Bind(wxEVT_COMMAND_RADIOBUTTON_SELECTED, &CreateTextureXDialog::onRadioNewSelected, this);
-		rb_import_bra->Bind(wxEVT_COMMAND_RADIOBUTTON_SELECTED, &CreateTextureXDialog::onRadioNewSelected, this);
+		rb_new->Bind(wxEVT_RADIOBUTTON, &CreateTextureXDialog::onRadioNewSelected, this);
+		rb_import_bra->Bind(wxEVT_RADIOBUTTON, &CreateTextureXDialog::onRadioNewSelected, this);
 
 		SetInitialSize(wxSize(-1, -1));
 		Layout();
@@ -182,6 +182,7 @@ TextureXEditor::TextureXEditor(wxWindow* parent) : wxPanel(parent, -1)
 	menu_texture->AppendSeparator();
 	theApp->getAction("txed_up")->addToMenu(menu_texture);
 	theApp->getAction("txed_down")->addToMenu(menu_texture);
+	theApp->getAction("txed_sort")->addToMenu(menu_texture);
 	wxMenu* menu_patch = new wxMenu();
 	theApp->getAction("txed_patch_add")->addToMenu(menu_patch);
 	theApp->getAction("txed_patch_remove")->addToMenu(menu_patch);
@@ -200,12 +201,12 @@ TextureXEditor::TextureXEditor(wxWindow* parent) : wxPanel(parent, -1)
 	SetSizer(sizer);
 
 	// Add tabs
-	tabs = new wxAuiNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP|wxAUI_NB_TAB_SPLIT|wxAUI_NB_TAB_MOVE|wxNO_BORDER);
+	tabs = new wxAuiNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP|wxAUI_NB_TAB_SPLIT|wxAUI_NB_TAB_MOVE|wxAUI_NB_SCROLL_BUTTONS|wxAUI_NB_WINDOWLIST_BUTTON|wxBORDER_NONE);
 	tabs->SetArtProvider(new clAuiTabArt());
 	sizer->Add(tabs, 1, wxEXPAND|wxALL, 4);
 
 	// Bind events
-	//btn_save->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TextureXEditor::onSaveClicked, this);
+	//btn_save->Bind(wxEVT_BUTTON, &TextureXEditor::onSaveClicked, this);
 	Bind(wxEVT_SHOW, &TextureXEditor::onShow, this);
 
 	// Palette chooser
@@ -642,6 +643,29 @@ void TextureXEditor::setSelection(ArchiveEntry* entry)
 	}
 }
 
+/* TextureXEditor::updateMenuStatus
+ * Checks if the Texture menu needs to be displayed or not 
+ *******************************************************************/
+void TextureXEditor::updateMenuStatus()
+{
+	wxWindow* current = tabs->GetPage(tabs->GetSelection());
+
+	// Check if the currently opened tab is a texturex list
+	bool tex = false;
+	for (unsigned a = 0; a < texture_editors.size(); a++)
+	{
+		if (texture_editors[a] == current)
+		{
+			tex = true;
+			break;
+		}
+	}
+
+	// Show/hide texture menu accordingly
+	showTextureMenu(tex);
+}
+
+
 /* TextureXEditor::onAnnouncement
  * Handles any announcements from the current texture
  *******************************************************************/
@@ -685,22 +709,7 @@ void TextureXEditor::onShow(wxShowEvent& e)
 		showTextureMenu(false);
 		return;
 	}
-
-	wxWindow* current = tabs->GetPage(tabs->GetSelection());
-
-	// Check if the currently opened tab is a texturex list
-	bool tex = false;
-	for (unsigned a = 0; a < texture_editors.size(); a++)
-	{
-		if (texture_editors[a] == current)
-		{
-			tex = true;
-			break;
-		}
-	}
-
-	// Show/hide texture menu accordingly
-	showTextureMenu(tex);
+	updateMenuStatus();
 }
 
 

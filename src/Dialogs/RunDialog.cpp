@@ -154,16 +154,16 @@ RunDialog::RunDialog(wxWindow* parent, Archive* archive)
 	}
 
 	// Bind Events
-	btn_add_game->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnAddGame, this);
-	btn_remove_game->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnRemoveGame, this);
-	btn_browse_exe->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnBrowseExe, this);
-	btn_edit_config->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnEditConfig, this);
-	btn_add_config->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnAddConfig, this);
-	btn_remove_config->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnRemoveConfig, this);
-	btn_run->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnRun, this);
-	btn_cancel->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &RunDialog::onBtnCancel, this);
-	choice_game_exes->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &RunDialog::onChoiceGameExe, this);
-	choice_config->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &RunDialog::onChoiceConfig, this);
+	btn_add_game->Bind(wxEVT_BUTTON, &RunDialog::onBtnAddGame, this);
+	btn_remove_game->Bind(wxEVT_BUTTON, &RunDialog::onBtnRemoveGame, this);
+	btn_browse_exe->Bind(wxEVT_BUTTON, &RunDialog::onBtnBrowseExe, this);
+	btn_edit_config->Bind(wxEVT_BUTTON, &RunDialog::onBtnEditConfig, this);
+	btn_add_config->Bind(wxEVT_BUTTON, &RunDialog::onBtnAddConfig, this);
+	btn_remove_config->Bind(wxEVT_BUTTON, &RunDialog::onBtnRemoveConfig, this);
+	btn_run->Bind(wxEVT_BUTTON, &RunDialog::onBtnRun, this);
+	btn_cancel->Bind(wxEVT_BUTTON, &RunDialog::onBtnCancel, this);
+	choice_game_exes->Bind(wxEVT_CHOICE, &RunDialog::onChoiceGameExe, this);
+	choice_config->Bind(wxEVT_CHOICE, &RunDialog::onChoiceConfig, this);
 
 	gb_sizer->AddGrowableCol(1, 1);
 	SetInitialSize(wxSize(500, 400));
@@ -231,22 +231,33 @@ string RunDialog::getSelectedCommandLine(Archive* archive, string map_name, stri
 		else
 			path.Replace("%a", S_FMT("\"%s\" \"%s\"", archive->getFilename(), map_file));
 
-		// Map name
-		path.Replace("%mn", map_name);
-
-		// Map warp
-		if (path.Contains("%mw"))
+		// Running an archive yields no map name, so don't try to warp
+		if (map_name.IsEmpty())
 		{
-			string mn = map_name.Lower();
+			path.Replace("-warp ", wxEmptyString);
+			path.Replace("+map ",  wxEmptyString);
+			path.Replace("%mn",    wxEmptyString);
+			path.Replace("%mw",    wxEmptyString);
+		}
+		// Map name
+		else
+		{
+			path.Replace("%mn", map_name);
 
-			// MAPxx
-			string mapnum;
-			if (mn.StartsWith("map", &mapnum))
-				path.Replace("%mw", mapnum);
+			// Map warp
+			if (path.Contains("%mw"))
+			{
+				string mn = map_name.Lower();
 
-			// ExMx
-			else if (mn[0] == 'e' && mn[2] == 'm')
-				path.Replace("%mw", S_FMT("%c %c", mn[1], mn[3]));
+				// MAPxx
+				string mapnum;
+				if (mn.StartsWith("map", &mapnum))
+					path.Replace("%mw", mapnum);
+
+				// ExMx
+				else if (map_name.length() == 4 && mn[0] == 'e' && mn[2] == 'm')
+					path.Replace("%mw", S_FMT("%c %c", mn[1], mn[3]));
+			}
 		}
 
 		// Extra parameters
@@ -305,7 +316,11 @@ void RunDialog::onBtnBrowseExe(wxCommandEvent& e)
 	if (exe)
 	{
 		SFileDialog::fd_info_t info;
-		if (SFileDialog::openFile(info, "Browse for game executable", "Executable files (*.exe)|*.exe", this, exe->exe_name))
+#ifdef WIN32
+		if (SFileDialog::openFile(info, "Browse for game executable", "Executable files (*.exe)|*.exe;*.bat", this, exe->exe_name))
+#else
+		if (SFileDialog::openFile(info, "Browse for game executable", wxFileSelectorDefaultWildcardStr, this, exe->exe_name))
+#endif
 		{
 			text_exe_path->SetValue(info.filenames[0]);
 			exe->path = info.filenames[0];

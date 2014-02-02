@@ -404,6 +404,7 @@ void MainApp::initActions()
 	new SAction("aman_newzip", "New Zip Archive", "t_newzip", "Create a new Zip Archive", "Ctrl+Shift+Z");
 	new SAction("aman_newmap", "New Map", "t_mapeditor", "Create a new standalone map", "Ctrl+Shift+M");
 	new SAction("aman_open", "&Open", "t_open", "Open an existing Archive", "Ctrl+O");
+	new SAction("aman_opendir", "Open &Directory", "t_opendir", "Open a directory as an Archive");
 	new SAction("aman_save", "&Save", "t_save", "Save the currently open Archive", "Ctrl+S");
 	new SAction("aman_saveas", "Save &As", "t_saveas", "Save the currently open Archive to a new file", "Ctrl+Shift+S");
 	new SAction("aman_saveall", "Save All", "t_saveall", "Save all open Archives");
@@ -464,12 +465,15 @@ void MainApp::initActions()
 	new SAction("arch_entry_paste", "Paste", "t_paste", "Paste the selected entries");
 	new SAction("arch_entry_moveup", "Move Up", "t_up", "Move the selected entries up");
 	new SAction("arch_entry_movedown", "Move Down", "t_down", "Move the selected entries down");
+	new SAction("arch_entry_sort", "Sort", "t_down", "Sort the entries in the list");
 	new SAction("arch_entry_import", "Import", "t_import", "Import a file to the selected entry");
 	new SAction("arch_entry_export", "Export", "t_export", "Export the selected entries to files");
 	new SAction("arch_entry_bookmark", "Bookmark", "t_bookmark", "Bookmark the current entry");
 	new SAction("arch_entry_opentab", "Open in Tab", "t_open", "Open selected entries in separate tabs");
 	new SAction("arch_entry_crc32", "Compute CRC-32 Checksum", "e_text", "Compute the CRC-32 checksums of the selected entries");
-	new SAction("arch_bas_convert", "Convert to ANIMDEFS", "", "Convert any selected SWITCHES and ANIMATED entries to a single ANIMDEFS entry");
+	new SAction("arch_bas_convertb", "Convert to SWANTBLS", "", "Convert any selected SWITCHES and ANIMATED entries to a single SWANTBLS entry");
+	new SAction("arch_bas_convertz", "Convert to ANIMDEFS", "", "Convert any selected SWITCHES and ANIMATED entries to a single ANIMDEFS entry");
+	new SAction("arch_swan_convert", "Compile to SWITCHES and ANIMATED", "", "Convert SWANTBLS entries into SWITCHES and ANIMATED entries");
 	new SAction("arch_texturex_convertzd", "Convert to TEXTURES", "", "Convert any selected TEXTUREx entries to ZDoom TEXTURES format");
 	new SAction("arch_view_text", "View as Text", "e_text", "Open the selected entry in the text editor, regardless of type");
 	new SAction("arch_view_hex", "View as Hex", "e_data", "Open the selected entry in the hex editor, regardless of type");
@@ -523,6 +527,7 @@ void MainApp::initActions()
 	new SAction("txed_offsets", "Modify Offsets", "t_tex_offset", "Mass modify offsets in the selected texture(s)");
 	new SAction("txed_up", "Move Up", "t_up", "Move the selected texture(s) up in the list");
 	new SAction("txed_down", "Move Down", "t_down", "Move the selected texture(s) down in the list");
+	new SAction("txed_sort", "Sort", "t_down", "Sort the textures in the list");
 	new SAction("txed_copy", "Copy", "t_copy", "Copy the selected texture(s)");
 	new SAction("txed_cut", "Cut", "t_cut", "Cut the selected texture(s)");
 	new SAction("txed_paste", "Paste", "t_paste", "Paste the previously copied texture(s)");
@@ -757,7 +762,7 @@ bool MainApp::OnInit()
 	}
 
 	// Bind events
-	Bind(wxEVT_COMMAND_MENU_SELECTED, &MainApp::onMenu, this);
+	Bind(wxEVT_MENU, &MainApp::onMenu, this);
 
 	return true;
 }
@@ -925,8 +930,11 @@ void MainApp::readConfigFile()
 			token = tz.getToken();
 			while (token != "}")
 			{
-				string path = tz.getToken();
-				Executables::setExePath(token, path);
+				if (token.length())
+				{
+					string path = tz.getToken();
+					Executables::setExePath(token, path);
+				}
 				token = tz.getToken();
 			}
 		}

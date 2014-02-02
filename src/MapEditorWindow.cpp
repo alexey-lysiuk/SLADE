@@ -63,6 +63,7 @@ CVAR(Int, mew_top, -1, CVAR_SAVE);
 CVAR(Bool, mew_maximized, true, CVAR_SAVE);
 CVAR(String, nodebuilder_id, "zdbsp", CVAR_SAVE);
 CVAR(String, nodebuilder_options, "", CVAR_SAVE);
+CVAR(Bool, save_archive_with_map, true, CVAR_SAVE);
 
 
 /*******************************************************************
@@ -557,7 +558,7 @@ void MapEditorWindow::buildNodes(Archive* wad)
 
 		// Get new builder if one was selected
 		builder = NodeBuilders::getBuilder(nodebuilder_id);
-		string command = builder.command;
+		command = builder.command;
 
 		// Check again
 		if (!wxFileExists(builder.path))
@@ -575,7 +576,7 @@ void MapEditorWindow::buildNodes(Archive* wad)
 	if (wxFileExists(builder.path))
 	{
 		wxArrayString out;
-		wxLogMessage("execute \"%s\"", command);
+		wxLogMessage("execute \"%s %s\"", builder.path, command);
 		wxExecute(S_FMT("\"%s\" %s", builder.path, command), out, wxEXEC_HIDE_CONSOLE);
 		Raise();
 		wxLogMessage("Nodebuilder output:");
@@ -590,7 +591,7 @@ void MapEditorWindow::buildNodes(Archive* wad)
 		wxLogMessage("Nodebuilder path not set up, no nodes were built");
 }
 
-WadArchive* MapEditorWindow::writeMap()
+WadArchive* MapEditorWindow::writeMap(string name)
 {
 	// Get map data entries
 	vector<ArchiveEntry*> map_data;
@@ -612,6 +613,9 @@ WadArchive* MapEditorWindow::writeMap()
 	if (theGameConfiguration->scriptLanguage() == "acs_hexen" ||
 		theGameConfiguration->scriptLanguage() == "acs_zdoom")
 		acs = true;
+	// Force ACS on for Hexen map format, and off for Doom map format
+	if (mdesc_current.format == MAP_DOOM) acs = false;
+	if (mdesc_current.format == MAP_HEXEN) acs = true;
 	bool dialogue = false;
 	if (theGameConfiguration->scriptLanguage() == "usdf" ||
 		theGameConfiguration->scriptLanguage() == "zsdf")
@@ -619,11 +623,11 @@ WadArchive* MapEditorWindow::writeMap()
 
 	// Add map data to temporary wad
 	WadArchive* wad = new WadArchive();
-	wad->addNewEntry("MAP01");
+	wad->addNewEntry(name);
 	// Handle fragglescript and similar content in the map header
-	if (mdesc_current.head->getSize())
+	if (mdesc_current.head->getSize() && !mdesc_current.archive)
 	{
-		wad->getEntry("MAP01")->importMemChunk(mdesc_current.head->getMCData());
+		wad->getEntry(name)->importMemChunk(mdesc_current.head->getMCData());
 	}
 	for (unsigned a = 0; a < map_data.size(); a++)
 		wad->addEntry(map_data[a]);
@@ -737,18 +741,20 @@ bool MapEditorWindow::saveMapAs()
 		end = wad.addNewEntry("SECTORS");
 	}
 
-	// Update current map description
+	// Save map data
 	mdesc_current.head = head;
 	mdesc_current.archive = false;
 	mdesc_current.end = end;
-	//mdesc_current.format = theGameConfiguration->getMapFormat();
-
-	// Save map data
 	saveMap();
 
 	// Write wad to file
 	wad.save(info.filenames[0]);
-	theArchiveManager->openArchive(info.filenames[0], true, true);
+	Archive* archive = theArchiveManager->openArchive(info.filenames[0], true, true);
+
+	// Update current map description
+	mdesc_current.head = archive->getEntry(head->getName());
+	mdesc_current.archive = false;
+	mdesc_current.end = archive->getEntry(end->getName());
 
 	// Set window title
 	SetTitle(S_FMT("SLADE - %s of %s", mdesc_current.name, wad.getFilename(false)));
@@ -847,7 +853,7 @@ bool MapEditorWindow::handleAction(string id)
 
 		// Save archive
 		Archive* a = currentMapDesc().head->getParent();
-		if (a) a->save();
+		if (a && save_archive_with_map) a->save();
 
 		return true;
 	}
@@ -1006,7 +1012,7 @@ bool MapEditorWindow::handleAction(string id)
 		RunDialog dlg(this, archive);
 		if (dlg.ShowModal() == wxID_OK)
 		{
-			WadArchive* wad = writeMap();
+			WadArchive* wad = writeMap(mdesc_current.name);
 			if (wad)
 				wad->save(appPath("sladetemp_run.wad", DIR_TEMP));
 

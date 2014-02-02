@@ -50,10 +50,12 @@ public:
 	bool		initBaseResource();
 	bool		resArchiveOK() { return res_archive_open; }
 	bool		addArchive(Archive* archive);
+	bool		validResDir(string dir);
 	Archive*	getArchive(int index);
 	Archive*	getArchive(string filename);
 	Archive*	openArchive(string filename, bool manage = true, bool silent = false);
 	Archive*	openArchive(ArchiveEntry* entry, bool manage = true, bool silent = false);
+	Archive*	openDirArchive(string dir, bool manage = true, bool silent = false);
 	Archive*	newArchive(uint8_t type);
 	bool		closeArchive(int index);
 	bool		closeArchive(string filename);

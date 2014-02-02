@@ -31,6 +31,7 @@
 #include "Main.h"
 #include "ArchiveManager.h"
 #include "Archives.h"
+#include "DirArchive.h"
 #include "Console.h"
 #include "SplashWindow.h"
 #include "ResourceManager.h"
@@ -71,6 +72,50 @@ ArchiveManager::~ArchiveManager()
 	if (base_resource_archive) delete base_resource_archive;
 }
 
+/* ArchiveManager::validResDir
+ * Checks that the given directory is actually a suitable resource
+ * directory for SLADE 3, and not just a directory named 'res' that
+ * happens to be there (possibly because the user installed SLADE in
+ * the same folder as an installation of SLumpEd).
+ *******************************************************************/
+bool ArchiveManager::validResDir(string dir)
+{
+	// Assortment of resources that the program expects to find.
+	// If at least one is missing, then probably more are missing
+	// too, so the res folder cannot be used.
+	string paths[] = {
+		"animated.lmp",
+		"config/executables.cfg",
+		"config/nodebuilders.cfg",
+		"fonts/dejavu_sans.ttf",
+		"html/box-title-back.png",
+		"html/startpage.htm",
+		"icons/e_archive.png",
+		"icons/t_wiki.png",
+		"images/arrow.png",
+		"logo.png",
+		"palettes/Doom .pal",
+		"s3dummy.lmp",
+		"slade.ico",
+		"switches.lmp",
+		"tips.txt",
+		"vga-rom-font.16",
+	};
+
+	for (size_t a = 0; a < 16; ++a)
+	{
+		wxFileName fn(dir + "/" + paths[a]);
+		if (!wxFileExists(fn.GetFullPath()))
+		{
+			wxLogMessage("Resource %s was not found in dir %s!\n"
+				"This resource folder cannot be used. "
+				"(Did you install SLADE 3 in a SLumpEd folder?)", paths[a], dir);
+			return false;
+		}
+	}
+	return true;
+}
+
 /* ArchiveManager::init
  * Initialised the ArchiveManager. Finds and opens the program
  * resource archive
@@ -85,7 +130,7 @@ bool ArchiveManager::init()
 	string resdir = appPath("res", DIR_APP);
 #endif
 
-	if (wxDirExists(resdir))
+	if (wxDirExists(resdir) && validResDir(resdir))
 	{
 		program_resource_archive->importDir(resdir);
 		res_archive_open = (program_resource_archive->numEntries() > 0);
@@ -187,6 +232,10 @@ Archive* ArchiveManager::getArchive(string filename)
  *******************************************************************/
 Archive* ArchiveManager::openArchive(string filename, bool manage, bool silent)
 {
+	// Check for directory
+	if (!wxFile::Exists(filename) && wxDirExists(filename))
+		return openDirArchive(filename, manage, silent);
+
 	open_silent = silent;
 
 	Archive* new_archive = getArchive(filename);
@@ -391,6 +440,62 @@ Archive* ArchiveManager::openArchive(ArchiveEntry* entry, bool manage, bool sile
 	}
 }
 
+/* ArchiveManager::openDirArchive
+ * Opens [dir] as a DirArchive and adds it to the list. Returns a
+ * pointer to the archive or NULL if an error occurred.
+ *******************************************************************/
+Archive* ArchiveManager::openDirArchive(string dir, bool manage, bool silent)
+{
+	open_silent = silent;
+
+	Archive* new_archive = getArchive(dir);
+
+	wxLogMessage("Opening directory %s as archive", dir);
+
+	// If the archive is already open, just return it
+	if (new_archive)
+	{
+		// Announce open
+		MemChunk mc;
+		uint32_t index = archiveIndex(new_archive);
+		mc.write(&index, 4);
+		announce("archive_opened", mc);
+
+		return new_archive;
+	}
+
+	new_archive = new DirArchive();
+
+	// If it opened successfully, add it to the list if needed & return it,
+	// Otherwise, delete it and return NULL
+	if (new_archive->open(dir))
+	{
+		if (manage)
+		{
+			// Add the archive
+			addArchive(new_archive);
+
+			// Announce open
+			MemChunk mc;
+			uint32_t index = archiveIndex(new_archive);
+			mc.write(&index, 4);
+			announce("archive_opened", mc);
+
+			// Add to recent files
+			addRecentFile(dir);
+		}
+
+		// Return the opened archive
+		return new_archive;
+	}
+	else
+	{
+		wxLogMessage("Error: " + Global::error);
+		delete new_archive;
+		return NULL;
+	}
+}
+
 /* ArchiveManager::newArchive
  * Creates a new archive of the specified format and adds it to the
  * list of open archives. Returns the created archive, or NULL if an
@@ -552,7 +657,7 @@ string ArchiveManager::getArchiveExtensionsString()
 	string extensions = "Any supported file|";
 	string ext_wad = "*.wad;*.WAD;*.Wad;*.rts;*.RTS;*.Rts";		extensions += ext_wad + ";";
 	string ext_zip = "*.zip;*.ZIP;*.Zip";						extensions += ext_zip + ";";
-	string ext_pk3 = "*.pk3;*.PK3;*.Pk3";						extensions += ext_pk3 + ";";
+	string ext_pk3 = "*.pk3;*.PK3;*.Pk3;*.pke;*.PKE;*.Pke";		extensions += ext_pk3 + ";";
 	string ext_jdf = "*.jdf;*.JDF;*.Jdf";						extensions += ext_jdf + ";";
 	string ext_dat = "*.dat;*.DAT;*.Dat";						extensions += ext_dat + ";";
 	string ext_chd = "*.cd;*.CD;*.Cd;*.hd;*.HD;*.Hd";			extensions += ext_chd + ";";
@@ -845,7 +950,7 @@ string ArchiveManager::recentFile(unsigned index)
 void ArchiveManager::addRecentFile(string path)
 {
 	// Check the path is valid
-	if (!wxFileName::FileExists(path))
+	if (!(wxFileName::FileExists(path) || wxDirExists(path)))
 		return;
 
 	// Check if the file is already in the list

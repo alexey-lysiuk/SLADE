@@ -68,7 +68,6 @@
 #include <wx/filename.h>
 #include <wx/gbsizer.h>
 
-
 /*******************************************************************
  * VARIABLES
  *******************************************************************/
@@ -78,6 +77,7 @@ CVAR(Bool, context_submenus, true, CVAR_SAVE)
 CVAR(String, last_colour, "RGB(255, 0, 0)", CVAR_SAVE)
 CVAR(String, last_tint_colour, "RGB(255, 0, 0)", CVAR_SAVE)
 CVAR(Int, last_tint_amount, 50, CVAR_SAVE)
+CVAR(Bool, auto_entry_replace, false, CVAR_SAVE)
 EXTERN_CVAR(String, path_pngout);
 EXTERN_CVAR(String, path_pngcrush);
 EXTERN_CVAR(String, path_deflopt);
@@ -112,6 +112,9 @@ public:
 		if (index < 0)
 			index = list->GetItemCount() - list->entriesBegin();
 
+		bool yes_to_all = false;
+		string caption = (filenames.size() > 1) ? "Overwrite entries" : "Overwrite entry";
+
 		// Import all dragged files, inserting after the item they were dragged onto
 		for (int a = filenames.size()-1; a >= 0; a--)
 		{
@@ -124,9 +127,33 @@ public:
 			else
 			{
 				wxFileName fn(filenames[a]);
+				ArchiveEntry* entry = NULL;
 
-				// Create new entry
-				ArchiveEntry* entry = parent->getArchive()->addNewEntry(fn.GetFullName(), index, list->getCurrentDir());
+				// Find entry to replace if needed
+				if (auto_entry_replace)
+				{
+					entry = parent->getArchive()->entryAtPath(list->getCurrentDir()->getPath() + fn.GetFullName());
+					// An entry with that name is already present, so ask about replacing it
+					if (entry && !yes_to_all)
+					{
+						// Since there is no standard "Yes/No to all" button or "Don't ask me again" checkbox,
+						// we will instead hack the Cancel button into being a "Yes to all" button. This is
+						// despite the existence of a wxID_YESTOALL return value...
+						string message = S_FMT("Overwrite existing entry %s%s", list->getCurrentDir()->getPath(), fn.GetFullName());
+						wxMessageDialog dlg(parent, message, caption, wxCANCEL|wxYES_NO|wxCENTRE);
+						dlg.SetYesNoCancelLabels(_("Yes"), _("No"), _("Yes to all"));
+						int result = dlg.ShowModal();
+
+						// User doesn't want to replace the entry
+						if (result == wxID_NO)			entry = NULL;
+						// User wants to replace all entries
+						if (result == wxID_CANCEL)		yes_to_all = true;
+					}
+				}
+
+				// Create new entry if needed
+				if (entry == NULL)
+					entry = parent->getArchive()->addNewEntry(fn.GetFullName(), index, list->getCurrentDir());
 
 				// Import the file to it
 				entry->importFile(filenames[a]);
@@ -182,6 +209,83 @@ public:
 		return pal_chooser->GetSelection();
 	}
 };
+
+/*******************************************************************
+ * ARCHIVEPANEL ANCILLARY FUNCTIONS
+ *******************************************************************
+ Used by the entry sort function.
+ */
+
+/* initNamespaceVector
+ * Creates a vector of namespaces in a predefined order
+ */
+void initNamespaceVector(vector<string> &ns, bool flathack)
+{
+	ns.clear();
+	if (flathack)
+		ns.push_back("flats");
+	ns.push_back("global");
+	ns.push_back("colormaps");
+	ns.push_back("acs");
+	ns.push_back("maps");
+	ns.push_back("sounds");
+	ns.push_back("music");
+	ns.push_back("voices");
+	ns.push_back("voxels");
+	ns.push_back("graphics");
+	ns.push_back("sprites");
+	ns.push_back("patches");
+	ns.push_back("textures");
+	ns.push_back("hires");
+	if (!flathack)
+		ns.push_back("flats");
+}
+
+/* isInMap
+ * Checks through a mapdesc_t vector and returns which one, 
+ * if any, the entry index is in, -1 otherwise
+ */
+int isInMap(size_t index, vector<Archive::mapdesc_t> &maps)
+{
+	for (size_t m = 0; m < maps.size(); ++m)
+	{
+		size_t head_index = maps[m].head->getParentDir()->entryIndex(maps[m].head);
+		size_t end_index = maps[m].head->getParentDir()->entryIndex(maps[m].end, head_index);
+		if (index >= head_index && index <= end_index)
+			return m;
+	}
+	return -1;
+}
+
+/* getNamespaceNumber
+ * Returns the position of the given entry's detected 
+ * namespace in the namespace vector. Also hacks around
+ * a bit to put less entries in the global namespace
+ * and allow sorting a bit by categories.
+ */
+size_t getNamespaceNumber(ArchiveEntry * entry, size_t index, vector<string> &ns, vector<Archive::mapdesc_t> &maps)
+{
+	string ens = entry->getParent()->detectNamespace(index);
+	if (S_CMPNOCASE(ens, "global"))
+	{
+		if (maps.size() > 0 && isInMap(index, maps) >= 0)
+			ens = "maps";
+		else if (S_CMPNOCASE(entry->getType()->getCategory(), "Graphics"))
+			ens = "graphics";
+		else if (S_CMPNOCASE(entry->getType()->getCategory(), "Audio"))
+		{
+			if (S_CMPNOCASE(entry->getType()->getIcon(), "e_music"))
+				ens = "music";
+			else ens = "sounds";
+		}
+	}
+	for (size_t n = 0; n < ns.size(); ++n)
+		if (S_CMPNOCASE(ns[n], ens))
+			return n;
+
+	ns.push_back(ens);
+	return ns.size();
+}
 
 
 /*******************************************************************
@@ -280,16 +384,16 @@ ArchivePanel::ArchivePanel(wxWindow* parent, Archive* archive)
 
 	// Bind events
 	entry_list->Bind(EVT_VLV_SELECTION_CHANGED, &ArchivePanel::onEntryListSelectionChange, this);
-	entry_list->Bind(wxEVT_COMMAND_LIST_ITEM_FOCUSED, &ArchivePanel::onEntryListFocusChange, this);
+	entry_list->Bind(wxEVT_LIST_ITEM_FOCUSED, &ArchivePanel::onEntryListFocusChange, this);
 	entry_list->Bind(wxEVT_KEY_DOWN, &ArchivePanel::onEntryListKeyDown, this);
-	entry_list->Bind(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, &ArchivePanel::onEntryListRightClick, this);
-	entry_list->Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, &ArchivePanel::onEntryListActivated, this);
-	text_filter->Bind(wxEVT_COMMAND_TEXT_UPDATED, &ArchivePanel::onTextFilterChanged, this);
-	choice_category->Bind(wxEVT_COMMAND_CHOICE_SELECTED, &ArchivePanel::onChoiceCategoryChanged, this);
+	entry_list->Bind(wxEVT_LIST_ITEM_RIGHT_CLICK, &ArchivePanel::onEntryListRightClick, this);
+	entry_list->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ArchivePanel::onEntryListActivated, this);
+	text_filter->Bind(wxEVT_TEXT, &ArchivePanel::onTextFilterChanged, this);
+	choice_category->Bind(wxEVT_CHOICE, &ArchivePanel::onChoiceCategoryChanged, this);
 	Bind(EVT_AEL_DIR_CHANGED, &ArchivePanel::onDirChanged, this);
-	btn_updir->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &ArchivePanel::onBtnUpDir, this);
-	//((DefaultEntryPanel*)default_area)->getEditTextButton()->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &ArchivePanel::onDEPEditAsText, this);
-	//((DefaultEntryPanel*)default_area)->getViewHexButton()->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &ArchivePanel::onDEPViewAsHex, this);
+	btn_updir->Bind(wxEVT_BUTTON, &ArchivePanel::onBtnUpDir, this);
+	//((DefaultEntryPanel*)default_area)->getEditTextButton()->Bind(wxEVT_BUTTON, &ArchivePanel::onDEPEditAsText, this);
+	//((DefaultEntryPanel*)default_area)->getViewHexButton()->Bind(wxEVT_BUTTON, &ArchivePanel::onDEPViewAsHex, this);
 
 	// Do a quick check to see if we need the path display
 	if (archive->getRoot()->nChildren() == 0)
@@ -381,6 +485,7 @@ void ArchivePanel::addMenus()
 		menu_entry->AppendSeparator();
 		theApp->getAction("arch_entry_moveup")->addToMenu(menu_entry);
 		theApp->getAction("arch_entry_movedown")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_sort")->addToMenu(menu_entry);
 		menu_entry->AppendSeparator();
 		theApp->getAction("arch_entry_import")->addToMenu(menu_entry);
 		theApp->getAction("arch_entry_export")->addToMenu(menu_entry);
@@ -620,7 +725,7 @@ bool ArchivePanel::newEntry(int type)
 bool ArchivePanel::newDirectory()
 {
 	// Check archive supports directories
-	if (archive->getType() != ARCHIVE_ZIP)
+	if (archive->getType() != ARCHIVE_ZIP && archive->getType() != ARCHIVE_FOLDER)
 	{
 		wxMessageBox("This Archive format does not support directories", "Can't create new directory", wxICON_ERROR);
 		return false;
@@ -995,6 +1100,188 @@ bool ArchivePanel::moveDown()
 	entry_list->EnsureVisible(entry_list->getEntryIndex(selection[selection.size() - 1]) + 4);
 
 	// Return success
+	return true;
+}
+
+/* ArchivePanel::sort
+ * Sorts all selected entries. If the selection is empty or only
+ * contains one single entry, sort the entire archive instead.
+ * Note that a simple sort is not desired for three reasons:
+ * 1. Map lumps have to remain in sequence
+ * 2. Namespaces should be respected
+ * 3. Marker lumps used as separators should also be respected
+ * The way we're doing that is more than a bit hacky, sorry.
+ * The basic idea is to assign to each entry a sortkey (thanks to
+ * ExProps for that) which is prefixed with namespace information.
+ * Also, the name of map lumps is replaced by the map name so that
+ * they stay together. Finally, the original index is appended so
+ * that duplicate names are disambiguated.
+ *******************************************************************/
+bool ArchivePanel::sort()
+{
+	// Get selected entries
+	vector<long> selection = entry_list->getSelection();
+	ArchiveTreeNode* dir = entry_list->getCurrentDir();
+
+	size_t start, stop;
+
+	// Without selection of multiple entries, sort everything instead
+	if (selection.size() < 2)
+	{
+		start = 0;
+		stop = dir->numEntries();
+	}
+	// We need sorting to be contiguous, otherwise it'll destroy maps
+	else
+	{
+		start = selection[0];
+		stop = selection[selection.size() - 1] + 1;
+	}
+
+	// Make sure everything in the range is selected
+	selection.clear();
+	selection.resize(stop - start);
+	for (size_t i = start; i < stop; ++i)
+		selection[i] = i;
+
+	// No sorting needed even after adding everything
+	if (selection.size() < 2)
+		return false;
+
+	vector<string> nspaces;
+	initNamespaceVector(nspaces, dir->getArchive()->hasFlatHack());
+	vector<Archive::mapdesc_t> maps = dir->getArchive()->detectMaps();
+
+	string ns = dir->getArchive()->detectNamespace(dir->getEntry(selection[0]));
+	size_t nsn = 0, lnsn = 0;
+
+	// Fill a map with <entry name, entry index> pairs
+	std::map<string, size_t> emap; emap.clear();
+	for (size_t i = 0; i < selection.size(); ++i)
+	{
+		bool ns_changed = false;
+		int mapindex = isInMap(selection[i], maps);
+		string mapname;
+		ArchiveEntry * entry = dir->getEntry(selection[i]);
+		// If this is a map entry, deal with it
+		if (maps.size() && mapindex > -1)
+		{
+			// Keep track of the name
+			mapname = maps[mapindex].name;
+
+			// If part of a map is selected, make sure the rest is selected as well
+			size_t head_index = maps[mapindex].head->getParentDir()->entryIndex(maps[mapindex].head);
+			size_t end_index = maps[mapindex].head->getParentDir()->entryIndex(maps[mapindex].end, head_index);
+			// Good thing we can rely on selection being contiguous
+			for (size_t a = head_index; a <= end_index; ++a)
+			{
+				bool selected = (a >= start && a < stop);
+				if (!selected) selection.push_back(a);
+			}
+			if (head_index < start) start = head_index;
+			if (end_index+1 > stop) stop = end_index+1;
+		}
+		else if (dir->getArchive()->detectNamespace(selection[i]) != ns)
+		{
+			ns = dir->getArchive()->detectNamespace(selection[i]);
+			nsn = getNamespaceNumber(entry, selection[i], nspaces, maps) * 1000;
+			ns_changed = true;
+		}
+		else if (mapindex < 0 && (entry->getSize() == 0))
+		{
+			nsn++;
+			ns_changed = true;
+		}
+
+		// Local namespace number is not necessarily computed namespace number.
+		// This is because the global namespace in wads is bloated and we want more
+		// categories than it actually has to offer.
+		lnsn = (nsn == 0 ? getNamespaceNumber(entry, selection[i], nspaces, maps)*1000 : nsn);
+		string name, ename = entry->getName().Upper();
+		// Want to get another hack in this stuff? Yeah, of course you do!
+		// This here hack will sort Doom II songs by their associated map.
+		if (ename.StartsWith("D_") && S_CMPNOCASE(entry->getType()->getIcon(), "e_music"))
+		{
+			if		(ename == "D_RUNNIN")	ename = "D_MAP01";
+			else if (ename == "D_STALKS")	ename = "D_MAP02";
+			else if (ename == "D_COUNTD")	ename = "D_MAP03";
+			else if (ename == "D_BETWEE")	ename = "D_MAP04";
+			else if (ename == "D_DOOM"  )	ename = "D_MAP05";
+			else if (ename == "D_THE_DA")	ename = "D_MAP06";
+			else if (ename == "D_SHAWN" )	ename = "D_MAP07";
+			else if (ename == "D_DDTBLU")	ename = "D_MAP08";
+			else if (ename == "D_IN_CIT")	ename = "D_MAP09";
+			else if (ename == "D_DEAD"  )	ename = "D_MAP10";
+			else if (ename == "D_STLKS2")	ename = "D_MAP11";
+			else if (ename == "D_THEDA2")	ename = "D_MAP12";
+			else if (ename == "D_DOOM2" )	ename = "D_MAP13";
+			else if (ename == "D_DDTBL2")	ename = "D_MAP14";
+			else if (ename == "D_RUNNI2")	ename = "D_MAP15";
+			else if (ename == "D_DEAD2" )	ename = "D_MAP16";
+			else if (ename == "D_STLKS3")	ename = "D_MAP17";
+			else if (ename == "D_ROMERO")	ename = "D_MAP18";
+			else if (ename == "D_SHAWN2")	ename = "D_MAP19";
+			else if (ename == "D_MESSAG")	ename = "D_MAP20";
+			else if (ename == "D_COUNT2")	ename = "D_MAP21";
+			else if (ename == "D_DDTBL3")	ename = "D_MAP22";
+			else if (ename == "D_AMPIE" )	ename = "D_MAP23";
+			else if (ename == "D_THEDA3")	ename = "D_MAP24";
+			else if (ename == "D_ADRIAN")	ename = "D_MAP25";
+			else if (ename == "D_MESSG2")	ename = "D_MAP26";
+			else if (ename == "D_ROMER2")	ename = "D_MAP27";
+			else if (ename == "D_TENSE" )	ename = "D_MAP28";
+			else if (ename == "D_SHAWN3")	ename = "D_MAP29";
+			else if (ename == "D_OPENIN")	ename = "D_MAP30";
+			else if (ename == "D_EVIL"  )	ename = "D_MAP31";
+			else if (ename == "D_ULTIMA")	ename = "D_MAP32";
+			else if (ename == "D_READ_M")	ename = "D_MAP33";
+			else if (ename == "D_DM2TTL")	ename = "D_MAP34";
+			else if (ename == "D_DM2INT")	ename = "D_MAP35";
+		}
+		// All map lumps have the same sortkey name so they stay grouped
+		if (mapindex > -1)
+		{
+			name = S_FMT("%08d%-64s%8d", lnsn, mapname, selection[i]);
+		}
+		// Yet another hack! Make sure namespace start markers are first
+		else if (ns_changed)
+		{
+			name = S_FMT("%08d%-64s%8d", lnsn, wxEmptyString, selection[i]);
+		}
+		// Generic case: actually use the entry name to sort
+		else
+		{
+			name = S_FMT("%08d%-64s%8d", lnsn, ename, selection[i]);
+		}
+		// Let the entry remember how it was sorted this time
+		entry->exProp("sortkey") = name;
+		// Insert sortkey into entry map so it'll be sorted
+		emap[name] = selection[i];
+	}
+
+	// And now, sort the entries based on the map
+	undo_manager->beginRecord("Sort Entries");
+	std::map<string, size_t>::iterator itr = emap.begin();
+	for (size_t i = start; i < stop; ++i, itr++)
+	{
+		ArchiveEntry * entry = dir->getEntry(i);
+		// If the entry isn't in its sorted place already
+		if (i != (size_t)itr->second)
+		{
+			// Swap the texture in the spot with the sorted one
+			dir->swapEntries(i, itr->second);
+
+			// Update the position of the displaced texture in the emap
+			string name = entry->exProp("sortkey");
+			emap[name] = itr->second;
+		}
+	}
+	undo_manager->endRecord(true);
+
+	// Refresh
+	entry_list->updateList();
+	archive->setModified(true);
+
 	return true;
 }
 
@@ -1616,11 +1903,10 @@ ArchiveTreeNode* ArchivePanel::currentDir()
 	return NULL;
 }
 
-/* ArchivePanel::basConvert
- * Converts any selected SWITCHES or ANIMATED entries to a newly
- * created ANIMDEFS entry
+/* ArchivePanel::swanConvert
+ * Converts any selected SWANTBLS entries to SWITCHES and ANIMATED
  *******************************************************************/
-bool ArchivePanel::basConvert()
+bool ArchivePanel::swanConvert()
 {
 	// Get the entry index of the last selected list item
 	int index = archive->entryIndex(currentEntry(), entry_list->getCurrentDir());
@@ -1628,8 +1914,84 @@ bool ArchivePanel::basConvert()
 	// If something was selected, add 1 to the index so we add the new entry after the last selected
 	if (index >= 0)
 		index++;
-	else
-		return false; // If not there's a problem
+
+	// MemChunks for ANIMATED and SWITCHES
+	MemChunk mca, mcs;
+
+	// Get a list of selected entries
+	vector<ArchiveEntry*> selection = entry_list->getSelectedEntries();
+
+	bool error = false;
+
+	// Check each selected entry for possible conversion
+	for (size_t a = 0; a < selection.size(); a++)
+	{
+		if (selection[a]->getType()->getId() == "swantbls")
+		{
+			error |= !AnimatedList::convertSwanTbls(selection[a], &mca);
+			error |= !SwitchesList::convertSwanTbls(selection[a], &mcs);
+		}
+	}
+
+	// Close off ANIMATED lump if needed
+	if (mca.getSize())
+	{
+		uint8_t buffer = 255;
+		error |= !mca.reSize(mca.getSize() + 1, true);
+		error |= !mca.write(&buffer, 1);
+	}
+	// Close off SWITCHES lump if needed
+	if (mcs.getSize())
+	{
+		uint8_t buffer[20];
+		memset(buffer, 0, 20);
+		error |= !mcs.reSize(mcs.getSize() + 20, true);
+		error |= !mcs.write(buffer, 20);
+	}
+
+	// Create entries
+	MemChunk* mc[2] = {&mca, &mcs};
+	string wadnames[2] = { "ANIMATED", "SWITCHES" };
+	string zipnames[2] = { "animated.lmp", "switches.lmp" };
+	string etypeids[2] = { "animated", "switches" };
+	for (int e = 0; e < 2; ++e)
+	{
+		if (mc[e]->getSize())
+		{
+			// Begin recording undo level
+			undo_manager->beginRecord(S_FMT("Creating %s", wadnames[e]));
+
+			ArchiveEntry * output = archive->addNewEntry(
+				(archive->getType() == ARCHIVE_WAD ?  wadnames[e] : zipnames[e]), 
+				index, entry_list->getCurrentDir());
+			if (output)
+			{
+				error |= !output->importMemChunk(*mc[e]);
+				EntryType::detectEntryType(output);
+				if (output->getType() == EntryType::unknownType())
+					output->setType(EntryType::getType(etypeids[e]));
+				if (index >= 0) index++;
+			}
+			else error = true;
+			// Finish recording undo level
+			undo_manager->endRecord(true);
+		}
+	}
+	return !error;
+}
+
+/* ArchivePanel::basConvert
+ * Converts any selected SWITCHES or ANIMATED entries to a newly
+ * created ANIMDEFS or SWANTBLS entry
+ *******************************************************************/
+bool ArchivePanel::basConvert(bool animdefs)
+{
+	// Get the entry index of the last selected list item
+	int index = archive->entryIndex(currentEntry(), entry_list->getCurrentDir());
+
+	// If something was selected, add 1 to the index so we add the new entry after the last selected
+	if (index >= 0)
+		index++;
 
 	// Get a list of selected entries
 	vector<ArchiveEntry*> selection = entry_list->getSelectedEntries();
@@ -1638,40 +2000,58 @@ bool ArchivePanel::basConvert()
 	undo_manager->beginRecord("Convert to ANIMDEFS");
 
 	// Create new entry
-	ArchiveEntry* animdef = archive->addNewEntry((archive->getType() == ARCHIVE_WAD ?
-	                        "ANIMDEFS" : "animdefs.txt"), index, entry_list->getCurrentDir());
+	ArchiveEntry* output = archive->addNewEntry(
+		(animdefs
+		? (archive->getType() == ARCHIVE_WAD ? "ANIMDEFS" : "animdefs.txt")
+		: (archive->getType() == ARCHIVE_WAD ? "SWANTBLS" : "swantbls.dat")
+		), index, entry_list->getCurrentDir());
 
 	// Finish recording undo level
 	undo_manager->endRecord(true);
 
-	if (animdef)
+	// Convert to ZDoom-compatible ANIMDEFS
+	if (output)
 	{
 		// Create the memory buffer
-		MemChunk animdata(38);
+		string gentext; 
+		if (animdefs)
+		{
+			gentext = "// ANIMDEFS lump generated by SLADE3\n// on " + wxNow() + "\n\n";
+		}
+		else
+		{
+			gentext = "# SWANTBLS data generated by SLADE 3\n# on " + wxNow() + "\n#\n"
+				"# This file is input for SWANTBLS.EXE, it specifies the switchnames\n"
+				"# and animated textures and flats usable with BOOM. The output of\n"
+				"# SWANTBLS is two lumps, SWITCHES.LMP and ANIMATED.LMP that should\n"
+				"# be inserted in the PWAD as lumps.\n#\n";
+		}
+
+		MemChunk animdata(gentext.length());
 		animdata.seek(0, SEEK_SET);
-		animdata.write("// ANIMDEFS lump generated by SLADE3\n\n", 38);
+		animdata.write(CHR(gentext), gentext.length());
 
 		// Check each selected entry for possible conversion
 		for (size_t a = 0; a < selection.size(); a++)
 		{
 			if (selection[a]->getType()->getFormat() == "animated")
-				AnimatedList::convertAnimated(selection[a], &animdata);
+				AnimatedList::convertAnimated(selection[a], &animdata, animdefs);
 			else if (selection[a]->getType()->getFormat() == "switches")
-				SwitchesList::convertSwitches(selection[a], &animdata);
+				SwitchesList::convertSwitches(selection[a], &animdata, animdefs);
 		}
-		animdef->importMemChunk(animdata);
+		output->importMemChunk(animdata);
 
 		// Identify the new lump as what it is
-		EntryType::detectEntryType(animdef);
+		EntryType::detectEntryType(output);
 		// Failsafe is detectEntryType doesn't accept to work, grumble
-		if (animdef->getType() == EntryType::unknownType())
-			animdef->setType(EntryType::getType("animdefs"));
+		if (output->getType() == EntryType::unknownType())
+			output->setType(EntryType::getType("animdefs"));
 	}
 
 	// Force entrylist width update
 	Layout();
 
-	return true;
+	return (output != NULL);
 }
 
 /* ArchivePanel::palConvert
@@ -1751,6 +2131,9 @@ bool ArchivePanel::dSndWavConvert()
 		if (selection[a]->getType()->getFormat() == "snd_doom" ||
 		        selection[a]->getType()->getFormat() == "snd_doom_mac")
 			worked = Conversions::doomSndToWav(selection[a]->getMCData(), wav);
+		// Or Doom Speaker sound format
+		else if (selection[a]->getType()->getFormat() == "snd_speaker")
+			worked = Conversions::spkSndToWav(selection[a]->getMCData(), wav);
 		// Or Jaguar Doom sound format
 		else if (selection[a]->getType()->getFormat() == "snd_jaguar")
 			worked = Conversions::jagSndToWav(selection[a]->getMCData(), wav);
@@ -1798,16 +2181,26 @@ bool ArchivePanel::musMidiConvert()
 	// Go through selection
 	for (unsigned a = 0; a < selection.size(); a++)
 	{
-		// Convert MUS -> MIDI if the entry is Doom MUS format
-		if (selection[a]->getType()->getFormat() == "mus")
+		// Convert MUS -> MIDI if the entry is a MIDI-like format
+		if (selection[a]->getType()->getFormat() == "mus" ||
+			selection[a]->getType()->getFormat() == "hmi" ||
+			selection[a]->getType()->getFormat() == "hmp" ||
+			selection[a]->getType()->getFormat() == "xmi" ||
+			selection[a]->getType()->getFormat() == "gmid")
 		{
 			MemChunk midi;
 			undo_manager->recordUndoStep(new EntryDataUS(selection[a]));	// Create undo step
-			Conversions::musToMidi(selection[a]->getMCData(), midi);		// Convert
+			if (selection[a]->getType()->getFormat() == "mus")
+				Conversions::musToMidi(selection[a]->getMCData(), midi);	// Convert
+			else if (selection[a]->getType()->getFormat() == "gmid")
+				Conversions::gmidToMidi(selection[a]->getMCData(), midi);	// Convert
+			else
+				Conversions::zmusToMidi(selection[a]->getMCData(), midi);	// Convert
 			selection[a]->importMemChunk(midi);								// Load midi data
 			EntryType::detectEntryType(selection[a]);						// Update entry type
 			selection[a]->setExtensionByType();								// Update extension if necessary
 		}
+
 	}
 
 	// Finish recording undo level
@@ -2028,15 +2421,15 @@ bool ArchivePanel::openEntryAsText(ArchiveEntry* entry)
 	if (!entry)
 		return false;
 
-	// Show the text entry panel
-	if (!showEntryPanel(text_area))
-		return false;
-
 	// Load the current entry into the panel
-	if (!cur_area->openEntry(entry))
+	if (!text_area->openEntry(entry))
 	{
 		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error), "Error", wxOK|wxICON_ERROR);
 	}
+
+	// Show the text entry panel
+	if (!showEntryPanel(text_area))
+		return false;
 
 	return true;
 }
@@ -2050,15 +2443,15 @@ bool ArchivePanel::openEntryAsHex(ArchiveEntry* entry)
 	if (!entry)
 		return false;
 
-	// Show the text entry panel
-	if (!showEntryPanel(hex_area))
-		return false;
-
 	// Load the current entry into the panel
-	if (!cur_area->openEntry(entry))
+	if (!hex_area->openEntry(entry))
 	{
 		wxMessageBox(S_FMT("Error loading entry:\n%s", Global::error), "Error", wxOK|wxICON_ERROR);
 	}
+
+	// Show the text entry panel
+	if (!showEntryPanel(hex_area))
+		return false;
 
 	return true;
 }
@@ -2275,6 +2668,10 @@ bool ArchivePanel::handleAction(string id)
 	else if (id == "arch_entry_movedown")
 		moveDown();
 
+	// Entry->Sort
+	else if (id == "arch_entry_sort")
+		sort();
+
 	// Entry->Bookmark
 	else if (id == "arch_entry_bookmark")
 		bookmark();
@@ -2306,8 +2703,12 @@ bool ArchivePanel::handleAction(string id)
 
 
 	// Context menu actions
-	else if (id == "arch_bas_convert")
-		basConvert();
+	else if (id == "arch_bas_convertb")
+		basConvert(false);
+	else if (id == "arch_bas_convertz")
+		basConvert(true);
+	else if (id == "arch_swan_convert")
+		swanConvert();
 	else if (id == "arch_gfx_convert")
 		gfxConvert();
 	else if (id == "arch_gfx_translate")
@@ -2550,6 +2951,7 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 	bool texturex_selected = false;
 	bool modified_selected = false;
 	bool map_selected = false;
+	bool swan_selected = false;
 //	bool rle_selected = false;
 	for (size_t a = 0; a < selection.size(); a++)
 	{
@@ -2570,6 +2972,11 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 			        selection[a]->getType()->getFormat() == "switches")
 				bas_selected = true;
 		}
+		if (!swan_selected)
+		{
+			if (selection[a]->getType()->getId() == "swantbls")
+				swan_selected = true;
+		}
 		if (!wav_selected)
 		{
 			if (selection[a]->getType()->getFormat() == "snd_wav")
@@ -2578,6 +2985,7 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 		if (!dsnd_selected)
 		{
 			if (selection[a]->getType()->getFormat() == "snd_doom" ||
+			        selection[a]->getType()->getFormat() == "snd_speaker" ||
 			        selection[a]->getType()->getFormat() == "snd_wolf" ||
 			        selection[a]->getType()->getFormat() == "snd_doom_mac" ||
 			        selection[a]->getType()->getFormat() == "snd_jaguar" ||
@@ -2587,7 +2995,11 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 		}
 		if (!mus_selected)
 		{
-			if (selection[a]->getType()->getFormat() == "mus")
+			if (selection[a]->getType()->getFormat() == "mus" ||
+				selection[a]->getType()->getFormat() == "hmi" ||
+				selection[a]->getType()->getFormat() == "hmp" ||
+				selection[a]->getType()->getFormat() == "xmi" ||
+				selection[a]->getType()->getFormat() == "gmid")
 				mus_selected = true;
 		}
 		if (!text_selected)
@@ -2642,6 +3054,7 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 	context.AppendSeparator();
 	theApp->getAction("arch_entry_moveup")->addToMenu(&context);
 	theApp->getAction("arch_entry_movedown")->addToMenu(&context);
+	theApp->getAction("arch_entry_sort")->addToMenu(&context);
 	context.AppendSeparator();
 	theApp->getAction("arch_entry_bookmark")->addToMenu(&context);
 	theApp->getAction("arch_entry_opentab")->addToMenu(&context);
@@ -2663,7 +3076,14 @@ void ArchivePanel::onEntryListRightClick(wxListEvent& e)
 
 	// Add Boom Animations/Switches related menu items if they are selected
 	if (bas_selected)
-		theApp->getAction("arch_bas_convert")->addToMenu(&context);
+	{
+		theApp->getAction("arch_bas_convertb")->addToMenu(&context);
+		theApp->getAction("arch_bas_convertz")->addToMenu(&context);
+	}
+	if (swan_selected)
+	{
+		theApp->getAction("arch_swan_convert")->addToMenu(&context);
+	}
 
 	// Add texturex related menu items if needed
 	if (texturex_selected)

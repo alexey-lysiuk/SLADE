@@ -107,11 +107,11 @@ AudioEntryPanel::AudioEntryPanel(wxWindow* parent) : EntryPanel(parent, "audio")
 	toolbar->Show(false);
 
 	// Bind events
-	btn_play->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AudioEntryPanel::onBtnPlay, this);
-	btn_pause->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AudioEntryPanel::onBtnPause, this);
-	btn_stop->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AudioEntryPanel::onBtnStop, this);
-	slider_seek->Bind(wxEVT_COMMAND_SLIDER_UPDATED, &AudioEntryPanel::onSliderSeekChanged, this);
-	slider_volume->Bind(wxEVT_COMMAND_SLIDER_UPDATED, &AudioEntryPanel::onSliderVolumeChanged, this);
+	btn_play->Bind(wxEVT_BUTTON, &AudioEntryPanel::onBtnPlay, this);
+	btn_pause->Bind(wxEVT_BUTTON, &AudioEntryPanel::onBtnPause, this);
+	btn_stop->Bind(wxEVT_BUTTON, &AudioEntryPanel::onBtnStop, this);
+	slider_seek->Bind(wxEVT_SLIDER, &AudioEntryPanel::onSliderSeekChanged, this);
+	slider_volume->Bind(wxEVT_SLIDER, &AudioEntryPanel::onSliderVolumeChanged, this);
 	Bind(wxEVT_TIMER, &AudioEntryPanel::onTimer, this);
 
 	Layout();
@@ -211,6 +211,8 @@ bool AudioEntryPanel::open()
 	if (entry->getType()->getFormat() == "snd_doom" ||			// Doom Sound -> WAV
 	        entry->getType()->getFormat() == "snd_doom_mac")
 		Conversions::doomSndToWav(mcdata, convdata);
+	else if (entry->getType()->getFormat() == "snd_speaker")	// Doom PC Speaker Sound -> WAV
+		Conversions::spkSndToWav(mcdata, convdata);
 	else if (entry->getType()->getFormat() == "snd_wolf")		// Wolfenstein 3D Sound -> WAV
 		Conversions::wolfSndToWav(mcdata, convdata);
 	else if (entry->getType()->getFormat() == "snd_voc")		// Creative Voice File -> WAV
@@ -221,7 +223,13 @@ bool AudioEntryPanel::open()
 		Conversions::bloodToWav(entry, convdata);
 	else if (entry->getType()->getFormat() == "mus")  			// MUS -> MIDI
 	{
-		Conversions::musToMidi(mcdata, convdata);
+		Conversions::zmusToMidi(mcdata, convdata);
+		path.SetExt("mid");
+	}
+	else if (entry->getType()->getFormat() == "xmi" ||  			// HMI/HMP/XMI -> MIDI
+				entry->getType()->getFormat() == "hmi" || entry->getType()->getFormat() == "hmp")
+	{
+		Conversions::zmusToMidi(mcdata, convdata);
 		path.SetExt("mid");
 	}
 	else if (entry->getType()->getFormat() == "gmid")  			// GMID -> MIDI
@@ -234,7 +242,8 @@ bool AudioEntryPanel::open()
 
 	// MIDI format
 	if (entry->getType()->getFormat() == "midi" || entry->getType()->getFormat() == "mus" ||
-	        entry->getType()->getFormat() == "gmid")
+		entry->getType()->getFormat() == "gmid" || entry->getType()->getFormat() == "xmi" ||
+		entry->getType()->getFormat() == "hmp"  || entry->getType()->getFormat() == "hmi")
 	{
 		audio_type = AUTYPE_MIDI;
 		convdata.exportFile(path.GetFullPath());
@@ -277,7 +286,7 @@ bool AudioEntryPanel::openAudio(MemChunk& audio, string filename)
 	// Load into buffer
 	if (sound_buffer->loadFromMemory((const char*)audio.getData(), audio.getSize()))
 	{
-		wxLogMessage("opened as sound");
+		LOG_MESSAGE(3, "opened as sound");
 		// Bind to sound
 		sound.setBuffer(*sound_buffer);
 		audio_type = AUTYPE_SOUND;
@@ -292,13 +301,13 @@ bool AudioEntryPanel::openAudio(MemChunk& audio, string filename)
 	}
 	else if (music.openFromMemory((const char*)audio.getData(), audio.getSize()))
 	{
-		wxLogMessage("opened as music");
+		LOG_MESSAGE(3, "opened as music");
 		// Couldn't open the audio as a sf::SoundBuffer, try sf::Music instead
 		audio_type = AUTYPE_MUSIC;
 
 		// Enable play controls
 		setAudioDuration(music.getDuration().asMilliseconds());
-		wxLogMessage("duration: %dms", music.getDuration().asMilliseconds());
+		//wxLogMessage("duration: %dms", music.getDuration().asMilliseconds());
 		btn_play->Enable();
 		btn_stop->Enable();
 
@@ -372,7 +381,7 @@ bool AudioEntryPanel::openMod(MemChunk& data)
 {
 #ifndef NOLIBMODPLUG
 	// Attempt to load the mod
-	if (mod.LoadFromMemory(data.getData(), data.getSize()))
+	if (mod.loadFromMemory(data.getData(), data.getSize()))
 	{
 		audio_type = AUTYPE_MOD;
 
@@ -381,7 +390,7 @@ bool AudioEntryPanel::openMod(MemChunk& data)
 		btn_play->Enable();
 		btn_pause->Enable();
 		btn_stop->Enable();
-		setAudioDuration(mod.GetLength());
+		setAudioDuration(mod.getLength());
 
 		return true;
 	}

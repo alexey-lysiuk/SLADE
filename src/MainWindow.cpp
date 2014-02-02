@@ -49,7 +49,7 @@
 #include <wx/dnd.h>
 #include <wx/statline.h>
 #include <wx/webview.h>
-
+#include <wx/filename.h>
 
 /*******************************************************************
  * VARIABLES
@@ -187,7 +187,7 @@ void MainWindow::setupLayout()
 
 
 	// -- Editor Area --
-	notebook_tabs = new wxAuiNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE|wxNO_BORDER|wxAUI_NB_WINDOWLIST_BUTTON|wxNB_FLAT);
+	notebook_tabs = new wxAuiNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE|wxBORDER_NONE|wxAUI_NB_WINDOWLIST_BUTTON|wxNB_FLAT);
 	if (tab_style == 1)
 		notebook_tabs->SetArtProvider(new clAuiTabArt());
 	else if (tab_style == 2)
@@ -271,6 +271,7 @@ void MainWindow::setupLayout()
 	wxMenu* fileMenu = new wxMenu("");
 	fileMenu->AppendSubMenu(fileNewMenu, "&New", "Create a new Archive");
 	theApp->getAction("aman_open")->addToMenu(fileMenu);
+	theApp->getAction("aman_opendir")->addToMenu(fileMenu);
 	fileMenu->AppendSeparator();
 	theApp->getAction("aman_save")->addToMenu(fileMenu);
 	theApp->getAction("aman_saveas")->addToMenu(fileMenu);
@@ -318,6 +319,7 @@ void MainWindow::setupLayout()
 	tbg_file->addActionButton("aman_newwad");
 	tbg_file->addActionButton("aman_newzip");
 	tbg_file->addActionButton("aman_open");
+	tbg_file->addActionButton("aman_opendir");
 	tbg_file->addActionButton("aman_save");
 	tbg_file->addActionButton("aman_saveas");
 	tbg_file->addActionButton("aman_saveall");
@@ -382,7 +384,7 @@ void MainWindow::setupLayout()
 	html_startpage->Bind(wxEVT_WEBVIEW_NAVIGATING, &MainWindow::onHTMLLinkClicked, this);
 	Bind(wxEVT_SIZE, &MainWindow::onSize, this);
 	Bind(wxEVT_CLOSE_WINDOW, &MainWindow::onClose, this);
-	Bind(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, &MainWindow::onTabChanged, this);
+	Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &MainWindow::onTabChanged, this);
 	Bind(wxEVT_MOVE, &MainWindow::onMove, this);
 	Bind(wxEVT_STOOLBAR_LAYOUT_UPDATED, &MainWindow::onToolBarLayoutChanged, this, toolbar->GetId());
 }
@@ -397,10 +399,17 @@ void MainWindow::createStartPage()
 	Archive* res_archive = theArchiveManager->programResourceArchive();
 	if (!res_archive)
 		return;
+
+	// Get entries to export
+	vector<ArchiveEntry*> export_entries;
 	ArchiveEntry* entry_html = res_archive->entryAtPath("html/startpage.htm");
-	ArchiveEntry* entry_logo = res_archive->entryAtPath("logo.png");
 	ArchiveEntry* entry_tips = res_archive->entryAtPath("tips.txt");
-	ArchiveEntry* entry_boxback = res_archive->entryAtPath("html/box-title-back.png");
+	export_entries.push_back(res_archive->entryAtPath("logo.png"));
+	export_entries.push_back(res_archive->entryAtPath("html/box-title-back.png"));
+	export_entries.push_back(res_archive->entryAtPath("icons/e_archive.png"));
+	export_entries.push_back(res_archive->entryAtPath("icons/e_wad.png"));
+	export_entries.push_back(res_archive->entryAtPath("icons/e_zip.png"));
+	export_entries.push_back(res_archive->entryAtPath("icons/e_folder.png"));
 
 	// Can't do anything without html entry
 	if (!entry_html)
@@ -436,7 +445,7 @@ void MainWindow::createStartPage()
 
 	// Generate recent files string
 	string recent;
-	for (unsigned a = 0; a < 11; a++)
+	for (unsigned a = 0; a < 10; a++)
 	{
 		if (a >= theArchiveManager->numRecentFiles())
 			break;	// No more recent files
@@ -444,8 +453,18 @@ void MainWindow::createStartPage()
 		// Add line break if needed
 		if (a > 0) recent += "<br/>\n";
 
+		// Determine icon
+		string fn = theArchiveManager->recentFile(a);
+		string icon = "e_archive";
+		if (fn.EndsWith(".wad"))
+			icon = "e_wad";
+		else if (fn.EndsWith(".zip") || fn.EndsWith(".pk3") || fn.EndsWith(".pke"))
+			icon = "e_zip";
+		else if (wxDirExists(fn))
+			icon = "e_folder";
+
 		// Add recent file link
-		recent += S_FMT("<a href=\"recent://%d\">%s</a>", a, theArchiveManager->recentFile(a));
+		recent += S_FMT("<a href=\"recent://%d\"><img src=\"%s.png\"> %s</a>", a, icon, fn);
 	}
 
 	// Insert tip and recent files into html
@@ -453,8 +472,8 @@ void MainWindow::createStartPage()
 	html.Replace("#totd#", tip);
 
 	// Write html and images to temp folder
-	if (entry_logo) entry_logo->exportFile(appPath("logo.png", DIR_TEMP));
-	if (entry_boxback) entry_boxback->exportFile(appPath("box-title-back.png", DIR_TEMP));
+	for (unsigned a = 0; a < export_entries.size(); a++)
+		export_entries[a]->exportFile(appPath(export_entries[a]->getName(), DIR_TEMP));
 	string html_file = appPath("startpage.htm", DIR_TEMP);
 	wxFile outfile(html_file, wxFile::write);
 	outfile.Write(html);
@@ -751,7 +770,8 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 	else if (wxFileExists(href))
 	{
 		// Navigating to file, open it
-		if (href != appPath("startpage.htm", DIR_TEMP))
+		string page = appPath("startpage.htm", DIR_TEMP);
+		if (wxFileName(href).GetLongPath() != wxFileName(page).GetLongPath())
 			theArchiveManager->openArchive(href);
 		ev.Veto();
 	}

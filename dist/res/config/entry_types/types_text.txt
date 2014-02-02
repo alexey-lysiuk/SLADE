@@ -50,6 +50,13 @@ entry_types
 		text_language = "z_animdefs";
 	}
 
+	cvarinfo : text
+	{
+		name = "Console var defs";
+		match_name = "cvarinfo";
+		text_language = "z_cvarinfo";
+	}
+
 	decaldef : text
 	{
 		name = "Decals";
@@ -277,7 +284,7 @@ entry_types
 	
 	palvers : text
 	{
-		name = "Paletted Texture Substitutions";
+		name = "Paletted replacements";
 		match_name = "palvers";
 	}
 
@@ -292,6 +299,14 @@ entry_types
 	{
 		name = "Crosshairs";
 		match_name = "xhairs";
+	}
+	
+	// Boom swantbls.dat files
+	swantbls : text
+	{
+		name = "Boom Swan Tables";
+		match_name = "swantbls", "defswani";
+		export_ext = "dat";
 	}
 	
 	// Doomsday DED lumps and files

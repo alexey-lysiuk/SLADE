@@ -77,7 +77,7 @@ EXTERN_CVAR(String, dir_last)
 	this->parent = wm;
 
 	// Connect a custom event for when an item in the file tree is activated
-	GetTreeCtrl()->Connect(GetTreeCtrl()->GetId(), wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler(WMFileBrowser::onItemActivated));
+	GetTreeCtrl()->Connect(GetTreeCtrl()->GetId(), wxEVT_TREE_ITEM_ACTIVATED, wxTreeEventHandler(WMFileBrowser::onItemActivated));
 }
 
 /* WMFileBrowser::~WMFileBrowser
@@ -163,17 +163,17 @@ ArchiveManagerPanel::ArchiveManagerPanel(wxWindow* parent, wxAuiNotebook* nb_arc
 	notebook_tabs->SetSelection(am_current_tab);
 
 	// Bind events
-	list_archives->Bind(wxEVT_COMMAND_LIST_ITEM_SELECTED, &ArchiveManagerPanel::onListArchivesChanged, this);
-	list_archives->Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListArchivesActivated, this);
-	list_archives->Bind(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListArchivesRightClick, this);
-	list_recent->Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListRecentActivated, this);
-	list_recent->Bind(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListRecentRightClick, this);
-	list_bookmarks->Bind(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListBookmarksActivated, this);
-	list_bookmarks->Bind(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListBookmarksRightClick, this);
-	notebook_archives->Bind(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, &ArchiveManagerPanel::onArchiveTabChanging, this);
-	notebook_archives->Bind(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, &ArchiveManagerPanel::onArchiveTabChanged, this);
-	notebook_archives->Bind(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, &ArchiveManagerPanel::onArchiveTabClose, this);
-	notebook_tabs->Bind(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, &ArchiveManagerPanel::onAMTabChanged, this);
+	list_archives->Bind(wxEVT_LIST_ITEM_SELECTED, &ArchiveManagerPanel::onListArchivesChanged, this);
+	list_archives->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListArchivesActivated, this);
+	list_archives->Bind(wxEVT_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListArchivesRightClick, this);
+	list_recent->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListRecentActivated, this);
+	list_recent->Bind(wxEVT_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListRecentRightClick, this);
+	list_bookmarks->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ArchiveManagerPanel::onListBookmarksActivated, this);
+	list_bookmarks->Bind(wxEVT_LIST_ITEM_RIGHT_CLICK, &ArchiveManagerPanel::onListBookmarksRightClick, this);
+	notebook_archives->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGING, &ArchiveManagerPanel::onArchiveTabChanging, this);
+	notebook_archives->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &ArchiveManagerPanel::onArchiveTabChanged, this);
+	notebook_archives->Bind(wxEVT_AUINOTEBOOK_PAGE_CLOSE, &ArchiveManagerPanel::onArchiveTabClose, this);
+	notebook_tabs->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &ArchiveManagerPanel::onAMTabChanged, this);
 
 	// Listen to the ArchiveManager
 	listenTo(theArchiveManager);
@@ -213,6 +213,14 @@ void ArchiveManagerPanel::createRecentPanel()
 	vbox->Add(new wxStaticText(panel_rf, -1, "Recent Files:"), 0, wxEXPAND);
 	list_recent = new ListView(panel_rf, -1);
 	vbox->Add(list_recent, 1, wxEXPAND|wxTOP, 4);
+
+	// Setup image list
+	wxImageList* list = new wxImageList(16, 16, false, 0);
+	list->Add(getIcon("e_archive"));
+	list->Add(getIcon("e_wad"));
+	list->Add(getIcon("e_zip"));
+	list->Add(getIcon("e_folder"));
+	list_recent->SetImageList(list, wxIMAGE_LIST_SMALL);
 }
 
 /* ArchiveManagerPanel::layoutNormal
@@ -269,7 +277,22 @@ void ArchiveManagerPanel::refreshRecentFileList()
 		updateRecentListItem(a);
 
 		if (a < 8)
-			menu_recent->Append(id_recent_start + a, theArchiveManager->recentFile(a));
+		{
+			// Get path and determine icon
+			string fn = theArchiveManager->recentFile(a);
+			string icon = "e_archive";
+			if (fn.EndsWith(".wad"))
+				icon = "e_wad";
+			else if (fn.EndsWith(".zip") || fn.EndsWith(".pk3") || fn.EndsWith(".pke"))
+				icon = "e_zip";
+			else if (wxDirExists(fn))
+				icon = "e_folder";
+
+			// Create and add menu item
+			wxMenuItem* mi = new wxMenuItem(menu_recent, id_recent_start + a, fn);
+			mi->SetBitmap(getIcon(icon));
+			menu_recent->Append(mi);
+		}
 	}
 
 	// Update size
@@ -352,13 +375,23 @@ void ArchiveManagerPanel::updateOpenListItem(int index)
  *******************************************************************/
 void ArchiveManagerPanel::updateRecentListItem(int index)
 {
-
 	// Get path as wxFileName for processing
-	wxFileName fn(theArchiveManager->recentFile(index));
+	string path = theArchiveManager->recentFile(index);
+	wxFileName fn(path);
 
 	// Set item name
 	list_recent->setItemText(index, 0, fn.GetFullName());
 	list_recent->setItemText(index, 1, fn.GetPath());
+
+	// Set item icon
+	int icon = 0;
+	if (path.EndsWith(".wad"))
+		icon = 1;
+	else if (path.EndsWith(".zip") || path.EndsWith(".pk3") || path.EndsWith(".pke"))
+		icon = 2;
+	else if (wxDirExists(path))
+		icon = 3;
+	list_recent->SetItemImage(index, icon);
 }
 
 /* ArchiveManagerPanel::isArchivePanel
@@ -571,6 +604,8 @@ void ArchiveManagerPanel::openTab(Archive* archive)
 			icon = "e_wad";
 		else if (archive->getType() == ARCHIVE_ZIP)
 			icon = "e_zip";
+		else if (archive->getType() == ARCHIVE_FOLDER)
+			icon = "e_folder";
 
 		wp->SetName("archive");
 		notebook_archives->AddPage(wp, archive->getFilename(false), false);
@@ -835,6 +870,35 @@ void ArchiveManagerPanel::openFiles(wxArrayString& files)
 	}
 }
 
+/* ArchiveManagerPanel::openDirAsArchive
+* Opens a directory as an archive and initialises the UI for it
+*******************************************************************/
+void ArchiveManagerPanel::openDirAsArchive(string dir)
+{
+	// Show splash screen
+	theSplashWindow->show("Opening Directory...", true);
+
+	// test
+	wxStopWatch sw;
+	sw.Start();
+
+	// Open the file in the archive manager
+	Archive* new_archive = theArchiveManager->openDirArchive(dir);
+
+	sw.Pause();
+	wxLogMessage("Opening took %d ms", (int)sw.Time());
+
+	// Hide splash screen
+	theSplashWindow->hide();
+
+	// Check that the archive opened ok
+	if (!new_archive)
+	{
+		// If archive didn't open ok, show error message
+		wxMessageBox(S_FMT("Error opening directory %s:\n%s", dir, Global::error), "Error", wxICON_ERROR);
+	}
+}
+
 /* ArchiveManagerPanel::undo
  * Performs an undo operation on the currently selected tab, returns
  * true if the tab supports undo, false otherwise
@@ -1008,6 +1072,10 @@ bool ArchiveManagerPanel::saveArchiveAs(Archive* archive)
 	// Check for null pointer
 	if (!archive)
 		return false;
+
+	// Check archive type
+	if (archive->getType() == ARCHIVE_FOLDER)
+		return true;	// Can't do save as for folder
 
 	// Check for unsaved entry changes
 	saveEntryChanges(archive);
@@ -1398,6 +1466,27 @@ bool ArchiveManagerPanel::handleAction(string id)
 
 			// Save 'dir_last'
 			dir_last = dialog_open.GetDirectory();
+		}
+	}
+
+	// File->Open Directory
+	else if (id == "aman_opendir")
+	{
+		// Open a directory browser dialog
+		wxDirDialog dialog_open(this, "Select a Directory to open", dir_last, wxDD_DIR_MUST_EXIST | wxDD_NEW_DIR_BUTTON);
+
+		// Run the dialog & check the user didn't cancel
+		if (dialog_open.ShowModal() == wxID_OK)
+		{
+			wxBeginBusyCursor();
+
+			// Open directory
+			openDirAsArchive(dialog_open.GetPath());
+
+			wxEndBusyCursor();
+
+			// Save 'dir_last'
+			dir_last = dialog_open.GetPath();
 		}
 	}
 

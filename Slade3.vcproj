@@ -1743,6 +1743,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\DirArchive.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\DirArchive.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\DiskArchive.cpp"
 					>
 				</File>
@@ -2406,11 +2414,51 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\zreaders\i_music.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\i_music.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\i_musicinterns.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\zreaders\m_alloc.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\zreaders\m_alloc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\m_swap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\mus2midi.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\music_hmi_midiout.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\music_midistream.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\music_mus_midiout.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\music_smf_midiout.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\zreaders\music_xmi_midiout.cpp"
 					>
 				</File>
 				<File
@@ -2457,6 +2505,10 @@
 			<Filter
 				Name="sfMod"
 				>
+				<File
+					RelativePath=".\src\sfMod\Error.h"
+					>
+				</File>
 				<File
 					RelativePath=".\src\sfMod\modplug.h"
 					>
