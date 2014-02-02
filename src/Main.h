@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef __MAIN_H__
+#define __MAIN_H__
 
 #ifdef _WINDOWS
 #include <windows.h>
@@ -114,3 +115,5 @@ enum MapTypes
 	MAP_UDMF,
 	MAP_UNKNOWN,	// Needed for maps in zip archives
 };
+
+#endif //__MAIN_H__

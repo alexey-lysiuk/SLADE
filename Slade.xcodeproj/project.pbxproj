@@ -123,6 +123,13 @@
 		8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A40785E1840F29300843BD8 /* NodeBuildersWizardPage.cpp */; };
 		8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4078601840F29300843BD8 /* SetupWizardDialog.cpp */; };
 		8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4078621840F29300843BD8 /* TempFolderWizardPage.cpp */; };
+		8A4F6DAD189E410900B01A19 /* i_music.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DA3189E410900B01A19 /* i_music.cpp */; };
+		8A4F6DAE189E410900B01A19 /* music_hmi_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DA8189E410900B01A19 /* music_hmi_midiout.cpp */; };
+		8A4F6DAF189E410900B01A19 /* music_midistream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DA9189E410900B01A19 /* music_midistream.cpp */; };
+		8A4F6DB0189E410900B01A19 /* music_mus_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DAA189E410900B01A19 /* music_mus_midiout.cpp */; };
+		8A4F6DB1189E410900B01A19 /* music_smf_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DAB189E410900B01A19 /* music_smf_midiout.cpp */; };
+		8A4F6DB2189E410900B01A19 /* music_xmi_midiout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DAC189E410900B01A19 /* music_xmi_midiout.cpp */; };
+		8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4F6DB3189E418000B01A19 /* DirArchive.cpp */; };
 		8A5692FE154EE501000DF3CE /* fastmix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A5692D3154EE501000DF3CE /* fastmix.cpp */; };
 		8A5692FF154EE501000DF3CE /* it_defs.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692D4154EE501000DF3CE /* it_defs.h */; };
 		8A569300154EE501000DF3CE /* sndfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692D6154EE501000DF3CE /* sndfile.h */; };
@@ -515,6 +522,18 @@
 		8A4078621840F29300843BD8 /* TempFolderWizardPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TempFolderWizardPage.cpp; sourceTree = "<group>"; };
 		8A4078631840F29300843BD8 /* TempFolderWizardPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempFolderWizardPage.h; sourceTree = "<group>"; };
 		8A4078641840F29300843BD8 /* WizardPageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WizardPageBase.h; sourceTree = "<group>"; };
+		8A4F6DA3189E410900B01A19 /* i_music.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_music.cpp; sourceTree = "<group>"; };
+		8A4F6DA4189E410900B01A19 /* i_music.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_music.h; sourceTree = "<group>"; };
+		8A4F6DA5189E410900B01A19 /* i_musicinterns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_musicinterns.h; sourceTree = "<group>"; };
+		8A4F6DA6189E410900B01A19 /* m_swap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_swap.h; sourceTree = "<group>"; };
+		8A4F6DA7189E410900B01A19 /* mus2midi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mus2midi.h; sourceTree = "<group>"; };
+		8A4F6DA8189E410900B01A19 /* music_hmi_midiout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_hmi_midiout.cpp; sourceTree = "<group>"; };
+		8A4F6DA9189E410900B01A19 /* music_midistream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_midistream.cpp; sourceTree = "<group>"; };
+		8A4F6DAA189E410900B01A19 /* music_mus_midiout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_mus_midiout.cpp; sourceTree = "<group>"; };
+		8A4F6DAB189E410900B01A19 /* music_smf_midiout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_smf_midiout.cpp; sourceTree = "<group>"; };
+		8A4F6DAC189E410900B01A19 /* music_xmi_midiout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_xmi_midiout.cpp; sourceTree = "<group>"; };
+		8A4F6DB3189E418000B01A19 /* DirArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirArchive.cpp; sourceTree = "<group>"; };
+		8A4F6DB4189E418000B01A19 /* DirArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirArchive.h; sourceTree = "<group>"; };
 		8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmodplug_slade.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A5692D3154EE501000DF3CE /* fastmix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fastmix.cpp; sourceTree = "<group>"; };
 		8A5692D4154EE501000DF3CE /* it_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = it_defs.h; sourceTree = "<group>"; };
@@ -1286,6 +1305,8 @@
 				8AD5EC2C1778510400ADDE06 /* Decorate.h */,
 				8AD5EC2D1778510400ADDE06 /* DefaultEntryPanel.cpp */,
 				8AD5EC2E1778510400ADDE06 /* DefaultEntryPanel.h */,
+				8A4F6DB3189E418000B01A19 /* DirArchive.cpp */,
+				8A4F6DB4189E418000B01A19 /* DirArchive.h */,
 				8AD5EC2F1778510400ADDE06 /* DiskArchive.cpp */,
 				8AD5EC301778510400ADDE06 /* DiskArchive.h */,
 				8AD5EC311778510400ADDE06 /* DockPanel.cpp */,
@@ -1941,8 +1962,18 @@
 				8AD18F4B154A8A9B00AB9C07 /* ancientzip.h */,
 				8AD18F4C154A8A9B00AB9C07 /* files.cpp */,
 				8AD18F4D154A8A9B00AB9C07 /* files.h */,
+				8A4F6DA3189E410900B01A19 /* i_music.cpp */,
+				8A4F6DA4189E410900B01A19 /* i_music.h */,
+				8A4F6DA5189E410900B01A19 /* i_musicinterns.h */,
 				8AD18F4E154A8A9B00AB9C07 /* m_alloc.cpp */,
 				8AD18F4F154A8A9B00AB9C07 /* m_alloc.h */,
+				8A4F6DA6189E410900B01A19 /* m_swap.h */,
+				8A4F6DA7189E410900B01A19 /* mus2midi.h */,
+				8A4F6DA8189E410900B01A19 /* music_hmi_midiout.cpp */,
+				8A4F6DA9189E410900B01A19 /* music_midistream.cpp */,
+				8A4F6DAA189E410900B01A19 /* music_mus_midiout.cpp */,
+				8A4F6DAB189E410900B01A19 /* music_smf_midiout.cpp */,
+				8A4F6DAC189E410900B01A19 /* music_xmi_midiout.cpp */,
 				8AD18F50154A8A9B00AB9C07 /* tarray.h */,
 				8AD18F51154A8A9B00AB9C07 /* templates.h */,
 			);
@@ -2289,6 +2320,7 @@
 				8A880C1818533C56005DE572 /* BaseResourceArchivesPanel.cpp in Sources */,
 				8A880C1918533C56005DE572 /* BaseResourceChooser.cpp in Sources */,
 				8A880C1A18533C56005DE572 /* BrowserCanvas.cpp in Sources */,
+				8A4F6DAF189E410900B01A19 /* music_midistream.cpp in Sources */,
 				8A880C1B18533C56005DE572 /* BrowserItem.cpp in Sources */,
 				8A880C1C18533C56005DE572 /* BrowserWindow.cpp in Sources */,
 				8A880C1D18533C56005DE572 /* BSPArchive.cpp in Sources */,
@@ -2341,6 +2373,8 @@
 				8A880C4C18533C56005DE572 /* InterfacePrefsPanel.cpp in Sources */,
 				8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */,
 				8A880C4E18533C56005DE572 /* LfdArchive.cpp in Sources */,
+				8A4F6DAE189E410900B01A19 /* music_hmi_midiout.cpp in Sources */,
+				8A4F6DB1189E410900B01A19 /* music_smf_midiout.cpp in Sources */,
 				8A880C4F18533C56005DE572 /* LibArchive.cpp in Sources */,
 				8A880C5018533C56005DE572 /* LineInfoOverlay.cpp in Sources */,
 				8A880C5118533C56005DE572 /* LineTextureOverlay.cpp in Sources */,
@@ -2358,10 +2392,12 @@
 				8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */,
 				8A880C5D18533C56005DE572 /* MapEditorPrefsPanel.cpp in Sources */,
 				8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */,
+				8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */,
 				8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */,
 				8A880C6018533C56005DE572 /* MapLine.cpp in Sources */,
 				8A880C6118533C56005DE572 /* MapObject.cpp in Sources */,
 				8A880C6218533C56005DE572 /* MapObjectPropsPanel.cpp in Sources */,
+				8A4F6DAD189E410900B01A19 /* i_music.cpp in Sources */,
 				8A880C6318533C56005DE572 /* MapPreviewCanvas.cpp in Sources */,
 				8A880C6418533C56005DE572 /* MapRenderer2D.cpp in Sources */,
 				8A880C6518533C56005DE572 /* MapRenderer3D.cpp in Sources */,
@@ -2391,12 +2427,14 @@
 				8A880C7D18533C56005DE572 /* PaletteCanvas.cpp in Sources */,
 				8A880C7E18533C56005DE572 /* PaletteChooser.cpp in Sources */,
 				8A880C7F18533C56005DE572 /* PaletteDialog.cpp in Sources */,
+				8A4F6DB0189E410900B01A19 /* music_mus_midiout.cpp in Sources */,
 				8A880C8018533C56005DE572 /* PaletteEntryPanel.cpp in Sources */,
 				8A880C8118533C56005DE572 /* PaletteManager.cpp in Sources */,
 				8A880C8218533C56005DE572 /* Parser.cpp in Sources */,
 				8A880C8318533C56005DE572 /* PatchBrowser.cpp in Sources */,
 				8A880C8418533C56005DE572 /* PatchTable.cpp in Sources */,
 				8A880C8518533C56005DE572 /* PatchTablePanel.cpp in Sources */,
+				8A4F6DB2189E410900B01A19 /* music_xmi_midiout.cpp in Sources */,
 				8A880C8618533C56005DE572 /* PnamesEntryPanel.cpp in Sources */,
 				8A880C8718533C56005DE572 /* PnamesList.cpp in Sources */,
 				8A880C8818533C56005DE572 /* PNGPrefsPanel.cpp in Sources */,
