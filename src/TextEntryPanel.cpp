@@ -206,6 +206,7 @@ void TextEntryPanel::refreshPanel()
 {
 	// Update text editor
 	text_area->setup();
+	text_area->Refresh();
 
 	Refresh();
 	Update();
@@ -281,6 +282,7 @@ bool TextEntryPanel::redo()
 void TextEntryPanel::onTextModified(wxStyledTextEvent& e)
 {
 	setModified();
+	e.Skip();
 }
 
 /* TextEntryPanel::onBtnFindReplace

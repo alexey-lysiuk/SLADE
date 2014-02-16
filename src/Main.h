@@ -6,8 +6,6 @@
 #include <windows.h>
 #endif
 
-#include <stdint.h>
-
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS 1
 typedef __int8 int8_t;
@@ -18,6 +16,8 @@ typedef __int32 int32_t;
 typedef unsigned __int32 uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
+#else
+#include <stdint.h>
 #endif
 
 // String stuff
@@ -29,7 +29,7 @@ typedef wxString string;
 
 // Macro to convert a wxString to a c string
 #define CHR(s) (static_cast<const char*>((s).ToAscii()))
-
+#define UTF8(s) (static_cast<const char*>((s).c_str()))
 
 // Vectors
 #include <vector>

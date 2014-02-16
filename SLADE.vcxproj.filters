@@ -154,6 +154,12 @@
     <Filter Include="Dialogs\SetupWizard">
       <UniqueIdentifier>{90dc0f0c-92e7-414e-a30b-76c8c288e615}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Editor\UI Elements\Overlays\Info">
+      <UniqueIdentifier>{0818b646-e0fb-4903-a683-74d0c149675b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Editor\UI Elements\Dialogs">
+      <UniqueIdentifier>{76701b85-f3f6-418f-b84e-cddfc761072f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GfxConvDialog.cpp">
@@ -720,15 +726,6 @@
     <ClCompile Include="src\MCAnimations.cpp">
       <Filter>Map Editor\UI Elements</Filter>
     </ClCompile>
-    <ClCompile Include="src\VertexInfoOverlay.cpp">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LineInfoOverlay.cpp">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SectorInfoOverlay.cpp">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClCompile>
     <ClCompile Include="src\MapTextureManager.cpp">
       <Filter>Map Editor</Filter>
     </ClCompile>
@@ -746,9 +743,6 @@
     </ClCompile>
     <ClCompile Include="src\ThingType.cpp">
       <Filter>Map Editor\GameConfiguration</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ThingInfoOverlay.cpp">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
     </ClCompile>
     <ClCompile Include="src\glew\glew.c">
       <Filter>External\GLEW</Filter>
@@ -789,17 +783,11 @@
     <ClCompile Include="src\MOPGProperty.cpp">
       <Filter>Map Editor\UI Elements\MapObjectPropsPanel</Filter>
     </ClCompile>
-    <ClCompile Include="src\MapTextureBrowser.cpp">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClCompile>
     <ClCompile Include="src\SToolBar.cpp">
       <Filter>UI Elements\SToolBar</Filter>
     </ClCompile>
     <ClCompile Include="src\SToolBarButton.cpp">
       <Filter>UI Elements\SToolBar</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ThingTypeBrowser.cpp">
-      <Filter>Map Editor\UI Elements</Filter>
     </ClCompile>
     <ClCompile Include="src\MapPreviewCanvas.cpp">
       <Filter>UI Elements</Filter>
@@ -839,9 +827,6 @@
     </ClCompile>
     <ClCompile Include="src\InputPrefsPanel.cpp">
       <Filter>Dialogs\Preferences</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InfoOverlay3d.cpp">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
     </ClCompile>
     <ClCompile Include="src\ScriptEditorPanel.cpp">
       <Filter>Map Editor\Script Editor</Filter>
@@ -966,9 +951,6 @@
     <ClCompile Include="src\DiskArchive.cpp">
       <Filter>Resources\Archive\Formats</Filter>
     </ClCompile>
-    <ClCompile Include="src\SectorSpecialDialog.cpp">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClCompile>
     <ClCompile Include="libmodplug\fastmix.cpp">
       <Filter>External\libmodplug</Filter>
     </ClCompile>
@@ -1083,9 +1065,6 @@
     <ClCompile Include="src\GenLineSpecialPanel.cpp">
       <Filter>Map Editor\UI Elements</Filter>
     </ClCompile>
-    <ClCompile Include="src\ActionSpecialDialog.cpp">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClCompile>
     <ClCompile Include="src\ObjectEdit.cpp">
       <Filter>Map Editor</Filter>
     </ClCompile>
@@ -1142,6 +1121,33 @@
     </ClCompile>
     <ClCompile Include="src\DirArchive.cpp">
       <Filter>Resources\Archive\Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InfoOverlay3d.cpp">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LineInfoOverlay.cpp">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SectorInfoOverlay.cpp">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThingInfoOverlay.cpp">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexInfoOverlay.cpp">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ActionSpecialDialog.cpp">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SectorSpecialDialog.cpp">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThingTypeBrowser.cpp">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapTextureBrowser.cpp">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1737,15 +1743,6 @@
     <ClInclude Include="src\MCAnimations.h">
       <Filter>Map Editor\UI Elements</Filter>
     </ClInclude>
-    <ClInclude Include="src\VertexInfoOverlay.h">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LineInfoOverlay.h">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SectorInfoOverlay.h">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
-    </ClInclude>
     <ClInclude Include="src\MapTextureManager.h">
       <Filter>Map Editor</Filter>
     </ClInclude>
@@ -1766,9 +1763,6 @@
     </ClInclude>
     <ClInclude Include="src\ThingType.h">
       <Filter>Map Editor\GameConfiguration</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ThingInfoOverlay.h">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="src\glew\glew.h">
       <Filter>External\GLEW</Filter>
@@ -1815,17 +1809,11 @@
     <ClInclude Include="src\MOPGProperty.h">
       <Filter>Map Editor\UI Elements\MapObjectPropsPanel</Filter>
     </ClInclude>
-    <ClInclude Include="src\MapTextureBrowser.h">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClInclude>
     <ClInclude Include="src\SToolBar.h">
       <Filter>UI Elements\SToolBar</Filter>
     </ClInclude>
     <ClInclude Include="src\SToolBarButton.h">
       <Filter>UI Elements\SToolBar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ThingTypeBrowser.h">
-      <Filter>Map Editor\UI Elements</Filter>
     </ClInclude>
     <ClInclude Include="src\MapPreviewCanvas.h">
       <Filter>UI Elements</Filter>
@@ -1871,9 +1859,6 @@
     </ClInclude>
     <ClInclude Include="src\PrefsPanelBase.h">
       <Filter>Dialogs\Preferences</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InfoOverlay3d.h">
-      <Filter>Map Editor\UI Elements\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="src\ScriptEditorPanel.h">
       <Filter>Map Editor\Script Editor</Filter>
@@ -1974,9 +1959,6 @@
     <ClInclude Include="src\DiskArchive.h">
       <Filter>Resources\Archive\Formats</Filter>
     </ClInclude>
-    <ClInclude Include="src\SectorSpecialDialog.h">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClInclude>
     <ClInclude Include="libmodplug\load_pat.h">
       <Filter>External\libmodplug</Filter>
     </ClInclude>
@@ -1996,9 +1978,6 @@
       <Filter>Map Editor\UI Elements\Overlays</Filter>
     </ClInclude>
     <ClInclude Include="src\GenLineSpecialPanel.h">
-      <Filter>Map Editor\UI Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ActionSpecialDialog.h">
       <Filter>Map Editor\UI Elements</Filter>
     </ClInclude>
     <ClInclude Include="src\ObjectEdit.h">
@@ -2054,6 +2033,33 @@
     </ClInclude>
     <ClInclude Include="src\DirArchive.h">
       <Filter>Resources\Archive\Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InfoOverlay3d.h">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LineInfoOverlay.h">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SectorInfoOverlay.h">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThingInfoOverlay.h">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexInfoOverlay.h">
+      <Filter>Map Editor\UI Elements\Overlays\Info</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ActionSpecialDialog.h">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SectorSpecialDialog.h">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThingTypeBrowser.h">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapTextureBrowser.h">
+      <Filter>Map Editor\UI Elements\Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
