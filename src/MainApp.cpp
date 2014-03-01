@@ -182,7 +182,7 @@ public:
 		sizer->Add(text_stack, 1, wxEXPAND|wxALL, 4);
 
 		// Dump stack trace to a file (just in case)
-		wxFile file(appPath("slade3_crash.log", DIR_APP), wxFile::write);
+		wxFile file(appPath("slade3_crash.log", DIR_USER), wxFile::write);
 		file.Write(trace);
 		file.Close();
 
@@ -585,6 +585,7 @@ void MainApp::initActions()
 	new SAction("mapw_mode_lines", "Lines Mode", "t_lines", "Change to lines editing mode", "", SAction::RADIO, -1, group_mode);
 	new SAction("mapw_mode_sectors", "Sectors Mode", "t_sectors", "Change to sectors editing mode", "", SAction::RADIO, -1, group_mode);
 	new SAction("mapw_mode_things", "Things Mode", "t_things", "Change to things editing mode", "", SAction::RADIO, -1, group_mode);
+	new SAction("mapw_mode_3d", "3d Mode", "t_3d", "Change to 3d editing mode", "", SAction::RADIO, -1, group_mode);
 	int group_flat_type = SAction::newGroup();
 	new SAction("mapw_flat_none", "Wireframe", "t_flat_w", "Don't show flats (wireframe)", "", SAction::RADIO, -1, group_flat_type);
 	new SAction("mapw_flat_untextured", "Untextured", "t_flat_u", "Show untextured flats", "", SAction::RADIO, -1, group_flat_type);
@@ -593,19 +594,28 @@ void MainApp::initActions()
 	new SAction("mapw_sectormode_normal", "Normal (Both)", "t_sector_both", "Edit sector floors and ceilings", "", SAction::RADIO, -1, group_sector_mode);
 	new SAction("mapw_sectormode_floor", "Floors", "t_sector_floor", "Edit sector floors", "", SAction::RADIO, -1, group_sector_mode);
 	new SAction("mapw_sectormode_ceiling", "Ceilings", "t_sector_ceiling", "Edit sector ceilings", "", SAction::RADIO, -1, group_sector_mode);
-	new SAction("mapw_showconsole", "&Console", "t_console", "Toggle the Console window", "Ctrl+2");
 	new SAction("mapw_showproperties", "&Item Properties", "t_properties", "Toggle the Item Properties window", "Ctrl+1");
-	new SAction("mapw_showscripteditor", "Script &Editor", "e_text", "Toggle the Script Editor window", "Ctrl+3");
+	new SAction("mapw_showconsole", "&Console", "t_console", "Toggle the Console window", "Ctrl+2");
+	new SAction("mapw_showundohistory", "&Undo History", "t_undo", "Toggle the Undo History window", "Ctrl+3");
 	new SAction("mapw_showchecks", "Map Checks", "i_tick", "Toggle the Map Checks window", "Ctrl+4");
+	new SAction("mapw_showscripteditor", "Script &Editor", "e_text", "Toggle the Script Editor window", "Ctrl+5");
 	new SAction("mapw_run_map", "Run Map", "t_run", "Run the current map", "Ctrl+Shift+R");
+	new SAction("mapw_draw_lines", "Draw Lines", "t_linedraw", "Begin line drawing", "kb:me2d_begin_linedraw");
+	new SAction("mapw_draw_shape", "Draw Shape", "t_shapedraw", "Begin shape drawing", "kb:me2d_begin_shapedraw");
+	new SAction("mapw_edit_objects", "Edit Object(s)", "t_objectedit", "Edit currently selected object(s)", "kb:me2d_begin_object_edit");
+	new SAction("mapw_vertex_create", "Create Vertex Here", "", "Create a new vertex at the cursor position");
 	new SAction("mapw_line_changetexture", "Change Texture", "", "Change the currently selected or hilighted line texture(s)");
 	new SAction("mapw_line_changespecial", "Change Special", "", "Change the currently selected or hilighted line special");
 	new SAction("mapw_line_tagedit", "Edit Tagged", "", "Select sectors/things to tag to this line's special");
 	new SAction("mapw_line_correctsectors", "Correct Sectors", "i_tick", "Correct line sector references");
+	new SAction("mapw_line_flip", "Flip Line", "", "Flip the currently selected of hilighted line(s)");
 	new SAction("mapw_thing_changetype", "Change Type", "", "Change the currently selected or hilighted thing type(s)");
-	new SAction("mapw_thing_create", "Create Thing Here", "", "Creates a new thing at the cursor position");
+	new SAction("mapw_thing_create", "Create Thing Here", "", "Create a new thing at the cursor position");
+	new SAction("mapw_sector_create", "Create Sector Here", "", "Create a sector at the cursor position");
 	new SAction("mapw_sector_changetexture", "Change Texture", "", "Change the currently selected or hilighted sector texture(s)");
 	new SAction("mapw_sector_changespecial", "Change Special", "", "Change the currently selected or hilighted sector special(s)");
+	new SAction("mapw_sector_join", "Merge Sectors", "", "Join the currently selected sectors together, removing unneeded lines");
+	new SAction("mapw_sector_join_keep", "Join Sectors", "", "Join the currently selected sectors together, keeping all lines");
 	new SAction("mapw_item_properties", "Properties", "t_properties", "Edit the currently selected item's properties");
 	new SAction("mapw_camera_set", "Move 3d Camera Here", "", "Set the current position of the 3d mode camera to the cursor position");
 	new SAction("mapw_clear_selection", "Clear Selection", "", "Clear the current selection, if any");

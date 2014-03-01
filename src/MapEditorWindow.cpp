@@ -49,6 +49,7 @@
 #include "MapEditorConfigDialog.h"
 #include "MapChecksPanel.h"
 #include "SplashWindow.h"
+#include "UndoManagerHistoryPanel.h"
 #include <wx/aui/aui.h>
 
 
@@ -166,8 +167,67 @@ void MapEditorWindow::saveLayout()
 	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("map_checks"));
 	file.Write(S_FMT("\"%s\"\n", pinf));
 
+	// Undo history pane
+	file.Write("\"undo_history\" ");
+	pinf = m_mgr->SavePaneInfo(m_mgr->GetPane("undo_history"));
+	file.Write(S_FMT("\"%s\"\n", pinf));
+
 	// Close file
 	file.Close();
+}
+
+/* MapEditorWindow::setupLayout
+ * Sets up the basic map editor window menu bar
+ *******************************************************************/
+void MapEditorWindow::setupMenu()
+{
+	// Get menu bar
+	wxMenuBar* menu = GetMenuBar();
+	if (menu)
+	{
+		// Clear existing menu bar
+		unsigned n_menus = menu->GetMenuCount();
+		for (unsigned a = 0; a < n_menus; a++)
+		{
+			wxMenu* sm = menu->Remove(0);
+			delete sm;
+		}
+	}
+	else	// Create new menu bar
+		menu = new wxMenuBar();
+
+	// Map menu
+	wxMenu* menu_map = new wxMenu("");
+	theApp->getAction("mapw_save")->addToMenu(menu_map);
+	theApp->getAction("mapw_saveas")->addToMenu(menu_map);
+	theApp->getAction("mapw_rename")->addToMenu(menu_map);
+	menu_map->AppendSeparator();
+	theApp->getAction("mapw_run_map")->addToMenu(menu_map);
+	menu->Append(menu_map, "&Map");
+
+	// Edit menu
+	wxMenu* menu_editor = new wxMenu("");
+	theApp->getAction("mapw_undo")->addToMenu(menu_editor);
+	theApp->getAction("mapw_redo")->addToMenu(menu_editor);
+	menu_editor->AppendSeparator();
+	theApp->getAction("mapw_draw_lines")->addToMenu(menu_editor);
+	theApp->getAction("mapw_draw_shape")->addToMenu(menu_editor);
+	theApp->getAction("mapw_edit_objects")->addToMenu(menu_editor);
+	menu_editor->AppendSeparator();
+	theApp->getAction("mapw_preferences")->addToMenu(menu_editor);
+	theApp->getAction("mapw_setbra")->addToMenu(menu_editor);
+	menu->Append(menu_editor, "&Edit");
+
+	// View menu
+	wxMenu* menu_view = new wxMenu("");
+	theApp->getAction("mapw_showproperties")->addToMenu(menu_view);
+	theApp->getAction("mapw_showconsole")->addToMenu(menu_view);
+	theApp->getAction("mapw_showundohistory")->addToMenu(menu_view);
+	theApp->getAction("mapw_showchecks")->addToMenu(menu_view);
+	theApp->getAction("mapw_showscripteditor")->addToMenu(menu_view);
+	menu->Append(menu_view, "View");
+
+	SetMenuBar(menu);
 }
 
 /* MapEditorWindow::setupLayout
@@ -185,35 +245,7 @@ void MapEditorWindow::setupLayout()
 	m_mgr->AddPane(map_canvas, p_inf);
 
 	// --- Menus ---
-	wxMenuBar* menu = new wxMenuBar();
-
-	// Map menu
-	wxMenu* menu_map = new wxMenu("");
-	theApp->getAction("mapw_save")->addToMenu(menu_map);
-	theApp->getAction("mapw_saveas")->addToMenu(menu_map);
-	theApp->getAction("mapw_rename")->addToMenu(menu_map);
-	menu_map->AppendSeparator();
-	theApp->getAction("mapw_run_map")->addToMenu(menu_map);
-	menu->Append(menu_map, "&Map");
-
-	// Edit menu
-	wxMenu* menu_editor = new wxMenu("");
-	theApp->getAction("mapw_undo")->addToMenu(menu_editor);
-	theApp->getAction("mapw_redo")->addToMenu(menu_editor);
-	menu_editor->AppendSeparator();
-	theApp->getAction("mapw_preferences")->addToMenu(menu_editor);
-	theApp->getAction("mapw_setbra")->addToMenu(menu_editor);
-	menu->Append(menu_editor, "&Edit");
-
-	// View menu
-	wxMenu* menu_view = new wxMenu("");
-	theApp->getAction("mapw_showproperties")->addToMenu(menu_view);
-	theApp->getAction("mapw_showconsole")->addToMenu(menu_view);
-	theApp->getAction("mapw_showscripteditor")->addToMenu(menu_view);
-	theApp->getAction("mapw_showchecks")->addToMenu(menu_view);
-	menu->Append(menu_view, "View");
-
-	SetMenuBar(menu);
+	setupMenu();
 
 
 	// --- Toolbars ---
@@ -226,20 +258,13 @@ void MapEditorWindow::setupLayout()
 	tbg_map->addActionButton("mapw_rename");
 	toolbar->addGroup(tbg_map);
 
-	// Edit toolbar
-	/*
-	SToolBarGroup* tbg_edit = new SToolBarGroup(toolbar, "_Edit");
-	tbg_edit->addActionButton("mapw_undo");
-	tbg_edit->addActionButton("mapw_redo");
-	toolbar->addGroup(tbg_edit);
-	*/
-
 	// Mode toolbar
 	SToolBarGroup* tbg_mode = new SToolBarGroup(toolbar, "_Mode");
 	tbg_mode->addActionButton("mapw_mode_vertices");
 	tbg_mode->addActionButton("mapw_mode_lines");
 	tbg_mode->addActionButton("mapw_mode_sectors");
 	tbg_mode->addActionButton("mapw_mode_things");
+	tbg_mode->addActionButton("mapw_mode_3d");
 	theApp->toggleAction("mapw_mode_lines");	// Lines mode by default
 	toolbar->addGroup(tbg_mode);
 
@@ -254,6 +279,13 @@ void MapEditorWindow::setupLayout()
 	if (flat_drawtype == 0) theApp->toggleAction("mapw_flat_none");
 	else if (flat_drawtype == 1) theApp->toggleAction("mapw_flat_untextured");
 	else theApp->toggleAction("mapw_flat_textured");
+
+	// Edit toolbar
+	SToolBarGroup* tbg_edit = new SToolBarGroup(toolbar, "_Edit");
+	tbg_edit->addActionButton("mapw_draw_lines");
+	tbg_edit->addActionButton("mapw_draw_shape");
+	tbg_edit->addActionButton("mapw_edit_objects");
+	toolbar->addGroup(tbg_edit);
 
 	// Extra toolbar
 	SToolBarGroup* tbg_misc = new SToolBarGroup(toolbar, "_Misc");
@@ -376,6 +408,21 @@ void MapEditorWindow::setupLayout()
 	p_inf.Name("map_checks");
 	p_inf.Layer(0);
 	m_mgr->AddPane(panel_checks, p_inf);
+
+
+	// -- Undo History Panel --
+	panel_undo_history = new UndoManagerHistoryPanel(this, NULL);
+	panel_undo_history->setManager(editor.undoManager());
+
+	// Setup panel info & add panel
+	p_inf.DefaultPane();
+	p_inf.Right();
+	p_inf.BestSize(128, 480);
+	p_inf.Caption("Undo History");
+	p_inf.Name("undo_history");
+	p_inf.Show(false);
+	p_inf.Dock();
+	m_mgr->AddPane(panel_undo_history, p_inf);
 
 
 	// Load previously saved window layout
@@ -831,6 +878,14 @@ void MapEditorWindow::editObjectProperties(vector<MapObject*>& objects)
 	map_canvas->editObjectProperties(objects);
 }
 
+/* MapEditorWindow::setUndoManager
+ * Sets the undo manager to show in the undo history panel
+ *******************************************************************/
+void MapEditorWindow::setUndoManager(UndoManager* manager)
+{
+	panel_undo_history->setManager(manager);
+}
+
 /* MapEditorWindow::showObjectEditPanel
  * Shows/hides the object edit panel (opens [group] if shown)
  *******************************************************************/
@@ -1048,6 +1103,19 @@ bool MapEditorWindow::handleAction(string id)
 		}
 
 		//p_inf.MinSize(200, 128);
+		m_mgr->Update();
+		return true;
+	}
+
+	// View->Undo History
+	else if (id == "mapw_showundohistory")
+	{
+		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+		wxAuiPaneInfo& p_inf = m_mgr->GetPane("undo_history");
+
+		// Toggle window
+		p_inf.Show(!p_inf.IsShown());
+
 		m_mgr->Update();
 		return true;
 	}

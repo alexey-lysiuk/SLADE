@@ -46,6 +46,7 @@
  * VARIABLES
  *******************************************************************/
 CVAR(Bool, mobj_props_show_all, false, CVAR_SAVE)
+CVAR(Bool, mobj_props_auto_apply, false, CVAR_SAVE)
 
 
 /*******************************************************************
@@ -55,11 +56,14 @@ CVAR(Bool, mobj_props_show_all, false, CVAR_SAVE)
 /* MapObjectPropsPanel::MapObjectPropsPanel
  * MapObjectPropsPanel class constructor
  *******************************************************************/
-MapObjectPropsPanel::MapObjectPropsPanel(wxWindow* parent) : wxPanel(parent, -1)
+MapObjectPropsPanel::MapObjectPropsPanel(wxWindow* parent, bool no_apply) : wxPanel(parent, -1)
 {
 	// Init variables
 	last_type = -1;
 	group_custom = NULL;
+	for (unsigned a = 0; a < 5; a++)
+		args[a] = NULL;
+	this->no_apply = no_apply;
 
 	// Setup sizer
 	wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -117,10 +121,20 @@ MapObjectPropsPanel::MapObjectPropsPanel(wxWindow* parent) : wxPanel(parent, -1)
 	btn_reset->Bind(wxEVT_BUTTON, &MapObjectPropsPanel::onBtnReset, this);
 	cb_show_all->Bind(wxEVT_CHECKBOX, &MapObjectPropsPanel::onShowAllToggled, this);
 	btn_add->Bind(wxEVT_BUTTON, &MapObjectPropsPanel::onBtnAdd, this);
+	pg_properties->Bind(wxEVT_PG_CHANGED, &MapObjectPropsPanel::onPropertyChanged, this);
+	pg_props_side1->Bind(wxEVT_PG_CHANGED, &MapObjectPropsPanel::onPropertyChanged, this);
+	pg_props_side2->Bind(wxEVT_PG_CHANGED, &MapObjectPropsPanel::onPropertyChanged, this);
 
 	// Hide side property grids
 	pg_props_side1->Show(false);
 	pg_props_side2->Show(false);
+
+	// Hide apply button if needed
+	if (no_apply || mobj_props_auto_apply)
+	{
+		btn_apply->Show(false);
+		btn_reset->Show(false);
+	}
 
 	Layout();
 }
@@ -434,12 +448,26 @@ void MapObjectPropsPanel::setupType(int objtype)
 	int map_format = theMapEditor->currentMapDesc().format;
 
 	// Clear property grid
+	for (unsigned a = 0; a < 5; a++)
+		args[a] = NULL;
 	pg_properties->Clear();
 	pg_props_side1->Clear();
 	pg_props_side2->Clear();
 	group_custom = NULL;
 	properties.clear();
 	btn_add->Show(false);
+
+	// Hide buttons if not needed
+	if (no_apply || mobj_props_auto_apply)
+	{
+		btn_apply->Show(false);
+		btn_reset->Show(false);
+	}
+	else if (!no_apply)
+	{
+		btn_apply->Show();
+		btn_reset->Show();
+	}
 
 	// Remove side1/2 tabs if they exist
 	while (tabs_sections->GetPageCount() > 1)
@@ -491,10 +519,10 @@ void MapObjectPropsPanel::setupType(int objtype)
 			for (unsigned a = 0; a < 5; a++)
 			{
 				// Add arg property
-				MOPGIntProperty* prop = (MOPGIntProperty*)addIntProperty(g_special, S_FMT("Arg%d", a+1), S_FMT("arg%d", a));
+				MOPGIntProperty* prop = (MOPGIntProperty*)addIntProperty(g_special, S_FMT("Arg%u", a+1), S_FMT("arg%u", a));
 
-				// Link to action special if appropriate
-				if (map_format == MAP_HEXEN) prop_as->addArgProperty(prop, a);
+				// Link to action special
+				args[a] = prop;
 			}
 		}
 		else   // Sector tag otherwise
@@ -520,7 +548,7 @@ void MapObjectPropsPanel::setupType(int objtype)
 
 		// Add flags
 		for (int a = 0; a < theGameConfiguration->nLineFlags(); a++)
-			addLineFlagProperty(g_flags, theGameConfiguration->lineFlag(a), S_FMT("flag%d", a), a);
+			addLineFlagProperty(g_flags, theGameConfiguration->lineFlag(a), S_FMT("flag%u", a), a);
 
 		// --- Sides ---
 		pg_props_side1->Show(true);
@@ -656,8 +684,8 @@ void MapObjectPropsPanel::setupType(int objtype)
 			wxPGProperty* g_args = pg_properties->Append(new wxPropertyCategory("Args"));
 			for (unsigned a = 0; a < 5; a++)
 			{
-				MOPGIntProperty* prop = (MOPGIntProperty*)addIntProperty(g_args, S_FMT("Arg%d", a+1), S_FMT("arg%d", a));
-				prop_tt->addArgProperty(prop, a);
+				MOPGIntProperty* prop = (MOPGIntProperty*)addIntProperty(g_args, S_FMT("Arg%u", a+1), S_FMT("arg%u", a));
+				args[a] = prop;
 			}
 		}
 
@@ -666,13 +694,15 @@ void MapObjectPropsPanel::setupType(int objtype)
 
 		// Add flags
 		for (int a = 0; a < theGameConfiguration->nThingFlags(); a++)
-			addThingFlagProperty(g_flags, theGameConfiguration->thingFlag(a), S_FMT("flag%d", a), a);
+			addThingFlagProperty(g_flags, theGameConfiguration->thingFlag(a), S_FMT("flag%u", a), a);
 	}
 
 	// Set all bool properties to use checkboxes
 	pg_properties->SetPropertyAttributeAll(wxPG_BOOL_USE_CHECKBOX, true);
 
 	last_type = objtype;
+	
+	Layout();
 }
 
 /* MapObjectPropsPanel::setupTypeUDMF
@@ -685,12 +715,26 @@ void MapObjectPropsPanel::setupTypeUDMF(int objtype)
 		return;
 
 	// Clear property grids
+	for (unsigned a = 0; a < 5; a++)
+		args[a] = NULL;
 	pg_properties->Clear();
 	pg_props_side1->Clear();
 	pg_props_side2->Clear();
 	group_custom = NULL;
 	properties.clear();
 	btn_add->Show();
+
+	// Hide buttons if not needed
+	if (no_apply || mobj_props_auto_apply)
+	{
+		btn_apply->Show(false);
+		btn_reset->Show(false);
+	}
+	else if (!no_apply)
+	{
+		btn_apply->Show();
+		btn_reset->Show();
+	}
 
 	// Remove side1/2 tabs if they exist
 	while (tabs_sections->GetPageCount() > 1)
@@ -709,15 +753,10 @@ void MapObjectPropsPanel::setupTypeUDMF(int objtype)
 		tabs_sections->SetPageText(0, "Thing");
 
 	// Go through all possible properties for this type
-	bool args = false;
 	vector<udmfp_t> props = theGameConfiguration->allUDMFProperties(objtype);
 	sort(props.begin(), props.end());
 	for (unsigned a = 0; a < props.size(); a++)
-	{
 		addUDMFProperty(props[a].property, objtype);
-		if (props[a].property->getProperty() == "arg0")
-			args = true;
-	}
 
 	// Add side properties if line type
 	if (objtype == MOBJ_LINE)
@@ -744,28 +783,14 @@ void MapObjectPropsPanel::setupTypeUDMF(int objtype)
 	// Set all bool properties to use checkboxes
 	pg_properties->SetPropertyAttributeAll(wxPG_BOOL_USE_CHECKBOX, true);
 
-	// Link arg properties to type/special properties (if args exist)
-	if (args)
-	{
-		for (unsigned a = 0; a < properties.size(); a++)
-		{
-			// Action special
-			if (properties[a]->getType() == MOPGProperty::TYPE_ASPECIAL)
-			{
-				for (unsigned arg = 0; arg < 5; arg++)
-					((MOPGActionSpecialProperty*)properties[a])->addArgProperty(pg_properties->GetProperty(S_FMT("arg%d", arg)), arg);
-			}
-
-			// Thing type
-			else if (properties[a]->getType() == MOPGProperty::TYPE_TTYPE)
-			{
-				for (unsigned arg = 0; arg < 5; arg++)
-					((MOPGThingTypeProperty*)properties[a])->addArgProperty(pg_properties->GetProperty(S_FMT("arg%d", arg)), arg);
-			}
-		}
-	}
+	// Remember arg properties for passing to type/special properties (or set
+	// to NULL if args don't exist)
+	for (unsigned arg = 0; arg < 5; arg++)
+		args[arg] = pg_properties->GetProperty(S_FMT("arg%u", arg));
 
 	last_type = objtype;
+
+	Layout();
 }
 
 /* MapObjectPropsPanel::openObject
@@ -861,11 +886,9 @@ void MapObjectPropsPanel::openObjects(vector<MapObject*>& objects)
 	// Handle line sides
 	if (objects[0]->getObjType() == MOBJ_LINE)
 	{
-		((MOPGActionSpecialProperty*)pg_properties->GetProperty("special"))->updateArgVisibility();
-
 		// Enable/disable side properties
 		wxPGProperty* prop = pg_properties->GetProperty("sidefront");
-		if (prop && (prop->GetValue().GetInteger() >= 0 || prop->IsValueUnspecified()))
+		if (prop && (prop->IsValueUnspecified() || prop->GetValue().GetInteger() >= 0))
 			pg_props_side1->EnableProperty(pg_props_side1->GetGrid()->GetRoot());
 		else
 		{
@@ -873,7 +896,7 @@ void MapObjectPropsPanel::openObjects(vector<MapObject*>& objects)
 			pg_props_side1->SetPropertyValueUnspecified(pg_props_side1->GetGrid()->GetRoot());
 		}
 		prop = pg_properties->GetProperty("sideback");
-		if (prop && (prop->GetValue().GetInteger() >= 0 || prop->IsValueUnspecified()))
+		if (prop && (prop->IsValueUnspecified() || prop->GetValue().GetInteger() >= 0))
 			pg_props_side2->EnableProperty(pg_props_side2->GetGrid()->GetRoot());
 		else
 		{
@@ -881,9 +904,6 @@ void MapObjectPropsPanel::openObjects(vector<MapObject*>& objects)
 			pg_props_side2->SetPropertyValueUnspecified(pg_props_side2->GetGrid()->GetRoot());
 		}
 	}
-	else if (objects[0]->getObjType() == MOBJ_THING)
-		((MOPGThingTypeProperty*)pg_properties->GetProperty("type"))->updateArgVisibility();
-
 
 	// Update internal objects list
 	if (&objects != &this->objects)
@@ -893,17 +913,49 @@ void MapObjectPropsPanel::openObjects(vector<MapObject*>& objects)
 			this->objects.push_back(objects[a]);
 	}
 
+	// Possibly update the argument names and visibility
+	updateArgs(NULL);
+
 	pg_properties->Refresh();
 	pg_props_side1->Refresh();
 	pg_props_side2->Refresh();
 }
 
-/* MapObjectPropsPanel::showApplyButton
- * Shows/hides the 'Apply' button
+/* MapObjectPropsPanel::updateArgs
+ * Updates the names and visibility of the "arg" properties
  *******************************************************************/
-void MapObjectPropsPanel::showApplyButton(bool show)
+void MapObjectPropsPanel::updateArgs(MOPGIntWithArgsProperty* source)
 {
-	btn_apply->Show(show);
+	MOPGProperty* prop;
+	MOPGIntWithArgsProperty* prop_with_args;
+	MOPGIntWithArgsProperty* owner_prop = source;  // sane default
+
+	// First determine which property owns the args.  Use the last one that has
+	// a specified and non-zero value.  ThingType always wins, though, because
+	// ThingTypes with args ignore their specials.
+	for (unsigned a = 0; a < properties.size(); a++)
+	{
+		prop = properties[a];
+
+		if (prop->getType() == MOPGProperty::TYPE_TTYPE
+			|| prop->getType() == MOPGProperty::TYPE_ASPECIAL)
+		{
+			prop_with_args = (MOPGIntWithArgsProperty*)prop;
+
+			if (!prop_with_args->IsValueUnspecified()
+				&& prop_with_args->GetValue().GetInteger() != 0
+				&& prop_with_args->hasArgs())
+			{
+				owner_prop = prop_with_args;
+
+				if (prop->getType() == MOPGProperty::TYPE_TTYPE)
+					break;
+			}
+		}
+	}
+
+	if (owner_prop)
+		owner_prop->updateArgs(args);
 }
 
 /* MapObjectPropsPanel::applyChanges
@@ -950,8 +1002,11 @@ void MapObjectPropsPanel::onShowAllToggled(wxCommandEvent& e)
 {
 	mobj_props_show_all = cb_show_all->GetValue();
 
-	// Refresh the list
-	openObjects(objects);
+	// Refresh each property's visibility
+	for (unsigned a = 0; a < properties.size(); a++)
+		properties[a]->updateVisibility();
+
+	updateArgs(NULL);
 }
 
 /* MapObjectPropsPanel::onBtnAdd
@@ -1036,6 +1091,33 @@ void MapObjectPropsPanel::onBtnAdd(wxCommandEvent& e)
 			prop_col->setParent(this);
 			properties.push_back(prop_col);
 			pg_properties->AppendIn(group_custom, prop_col);
+		}
+	}
+}
+
+/* MapObjectPropsPanel::onPropertyChanged
+ * Called when a property value is changed
+ *******************************************************************/
+void MapObjectPropsPanel::onPropertyChanged(wxPropertyGridEvent& e)
+{
+	// Ignore if no auto apply
+	if (no_apply || !mobj_props_auto_apply)
+	{
+		e.Skip();
+		return;
+	}
+
+	// Find property
+	string name = e.GetPropertyName();
+	for (unsigned a = 0; a < properties.size(); a++)
+	{
+		if (properties[a]->getPropName() == name)
+		{
+			// Found, apply value
+			theMapEditor->mapEditor().beginUndoRecordLocked("Modify Properties", true, false, false);
+			properties[a]->applyValue();
+			theMapEditor->mapEditor().endUndoRecord();
+			return;
 		}
 	}
 }

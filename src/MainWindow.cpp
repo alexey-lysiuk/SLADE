@@ -51,6 +51,7 @@
 #include <wx/webview.h>
 #include <wx/filename.h>
 
+
 /*******************************************************************
  * VARIABLES
  *******************************************************************/
@@ -779,6 +780,12 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 		string page = appPath("startpage.htm", DIR_TEMP);
 		if (wxFileName(href).GetLongPath() != wxFileName(page).GetLongPath())
 			theArchiveManager->openArchive(href);
+		ev.Veto();
+	}
+	else if (wxDirExists(href))
+	{
+		// Navigating to folder, open it
+		theArchiveManager->openDirArchive(href);
 		ev.Veto();
 	}
 }

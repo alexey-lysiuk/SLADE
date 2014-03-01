@@ -22,8 +22,9 @@ private:
 	vector<string>			base_resource_paths;
 	vector<string>			recent_files;
 	vector<ArchiveEntry*>	bookmarks;
-	bool					open_silent;
 	static ArchiveManager*	instance;
+
+	void		getDependentArchivesInternal(Archive* archive, vector<Archive*>& vec);
 
 public:
 	ArchiveManager();
@@ -63,11 +64,12 @@ public:
 	void		closeAll();
 	int			numArchives() { return (int)open_archives.size(); }
 	int			archiveIndex(Archive* archive);
+	vector<Archive*>
+				getDependentArchives(Archive* archive);
 	Archive*	programResourceArchive() { return program_resource_archive; }
 	string		getArchiveExtensionsString();
 	bool		archiveIsResource(Archive* archive);
 	void		setArchiveResource(Archive* archive, bool resource = true);
-	bool		openSilent() { return open_silent; }
 
 	// Base resource archive stuff
 	Archive*	baseResourceArchive() { return base_resource_archive; }

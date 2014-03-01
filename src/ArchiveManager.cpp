@@ -59,7 +59,6 @@ ArchiveManager::ArchiveManager()
 	// Init variables
 	res_archive_open = false;
 	base_resource_archive = NULL;
-	open_silent = false;
 }
 
 /* ArchiveManager::~ArchiveManager
@@ -189,6 +188,28 @@ bool ArchiveManager::addArchive(Archive* archive)
 		// Add to resource manager
 		theResourceManager->addArchive(archive);
 
+		// ZDoom also loads any WADs found in the root of a PK3 or directory
+		if (archive->getType() == ARCHIVE_ZIP || archive->getType() == ARCHIVE_FOLDER)
+		{
+			ArchiveTreeNode* root = archive->getRoot();
+			ArchiveEntry* entry;
+			EntryType* type;
+			for (unsigned a = 0; a < root->numEntries(); a++)
+			{
+				entry = root->getEntry(a);
+
+				if (entry->getType() == EntryType::unknownType())
+					EntryType::detectEntryType(entry);
+
+				type = entry->getType();
+
+				if (type->getId() == "wad")
+					// First true: yes, manage this
+					// Second true: open silently, don't open a tab for it
+					openArchive(entry, true, true);
+			}
+		}
+
 		return true;
 	}
 	else
@@ -236,8 +257,6 @@ Archive* ArchiveManager::openArchive(string filename, bool manage, bool silent)
 	if (!wxFile::Exists(filename) && wxDirExists(filename))
 		return openDirArchive(filename, manage, silent);
 
-	open_silent = silent;
-
 	Archive* new_archive = getArchive(filename);
 
 	wxLogMessage("Opening archive %s", filename);
@@ -246,10 +265,13 @@ Archive* ArchiveManager::openArchive(string filename, bool manage, bool silent)
 	if (new_archive)
 	{
 		// Announce open
-		MemChunk mc;
-		uint32_t index = archiveIndex(new_archive);
-		mc.write(&index, 4);
-		announce("archive_opened", mc);
+		if (!silent)
+		{
+			MemChunk mc;
+			uint32_t index = archiveIndex(new_archive);
+			mc.write(&index, 4);
+			announce("archive_opened", mc);
+		}
 
 		return new_archive;
 	}
@@ -312,10 +334,13 @@ Archive* ArchiveManager::openArchive(string filename, bool manage, bool silent)
 			addArchive(new_archive);
 
 			// Announce open
-			MemChunk mc;
-			uint32_t index = archiveIndex(new_archive);
-			mc.write(&index, 4);
-			announce("archive_opened", mc);
+			if (!silent)
+			{
+				MemChunk mc;
+				uint32_t index = archiveIndex(new_archive);
+				mc.write(&index, 4);
+				announce("archive_opened", mc);
+			}
 
 			// Add to recent files
 			addRecentFile(filename);
@@ -337,7 +362,6 @@ Archive* ArchiveManager::openArchive(string filename, bool manage, bool silent)
  *******************************************************************/
 Archive* ArchiveManager::openArchive(ArchiveEntry* entry, bool manage, bool silent)
 {
-	open_silent = silent;
 	Archive* new_archive = NULL;
 
 	// Check entry was given
@@ -350,10 +374,13 @@ Archive* ArchiveManager::openArchive(ArchiveEntry* entry, bool manage, bool sile
 		if (open_archives[a].archive->getParent() == entry)
 		{
 			// Announce open
-			MemChunk mc;
-			uint32_t index = archiveIndex(open_archives[a].archive);
-			mc.write(&index, 4);
-			announce("archive_opened", mc);
+			if (!silent)
+			{
+				MemChunk mc;
+				uint32_t index = archiveIndex(open_archives[a].archive);
+				mc.write(&index, 4);
+				announce("archive_opened", mc);
+			}
 
 			return open_archives[a].archive;
 		}
@@ -424,10 +451,13 @@ Archive* ArchiveManager::openArchive(ArchiveEntry* entry, bool manage, bool sile
 			addArchive(new_archive);
 
 			// Announce open
-			MemChunk mc;
-			uint32_t index = archiveIndex(new_archive);
-			mc.write(&index, 4);
-			announce("archive_opened", mc);
+			if (!silent)
+			{
+				MemChunk mc;
+				uint32_t index = archiveIndex(new_archive);
+				mc.write(&index, 4);
+				announce("archive_opened", mc);
+			}
 		}
 
 		return new_archive;
@@ -446,8 +476,6 @@ Archive* ArchiveManager::openArchive(ArchiveEntry* entry, bool manage, bool sile
  *******************************************************************/
 Archive* ArchiveManager::openDirArchive(string dir, bool manage, bool silent)
 {
-	open_silent = silent;
-
 	Archive* new_archive = getArchive(dir);
 
 	wxLogMessage("Opening directory %s as archive", dir);
@@ -456,10 +484,13 @@ Archive* ArchiveManager::openDirArchive(string dir, bool manage, bool silent)
 	if (new_archive)
 	{
 		// Announce open
-		MemChunk mc;
-		uint32_t index = archiveIndex(new_archive);
-		mc.write(&index, 4);
-		announce("archive_opened", mc);
+		if (!silent)
+		{
+			MemChunk mc;
+			uint32_t index = archiveIndex(new_archive);
+			mc.write(&index, 4);
+			announce("archive_opened", mc);
+		}
 
 		return new_archive;
 	}
@@ -476,10 +507,13 @@ Archive* ArchiveManager::openDirArchive(string dir, bool manage, bool silent)
 			addArchive(new_archive);
 
 			// Announce open
-			MemChunk mc;
-			uint32_t index = archiveIndex(new_archive);
-			mc.write(&index, 4);
-			announce("archive_opened", mc);
+			if (!silent)
+			{
+				MemChunk mc;
+				uint32_t index = archiveIndex(new_archive);
+				mc.write(&index, 4);
+				announce("archive_opened", mc);
+			}
 
 			// Add to recent files
 			addRecentFile(dir);
@@ -560,11 +594,40 @@ bool ArchiveManager::closeArchive(int index)
 	//theGameConfiguration->removeEmbeddedConfig(open_archives[index].archive->getFilename());
 
 	// Close any open child archives
-	for (size_t a = 0; a < open_archives[index].open_children.size(); a++)
+	// Clear out the open_children vector first, lest the children try to
+	// remove themselves from it
+	vector<Archive*> open_children = open_archives[index].open_children;
+	open_archives[index].open_children.clear();
+	for (size_t a = 0; a < open_children.size(); a++)
 	{
-		int ci = archiveIndex(open_archives[index].open_children[a]);
+		int ci = archiveIndex(open_children[a]);
 		if (ci >= 0)
 			closeArchive(ci);
+	}
+
+	// Remove ourselves from our parent's open-child list
+	ArchiveEntry* parent = open_archives[index].archive->getParent();
+	if (parent)
+	{
+		Archive* gp = parent->getParent();
+		if (gp)
+		{
+			int pi = archiveIndex(gp);
+			if (pi >= 0)
+			{
+				vector<Archive*>& children = open_archives[pi].open_children;
+				for (vector<Archive*>::iterator it = children.begin();
+					it < children.end();
+					it++)
+				{
+					if (*it == open_archives[index].archive)
+					{
+						children.erase(it, it + 1);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	// Close the archive
@@ -645,6 +708,31 @@ int ArchiveManager::archiveIndex(Archive* archive)
 
 	// If we get to here the archive wasn't found, so return -1
 	return -1;
+}
+
+/* ArchiveManager::getDependentArchives
+ * Returns all open archives that live inside this one, recursively.
+ *******************************************************************/
+// This is the recursive bit, separate from the public entry point
+void ArchiveManager::getDependentArchivesInternal(Archive* archive, vector<Archive*>& vec)
+{
+	Archive* child;
+	int ai = archiveIndex(archive);
+
+	for (size_t a = 0; a < open_archives[ai].open_children.size(); a++)
+	{
+		child = open_archives[ai].open_children[a];
+		vec.push_back(child);
+
+		getDependentArchivesInternal(child, vec);
+	}
+}
+
+vector<Archive*> ArchiveManager::getDependentArchives(Archive* archive)
+{
+	vector<Archive*> vec;
+	getDependentArchivesInternal(archive, vec);
+	return vec;
 }
 
 /* ArchiveManager::getArchiveExtensionsString

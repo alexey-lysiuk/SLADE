@@ -48,6 +48,7 @@ UndoLevel::UndoLevel(string name)
 {
 	// Init variables
 	this->name = name;
+	this->timestamp = wxDateTime::Now();
 }
 
 /* UndoLevel::~UndoLevel
@@ -57,6 +58,20 @@ UndoLevel::~UndoLevel()
 {
 	for (unsigned a = 0; a < undo_steps.size(); a++)
 		delete undo_steps[a];
+}
+
+/* UndoLevel::getTimeStamp
+ * Returns a string representation of the time at which the undo
+ * level was recorded
+ *******************************************************************/
+string UndoLevel::getTimeStamp(bool date, bool time)
+{
+	if (date && !time)
+		return timestamp.FormatISODate();
+	else if (!date && time)
+		return timestamp.FormatISOTime();
+	else
+		return timestamp.FormatISOCombined();
 }
 
 /* UndoLevel::doUndo
@@ -105,6 +120,19 @@ bool UndoLevel::readFile(string filename)
 bool UndoLevel::writeFile(string filename)
 {
 	return true;
+}
+
+/* UndoLevel::createMerged
+ * Adds all undo steps from all undo levels in [levels]
+ *******************************************************************/
+void UndoLevel::createMerged(vector<UndoLevel*>& levels)
+{
+	for (unsigned a = 0; a < levels.size(); a++)
+	{
+		for (unsigned b = 0; b < levels[a]->undo_steps.size(); b++)
+			undo_steps.push_back(levels[a]->undo_steps[b]);
+		levels[a]->undo_steps.clear();
+	}
 }
 
 
@@ -276,12 +304,18 @@ string UndoManager::redo()
 	return level->getName();
 }
 
+/* UndoManager::getAllLevels
+ * Adds all undo level names to [list]
+ *******************************************************************/
 void UndoManager::getAllLevels(vector<string>& list)
 {
 	for (unsigned a = 0; a < undo_levels.size(); a++)
 		list.push_back(undo_levels[a]->getName());
 }
 
+/* UndoManager::clear
+ * Clears all undo levels and resets variables
+ *******************************************************************/
 void UndoManager::clear()
 {
 	// Clean up undo levels
@@ -293,6 +327,27 @@ void UndoManager::clear()
 	current_level = NULL;
 	current_level_index = -1;
 	undo_running = false;
+}
+
+/* UndoManager::createMergedLevel
+ * Creates an undo level from all levels in [manager], called [name]
+ *******************************************************************/
+bool UndoManager::createMergedLevel(UndoManager* manager, string name)
+{
+	// Do nothing if no levels to merge
+	if (manager->undo_levels.empty())
+		return false;
+
+	// Create merged undo level from manager
+	UndoLevel* merged = new UndoLevel(name);
+	merged->createMerged(manager->undo_levels);
+
+	// Add undo level
+	undo_levels.push_back(merged);
+	current_level = NULL;
+	current_level_index = undo_levels.size() - 1;
+
+	return true;
 }
 
 
