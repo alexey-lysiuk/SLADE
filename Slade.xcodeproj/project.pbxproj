@@ -867,7 +867,7 @@
 		8AD5EC791778510400ADDE06 /* Lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lua.h; sourceTree = "<group>"; };
 		8AD5EC7A1778510400ADDE06 /* LumpFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LumpFormats.h; sourceTree = "<group>"; };
 		8AD5EC7B1778510400ADDE06 /* Main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
-		8AD5EC7C1778510400ADDE06 /* MainApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = MainApp.cpp; sourceTree = "<group>"; };
+		8AD5EC7C1778510400ADDE06 /* MainApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainApp.cpp; sourceTree = "<group>"; };
 		8AD5EC7D1778510400ADDE06 /* MainApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApp.h; sourceTree = "<group>"; };
 		8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindow.cpp; sourceTree = "<group>"; };
 		8AD5EC7F1778510400ADDE06 /* MainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
