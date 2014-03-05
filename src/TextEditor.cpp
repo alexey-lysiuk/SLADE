@@ -845,6 +845,10 @@ void TextEditor::onKeyDown(wxKeyEvent& e)
 		}
 	}
 
+#ifdef __WXMSW__
+	Colourise(GetCurrentPos(), GetLineEndPosition(GetCurrentLine()));
+#endif
+	
 #ifdef __APPLE__
 	if (!handled) {
 		const int  keyCode =   e.GetKeyCode();
