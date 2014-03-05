@@ -20,13 +20,8 @@
 		8A2152DB154BD645000E4252 /* libglib-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2152CE154BD645000E4252 /* libglib-2.0.a */; };
 		8A2152DE154BD645000E4252 /* libgthread-2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2152D1154BD645000E4252 /* libgthread-2.0.a */; };
 		8A21BD6B154BFD5100EDF9F0 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A21BD6A154BFD5100EDF9F0 /* libiconv.dylib */; };
-		8A26CD42154BDE470079A63E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD41154BDE470079A63E /* OpenGL.framework */; };
-		8A26CD57154BDE880079A63E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD56154BDE880079A63E /* OpenAL.framework */; };
-		8A26CD5B154BDEA00079A63E /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD5A154BDEA00079A63E /* CoreAudio.framework */; };
-		8A26CD61154BDEE70079A63E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD60154BDEE70079A63E /* IOKit.framework */; };
 		8A26CD63154BDEEC0079A63E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD62154BDEEC0079A63E /* Carbon.framework */; };
 		8A26CD67154BDF3B0079A63E /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD66154BDF3B0079A63E /* libbz2.dylib */; };
-		8A26CD69154BDF440079A63E /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CD68154BDF440079A63E /* CoreMIDI.framework */; };
 		8A26CEA8154BEDCF0079A63E /* 7zAlloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18E06154A8A9A00AB9C07 /* 7zAlloc.c */; };
 		8A26CEA9154BEDCF0079A63E /* 7zBuf.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18E08154A8A9A00AB9C07 /* 7zBuf.c */; };
 		8A26CEAA154BEDD00079A63E /* 7zBuf2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18E0A154A8A9A00AB9C07 /* 7zBuf2.c */; };
@@ -174,6 +169,37 @@
 		8A569327154EE501000DF3CE /* tables.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692FD154EE501000DF3CE /* tables.h */; };
 		8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */; };
 		8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909718533A4600C1EF18 /* RunDialog.cpp */; };
+		8A85B6CB18C7899F00E34667 /* libwx_baseu_net-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6B618C7899F00E34667 /* libwx_baseu_net-3.0.a */; };
+		8A85B6CC18C7899F00E34667 /* libwx_baseu_xml-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6B718C7899F00E34667 /* libwx_baseu_xml-3.0.a */; };
+		8A85B6CD18C7899F00E34667 /* libwx_baseu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6B818C7899F00E34667 /* libwx_baseu-3.0.a */; };
+		8A85B6CE18C7899F00E34667 /* libwx_osx_carbonu_adv-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6B918C7899F00E34667 /* libwx_osx_carbonu_adv-3.0.a */; };
+		8A85B6CF18C7899F00E34667 /* libwx_osx_carbonu_aui-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BA18C7899F00E34667 /* libwx_osx_carbonu_aui-3.0.a */; };
+		8A85B6D018C7899F00E34667 /* libwx_osx_carbonu_core-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BB18C7899F00E34667 /* libwx_osx_carbonu_core-3.0.a */; };
+		8A85B6D118C7899F00E34667 /* libwx_osx_carbonu_gl-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BC18C7899F00E34667 /* libwx_osx_carbonu_gl-3.0.a */; };
+		8A85B6D218C7899F00E34667 /* libwx_osx_carbonu_html-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BD18C7899F00E34667 /* libwx_osx_carbonu_html-3.0.a */; };
+		8A85B6D318C7899F00E34667 /* libwx_osx_carbonu_media-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BE18C7899F00E34667 /* libwx_osx_carbonu_media-3.0.a */; };
+		8A85B6D418C7899F00E34667 /* libwx_osx_carbonu_propgrid-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6BF18C7899F00E34667 /* libwx_osx_carbonu_propgrid-3.0.a */; };
+		8A85B6D518C7899F00E34667 /* libwx_osx_carbonu_qa-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C018C7899F00E34667 /* libwx_osx_carbonu_qa-3.0.a */; };
+		8A85B6D618C7899F00E34667 /* libwx_osx_carbonu_ribbon-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C118C7899F00E34667 /* libwx_osx_carbonu_ribbon-3.0.a */; };
+		8A85B6D718C7899F00E34667 /* libwx_osx_carbonu_richtext-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C218C7899F00E34667 /* libwx_osx_carbonu_richtext-3.0.a */; };
+		8A85B6D818C7899F00E34667 /* libwx_osx_carbonu_stc-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C318C7899F00E34667 /* libwx_osx_carbonu_stc-3.0.a */; };
+		8A85B6D918C7899F00E34667 /* libwx_osx_carbonu_webview-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C418C7899F00E34667 /* libwx_osx_carbonu_webview-3.0.a */; };
+		8A85B6DA18C7899F00E34667 /* libwx_osx_carbonu_xrc-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C518C7899F00E34667 /* libwx_osx_carbonu_xrc-3.0.a */; };
+		8A85B6DB18C789A000E34667 /* libwxjpeg-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C618C7899F00E34667 /* libwxjpeg-3.0.a */; };
+		8A85B6DC18C789A000E34667 /* libwxpng-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C718C7899F00E34667 /* libwxpng-3.0.a */; };
+		8A85B6DD18C789A000E34667 /* libwxregexu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C818C7899F00E34667 /* libwxregexu-3.0.a */; };
+		8A85B6DE18C789A000E34667 /* libwxscintilla-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6C918C7899F00E34667 /* libwxscintilla-3.0.a */; };
+		8A85B6DF18C789A000E34667 /* libwxtiff-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B6CA18C7899F00E34667 /* libwxtiff-3.0.a */; };
+		8A85B79A18C789B800E34667 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B79918C789B800E34667 /* Cocoa.framework */; };
+		8A85B7A218C78A0F00E34667 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B7A118C78A0F00E34667 /* OpenGL.framework */; };
+		8A85B7A418C78A1E00E34667 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B7A318C78A1E00E34667 /* IOKit.framework */; };
+		8A85B89018C78AF100E34667 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B88F18C78AF100E34667 /* QuickTime.framework */; };
+		8A85B89918C78B2300E34667 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B89818C78B2300E34667 /* AGL.framework */; };
+		8A85B89D18C78B5200E34667 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B89C18C78B5200E34667 /* CoreMIDI.framework */; };
+		8A85B8A118C78B7600E34667 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B8A018C78B7600E34667 /* OpenAL.framework */; };
+		8A85B8A518C78BB000E34667 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B8A418C78BB000E34667 /* CoreAudio.framework */; };
+		8A85B8AB18C78C4D00E34667 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B8AA18C78C4D00E34667 /* WebKit.framework */; };
+		8A85B8CC18C78C8600E34667 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A85B8CB18C78C8600E34667 /* AudioToolbox.framework */; };
 		8A880C0618533C56005DE572 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */; };
 		8A880C0718533C56005DE572 /* ActionSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */; };
 		8A880C0818533C56005DE572 /* ActionSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */; };
@@ -365,29 +391,6 @@
 		8A880CC218533C56005DE572 /* WxStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED591778510600ADDE06 /* WxStuff.cpp */; };
 		8A880CC318533C56005DE572 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5B1778510600ADDE06 /* ZipArchive.cpp */; };
 		8A880CC418533C56005DE572 /* ZTextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5D1778510600ADDE06 /* ZTextureEditorPanel.cpp */; };
-		8AAD20691839282A00E1C89E /* libwx_baseu_net-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */; };
-		8AAD206A1839282A00E1C89E /* libwx_baseu_xml-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */; };
-		8AAD206B1839282A00E1C89E /* libwx_baseu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */; };
-		8AAD206C1839282A00E1C89E /* libwx_osx_cocoau_adv-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20571839282A00E1C89E /* libwx_osx_cocoau_adv-3.0.a */; };
-		8AAD206D1839282A00E1C89E /* libwx_osx_cocoau_aui-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20581839282A00E1C89E /* libwx_osx_cocoau_aui-3.0.a */; };
-		8AAD206E1839282A00E1C89E /* libwx_osx_cocoau_core-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20591839282A00E1C89E /* libwx_osx_cocoau_core-3.0.a */; };
-		8AAD206F1839282A00E1C89E /* libwx_osx_cocoau_gl-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205A1839282A00E1C89E /* libwx_osx_cocoau_gl-3.0.a */; };
-		8AAD20701839282A00E1C89E /* libwx_osx_cocoau_html-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205B1839282A00E1C89E /* libwx_osx_cocoau_html-3.0.a */; };
-		8AAD20711839282A00E1C89E /* libwx_osx_cocoau_media-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205C1839282A00E1C89E /* libwx_osx_cocoau_media-3.0.a */; };
-		8AAD20721839282A00E1C89E /* libwx_osx_cocoau_propgrid-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205D1839282A00E1C89E /* libwx_osx_cocoau_propgrid-3.0.a */; };
-		8AAD20731839282A00E1C89E /* libwx_osx_cocoau_qa-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205E1839282A00E1C89E /* libwx_osx_cocoau_qa-3.0.a */; };
-		8AAD20741839282A00E1C89E /* libwx_osx_cocoau_ribbon-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD205F1839282A00E1C89E /* libwx_osx_cocoau_ribbon-3.0.a */; };
-		8AAD20751839282A00E1C89E /* libwx_osx_cocoau_richtext-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20601839282A00E1C89E /* libwx_osx_cocoau_richtext-3.0.a */; };
-		8AAD20761839282A00E1C89E /* libwx_osx_cocoau_stc-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20611839282A00E1C89E /* libwx_osx_cocoau_stc-3.0.a */; };
-		8AAD20771839282B00E1C89E /* libwx_osx_cocoau_webview-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20621839282A00E1C89E /* libwx_osx_cocoau_webview-3.0.a */; };
-		8AAD20781839282B00E1C89E /* libwx_osx_cocoau_xrc-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20631839282A00E1C89E /* libwx_osx_cocoau_xrc-3.0.a */; };
-		8AAD20791839282B00E1C89E /* libwxjpeg-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20641839282A00E1C89E /* libwxjpeg-3.0.a */; };
-		8AAD207A1839282B00E1C89E /* libwxpng-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20651839282A00E1C89E /* libwxpng-3.0.a */; };
-		8AAD207B1839282B00E1C89E /* libwxregexu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20661839282A00E1C89E /* libwxregexu-3.0.a */; };
-		8AAD207C1839282B00E1C89E /* libwxscintilla-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */; };
-		8AAD207D1839282B00E1C89E /* libwxtiff-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */; };
-		8AAD208B18392A1300E1C89E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD208A18392A1300E1C89E /* QTKit.framework */; };
-		8AAD20DE183933B800E1C89E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20DD183933B800E1C89E /* WebKit.framework */; };
 		8AD18A56154A8A7000AB9C07 /* SLADE-osx.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8AD18A54154A8A7000AB9C07 /* SLADE-osx.icns */; };
 		8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18D9D154A8A9A00AB9C07 /* cl_aui_notebook_art.cpp */; };
 		8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18E89154A8A9B00AB9C07 /* mus2mid.cpp */; };
@@ -403,7 +406,6 @@
 		8AE371EA154D581E00D88A7F /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371E9154D581E00D88A7F /* libFLAC.a */; };
 		8AE371EE154D585A00D88A7F /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371ED154D585A00D88A7F /* libvorbisenc.a */; };
 		8AE87B26154BF66400A41E61 /* liblzma_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CEA1154BEDA10079A63E /* liblzma_slade.a */; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -431,7 +433,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8A103248154AF4BE00D4393F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapChecksPanel.cpp; sourceTree = "<group>"; };
 		8A122A10185471A7009C4BBB /* MapChecksPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapChecksPanel.h; sourceTree = "<group>"; };
@@ -447,13 +448,8 @@
 		8A2152CE154BD645000E4252 /* libglib-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglib-2.0.a"; path = "thirdparty/GTK/lib/libglib-2.0.a"; sourceTree = "<group>"; };
 		8A2152D1154BD645000E4252 /* libgthread-2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgthread-2.0.a"; path = "thirdparty/GTK/lib/libgthread-2.0.a"; sourceTree = "<group>"; };
 		8A21BD6A154BFD5100EDF9F0 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		8A26CD41154BDE470079A63E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		8A26CD56154BDE880079A63E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
-		8A26CD5A154BDEA00079A63E /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		8A26CD60154BDEE70079A63E /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		8A26CD62154BDEEC0079A63E /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		8A26CD66154BDF3B0079A63E /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
-		8A26CD68154BDF440079A63E /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		8A26CEA1154BEDA10079A63E /* liblzma_slade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblzma_slade.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3DC2B315DFBAF900E0AE2F /* liblua_slade.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblua_slade.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3DC2BF15DFBBE000E0AE2F /* lapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lapi.c; sourceTree = "<group>"; };
@@ -587,33 +583,41 @@
 		8A60909218533A3D00C1EF18 /* ResourceArchiveChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceArchiveChooser.h; sourceTree = "<group>"; };
 		8A60909718533A4600C1EF18 /* RunDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RunDialog.cpp; sourceTree = "<group>"; };
 		8A60909818533A4600C1EF18 /* RunDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunDialog.h; sourceTree = "<group>"; };
-		8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_net-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_net-3.0.a"; sourceTree = "<group>"; };
-		8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_xml-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_xml-3.0.a"; sourceTree = "<group>"; };
-		8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu-3.0.a"; sourceTree = "<group>"; };
-		8AAD20571839282A00E1C89E /* libwx_osx_cocoau_adv-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_adv-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_adv-3.0.a"; sourceTree = "<group>"; };
-		8AAD20581839282A00E1C89E /* libwx_osx_cocoau_aui-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_aui-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_aui-3.0.a"; sourceTree = "<group>"; };
-		8AAD20591839282A00E1C89E /* libwx_osx_cocoau_core-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_core-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_core-3.0.a"; sourceTree = "<group>"; };
-		8AAD205A1839282A00E1C89E /* libwx_osx_cocoau_gl-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_gl-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_gl-3.0.a"; sourceTree = "<group>"; };
-		8AAD205B1839282A00E1C89E /* libwx_osx_cocoau_html-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_html-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_html-3.0.a"; sourceTree = "<group>"; };
-		8AAD205C1839282A00E1C89E /* libwx_osx_cocoau_media-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_media-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_media-3.0.a"; sourceTree = "<group>"; };
-		8AAD205D1839282A00E1C89E /* libwx_osx_cocoau_propgrid-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_propgrid-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_propgrid-3.0.a"; sourceTree = "<group>"; };
-		8AAD205E1839282A00E1C89E /* libwx_osx_cocoau_qa-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_qa-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_qa-3.0.a"; sourceTree = "<group>"; };
-		8AAD205F1839282A00E1C89E /* libwx_osx_cocoau_ribbon-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_ribbon-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_ribbon-3.0.a"; sourceTree = "<group>"; };
-		8AAD20601839282A00E1C89E /* libwx_osx_cocoau_richtext-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_richtext-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_richtext-3.0.a"; sourceTree = "<group>"; };
-		8AAD20611839282A00E1C89E /* libwx_osx_cocoau_stc-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_stc-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_stc-3.0.a"; sourceTree = "<group>"; };
-		8AAD20621839282A00E1C89E /* libwx_osx_cocoau_webview-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_webview-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_webview-3.0.a"; sourceTree = "<group>"; };
-		8AAD20631839282A00E1C89E /* libwx_osx_cocoau_xrc-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_cocoau_xrc-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_cocoau_xrc-3.0.a"; sourceTree = "<group>"; };
-		8AAD20641839282A00E1C89E /* libwxjpeg-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxjpeg-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxjpeg-3.0.a"; sourceTree = "<group>"; };
-		8AAD20651839282A00E1C89E /* libwxpng-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxpng-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxpng-3.0.a"; sourceTree = "<group>"; };
-		8AAD20661839282A00E1C89E /* libwxregexu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxregexu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxregexu-3.0.a"; sourceTree = "<group>"; };
-		8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxscintilla-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxscintilla-3.0.a"; sourceTree = "<group>"; };
-		8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxtiff-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxtiff-3.0.a"; sourceTree = "<group>"; };
-		8AAD208A18392A1300E1C89E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		8A85B6B618C7899F00E34667 /* libwx_baseu_net-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_net-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_net-3.0.a"; sourceTree = "<group>"; };
+		8A85B6B718C7899F00E34667 /* libwx_baseu_xml-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_xml-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_xml-3.0.a"; sourceTree = "<group>"; };
+		8A85B6B818C7899F00E34667 /* libwx_baseu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu-3.0.a"; sourceTree = "<group>"; };
+		8A85B6B918C7899F00E34667 /* libwx_osx_carbonu_adv-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_adv-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_adv-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BA18C7899F00E34667 /* libwx_osx_carbonu_aui-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_aui-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_aui-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BB18C7899F00E34667 /* libwx_osx_carbonu_core-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_core-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_core-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BC18C7899F00E34667 /* libwx_osx_carbonu_gl-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_gl-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_gl-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BD18C7899F00E34667 /* libwx_osx_carbonu_html-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_html-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_html-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BE18C7899F00E34667 /* libwx_osx_carbonu_media-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_media-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_media-3.0.a"; sourceTree = "<group>"; };
+		8A85B6BF18C7899F00E34667 /* libwx_osx_carbonu_propgrid-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_propgrid-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_propgrid-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C018C7899F00E34667 /* libwx_osx_carbonu_qa-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_qa-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_qa-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C118C7899F00E34667 /* libwx_osx_carbonu_ribbon-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_ribbon-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_ribbon-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C218C7899F00E34667 /* libwx_osx_carbonu_richtext-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_richtext-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_richtext-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C318C7899F00E34667 /* libwx_osx_carbonu_stc-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_stc-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_stc-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C418C7899F00E34667 /* libwx_osx_carbonu_webview-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_webview-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_webview-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C518C7899F00E34667 /* libwx_osx_carbonu_xrc-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_osx_carbonu_xrc-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_osx_carbonu_xrc-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C618C7899F00E34667 /* libwxjpeg-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxjpeg-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxjpeg-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C718C7899F00E34667 /* libwxpng-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxpng-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxpng-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C818C7899F00E34667 /* libwxregexu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxregexu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxregexu-3.0.a"; sourceTree = "<group>"; };
+		8A85B6C918C7899F00E34667 /* libwxscintilla-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxscintilla-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxscintilla-3.0.a"; sourceTree = "<group>"; };
+		8A85B6CA18C7899F00E34667 /* libwxtiff-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwxtiff-3.0.a"; path = "thirdparty/wxWidgets/lib/libwxtiff-3.0.a"; sourceTree = "<group>"; };
+		8A85B79918C789B800E34667 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		8A85B7A118C78A0F00E34667 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		8A85B7A318C78A1E00E34667 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		8A85B88F18C78AF100E34667 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		8A85B89818C78B2300E34667 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
+		8A85B89C18C78B5200E34667 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		8A85B8A018C78B7600E34667 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
+		8A85B8A418C78BB000E34667 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		8A85B8AA18C78C4D00E34667 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		8A85B8CB18C78C8600E34667 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectEdit.cpp; sourceTree = "<group>"; };
 		8AAD20D5183931E800E1C89E /* ObjectEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectEdit.h; sourceTree = "<group>"; };
 		8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectEditPanel.cpp; sourceTree = "<group>"; };
 		8AAD20D7183931E800E1C89E /* ObjectEditPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectEditPanel.h; sourceTree = "<group>"; };
-		8AAD20DD183933B800E1C89E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		8AD18A54154A8A7000AB9C07 /* SLADE-osx.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "SLADE-osx.icns"; sourceTree = "<group>"; };
 		8AD18D9D154A8A9A00AB9C07 /* cl_aui_notebook_art.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cl_aui_notebook_art.cpp; sourceTree = "<group>"; };
 		8AD18D9E154A8A9A00AB9C07 /* cl_aui_notebook_art.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cl_aui_notebook_art.h; sourceTree = "<group>"; };
@@ -1123,12 +1127,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A26CD63154BDEEC0079A63E /* Carbon.framework in Frameworks */,
-				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				8A26CD5B154BDEA00079A63E /* CoreAudio.framework in Frameworks */,
-				8A26CD69154BDF440079A63E /* CoreMIDI.framework in Frameworks */,
-				8A26CD61154BDEE70079A63E /* IOKit.framework in Frameworks */,
-				8A26CD57154BDE880079A63E /* OpenAL.framework in Frameworks */,
-				8A26CD42154BDE470079A63E /* OpenGL.framework in Frameworks */,
 				8A26CD67154BDF3B0079A63E /* libbz2.dylib in Frameworks */,
 				8A21BD6B154BFD5100EDF9F0 /* libiconv.dylib in Frameworks */,
 				8AE371EA154D581E00D88A7F /* libFLAC.a in Frameworks */,
@@ -1151,29 +1149,37 @@
 				8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */,
 				8AE87B26154BF66400A41E61 /* liblzma_slade.a in Frameworks */,
 				8A3DC2BC15DFBB9500E0AE2F /* liblua_slade.a in Frameworks */,
-				8AAD20691839282A00E1C89E /* libwx_baseu_net-3.0.a in Frameworks */,
-				8AAD206A1839282A00E1C89E /* libwx_baseu_xml-3.0.a in Frameworks */,
-				8AAD206B1839282A00E1C89E /* libwx_baseu-3.0.a in Frameworks */,
-				8AAD206C1839282A00E1C89E /* libwx_osx_cocoau_adv-3.0.a in Frameworks */,
-				8AAD206D1839282A00E1C89E /* libwx_osx_cocoau_aui-3.0.a in Frameworks */,
-				8AAD206E1839282A00E1C89E /* libwx_osx_cocoau_core-3.0.a in Frameworks */,
-				8AAD206F1839282A00E1C89E /* libwx_osx_cocoau_gl-3.0.a in Frameworks */,
-				8AAD20701839282A00E1C89E /* libwx_osx_cocoau_html-3.0.a in Frameworks */,
-				8AAD20711839282A00E1C89E /* libwx_osx_cocoau_media-3.0.a in Frameworks */,
-				8AAD20721839282A00E1C89E /* libwx_osx_cocoau_propgrid-3.0.a in Frameworks */,
-				8AAD20731839282A00E1C89E /* libwx_osx_cocoau_qa-3.0.a in Frameworks */,
-				8AAD20741839282A00E1C89E /* libwx_osx_cocoau_ribbon-3.0.a in Frameworks */,
-				8AAD20751839282A00E1C89E /* libwx_osx_cocoau_richtext-3.0.a in Frameworks */,
-				8AAD20761839282A00E1C89E /* libwx_osx_cocoau_stc-3.0.a in Frameworks */,
-				8AAD20771839282B00E1C89E /* libwx_osx_cocoau_webview-3.0.a in Frameworks */,
-				8AAD20781839282B00E1C89E /* libwx_osx_cocoau_xrc-3.0.a in Frameworks */,
-				8AAD20791839282B00E1C89E /* libwxjpeg-3.0.a in Frameworks */,
-				8AAD207A1839282B00E1C89E /* libwxpng-3.0.a in Frameworks */,
-				8AAD207B1839282B00E1C89E /* libwxregexu-3.0.a in Frameworks */,
-				8AAD207C1839282B00E1C89E /* libwxscintilla-3.0.a in Frameworks */,
-				8AAD207D1839282B00E1C89E /* libwxtiff-3.0.a in Frameworks */,
-				8AAD208B18392A1300E1C89E /* QTKit.framework in Frameworks */,
-				8AAD20DE183933B800E1C89E /* WebKit.framework in Frameworks */,
+				8A85B6CB18C7899F00E34667 /* libwx_baseu_net-3.0.a in Frameworks */,
+				8A85B6CC18C7899F00E34667 /* libwx_baseu_xml-3.0.a in Frameworks */,
+				8A85B6CD18C7899F00E34667 /* libwx_baseu-3.0.a in Frameworks */,
+				8A85B6CE18C7899F00E34667 /* libwx_osx_carbonu_adv-3.0.a in Frameworks */,
+				8A85B6CF18C7899F00E34667 /* libwx_osx_carbonu_aui-3.0.a in Frameworks */,
+				8A85B6D018C7899F00E34667 /* libwx_osx_carbonu_core-3.0.a in Frameworks */,
+				8A85B6D118C7899F00E34667 /* libwx_osx_carbonu_gl-3.0.a in Frameworks */,
+				8A85B6D218C7899F00E34667 /* libwx_osx_carbonu_html-3.0.a in Frameworks */,
+				8A85B6D318C7899F00E34667 /* libwx_osx_carbonu_media-3.0.a in Frameworks */,
+				8A85B6D418C7899F00E34667 /* libwx_osx_carbonu_propgrid-3.0.a in Frameworks */,
+				8A85B6D518C7899F00E34667 /* libwx_osx_carbonu_qa-3.0.a in Frameworks */,
+				8A85B6D618C7899F00E34667 /* libwx_osx_carbonu_ribbon-3.0.a in Frameworks */,
+				8A85B6D718C7899F00E34667 /* libwx_osx_carbonu_richtext-3.0.a in Frameworks */,
+				8A85B6D818C7899F00E34667 /* libwx_osx_carbonu_stc-3.0.a in Frameworks */,
+				8A85B6D918C7899F00E34667 /* libwx_osx_carbonu_webview-3.0.a in Frameworks */,
+				8A85B6DA18C7899F00E34667 /* libwx_osx_carbonu_xrc-3.0.a in Frameworks */,
+				8A85B6DB18C789A000E34667 /* libwxjpeg-3.0.a in Frameworks */,
+				8A85B6DC18C789A000E34667 /* libwxpng-3.0.a in Frameworks */,
+				8A85B6DD18C789A000E34667 /* libwxregexu-3.0.a in Frameworks */,
+				8A85B6DE18C789A000E34667 /* libwxscintilla-3.0.a in Frameworks */,
+				8A85B6DF18C789A000E34667 /* libwxtiff-3.0.a in Frameworks */,
+				8A85B79A18C789B800E34667 /* Cocoa.framework in Frameworks */,
+				8A85B7A218C78A0F00E34667 /* OpenGL.framework in Frameworks */,
+				8A85B7A418C78A1E00E34667 /* IOKit.framework in Frameworks */,
+				8A85B89018C78AF100E34667 /* QuickTime.framework in Frameworks */,
+				8A85B89918C78B2300E34667 /* AGL.framework in Frameworks */,
+				8A85B89D18C78B5200E34667 /* CoreMIDI.framework in Frameworks */,
+				8A85B8A118C78B7600E34667 /* OpenAL.framework in Frameworks */,
+				8A85B8A518C78BB000E34667 /* CoreAudio.framework in Frameworks */,
+				8A85B8AB18C78C4D00E34667 /* WebKit.framework in Frameworks */,
+				8A85B8CC18C78C8600E34667 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1642,15 +1648,17 @@
 		29B97323FDCFA39411CA2CEA /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				8A85B89818C78B2300E34667 /* AGL.framework */,
+				8A85B8CB18C78C8600E34667 /* AudioToolbox.framework */,
 				8A26CD62154BDEEC0079A63E /* Carbon.framework */,
-				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
-				8A26CD5A154BDEA00079A63E /* CoreAudio.framework */,
-				8A26CD68154BDF440079A63E /* CoreMIDI.framework */,
-				8A26CD60154BDEE70079A63E /* IOKit.framework */,
-				8A26CD56154BDE880079A63E /* OpenAL.framework */,
-				8A26CD41154BDE470079A63E /* OpenGL.framework */,
-				8AAD208A18392A1300E1C89E /* QTKit.framework */,
-				8AAD20DD183933B800E1C89E /* WebKit.framework */,
+				8A85B79918C789B800E34667 /* Cocoa.framework */,
+				8A85B8A418C78BB000E34667 /* CoreAudio.framework */,
+				8A85B89C18C78B5200E34667 /* CoreMIDI.framework */,
+				8A85B7A318C78A1E00E34667 /* IOKit.framework */,
+				8A85B7A118C78A0F00E34667 /* OpenGL.framework */,
+				8A85B88F18C78AF100E34667 /* QuickTime.framework */,
+				8A85B8A018C78B7600E34667 /* OpenAL.framework */,
+				8A85B8AA18C78C4D00E34667 /* WebKit.framework */,
 				8A26CD66154BDF3B0079A63E /* libbz2.dylib */,
 				8A21BD6A154BFD5100EDF9F0 /* libiconv.dylib */,
 				8AE371E9154D581E00D88A7F /* libFLAC.a */,
@@ -1670,27 +1678,27 @@
 				8AE3700F154D53AE00D88A7F /* libsndfile.a */,
 				8AE371E5154D580600D88A7F /* libvorbis.a */,
 				8AE371ED154D585A00D88A7F /* libvorbisenc.a */,
-				8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */,
-				8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */,
-				8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */,
-				8AAD20571839282A00E1C89E /* libwx_osx_cocoau_adv-3.0.a */,
-				8AAD20581839282A00E1C89E /* libwx_osx_cocoau_aui-3.0.a */,
-				8AAD20591839282A00E1C89E /* libwx_osx_cocoau_core-3.0.a */,
-				8AAD205A1839282A00E1C89E /* libwx_osx_cocoau_gl-3.0.a */,
-				8AAD205B1839282A00E1C89E /* libwx_osx_cocoau_html-3.0.a */,
-				8AAD205C1839282A00E1C89E /* libwx_osx_cocoau_media-3.0.a */,
-				8AAD205D1839282A00E1C89E /* libwx_osx_cocoau_propgrid-3.0.a */,
-				8AAD205E1839282A00E1C89E /* libwx_osx_cocoau_qa-3.0.a */,
-				8AAD205F1839282A00E1C89E /* libwx_osx_cocoau_ribbon-3.0.a */,
-				8AAD20601839282A00E1C89E /* libwx_osx_cocoau_richtext-3.0.a */,
-				8AAD20611839282A00E1C89E /* libwx_osx_cocoau_stc-3.0.a */,
-				8AAD20621839282A00E1C89E /* libwx_osx_cocoau_webview-3.0.a */,
-				8AAD20631839282A00E1C89E /* libwx_osx_cocoau_xrc-3.0.a */,
-				8AAD20641839282A00E1C89E /* libwxjpeg-3.0.a */,
-				8AAD20651839282A00E1C89E /* libwxpng-3.0.a */,
-				8AAD20661839282A00E1C89E /* libwxregexu-3.0.a */,
-				8AAD20671839282A00E1C89E /* libwxscintilla-3.0.a */,
-				8AAD20681839282A00E1C89E /* libwxtiff-3.0.a */,
+				8A85B6B618C7899F00E34667 /* libwx_baseu_net-3.0.a */,
+				8A85B6B718C7899F00E34667 /* libwx_baseu_xml-3.0.a */,
+				8A85B6B818C7899F00E34667 /* libwx_baseu-3.0.a */,
+				8A85B6B918C7899F00E34667 /* libwx_osx_carbonu_adv-3.0.a */,
+				8A85B6BA18C7899F00E34667 /* libwx_osx_carbonu_aui-3.0.a */,
+				8A85B6BB18C7899F00E34667 /* libwx_osx_carbonu_core-3.0.a */,
+				8A85B6BC18C7899F00E34667 /* libwx_osx_carbonu_gl-3.0.a */,
+				8A85B6BD18C7899F00E34667 /* libwx_osx_carbonu_html-3.0.a */,
+				8A85B6BE18C7899F00E34667 /* libwx_osx_carbonu_media-3.0.a */,
+				8A85B6BF18C7899F00E34667 /* libwx_osx_carbonu_propgrid-3.0.a */,
+				8A85B6C018C7899F00E34667 /* libwx_osx_carbonu_qa-3.0.a */,
+				8A85B6C118C7899F00E34667 /* libwx_osx_carbonu_ribbon-3.0.a */,
+				8A85B6C218C7899F00E34667 /* libwx_osx_carbonu_richtext-3.0.a */,
+				8A85B6C318C7899F00E34667 /* libwx_osx_carbonu_stc-3.0.a */,
+				8A85B6C418C7899F00E34667 /* libwx_osx_carbonu_webview-3.0.a */,
+				8A85B6C518C7899F00E34667 /* libwx_osx_carbonu_xrc-3.0.a */,
+				8A85B6C618C7899F00E34667 /* libwxjpeg-3.0.a */,
+				8A85B6C718C7899F00E34667 /* libwxpng-3.0.a */,
+				8A85B6C818C7899F00E34667 /* libwxregexu-3.0.a */,
+				8A85B6C918C7899F00E34667 /* libwxscintilla-3.0.a */,
+				8A85B6CA18C7899F00E34667 /* libwxtiff-3.0.a */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -2635,7 +2643,7 @@
 					"_FILE_OFFSET_BITS=64",
 					__WXMAC__,
 					__WXOSX__,
-					__WXOSX_COCOA__,
+					__WXOSX_CARBON__,
 					__WX__,
 					NO_AUDIERE,
 					"BOOL=int",
@@ -2670,6 +2678,8 @@
 					thirdparty/sndfile/lib,
 					thirdparty/vorbis/lib,
 					thirdparty/wxWidgets/lib,
+					"\"$(SRCROOT)/../wxWidgets/build/osx/build/Release\"",
+					"\"$(SRCROOT)/thirdparty/wxWidgets/lib\"",
 				);
 				PRODUCT_NAME = Slade;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/PrecompiledHeaders";
@@ -2689,7 +2699,7 @@
 					"_FILE_OFFSET_BITS=64",
 					__WXMAC__,
 					__WXOSX__,
-					__WXOSX_COCOA__,
+					__WXOSX_CARBON__,
 					__WX__,
 					NO_AUDIERE,
 					"BOOL=int",
@@ -2724,6 +2734,8 @@
 					thirdparty/sndfile/lib,
 					thirdparty/vorbis/lib,
 					thirdparty/wxWidgets/lib,
+					"\"$(SRCROOT)/../wxWidgets/build/osx/build/Release\"",
+					"\"$(SRCROOT)/thirdparty/wxWidgets/lib\"",
 				);
 				PRODUCT_NAME = Slade;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)/PrecompiledHeaders";

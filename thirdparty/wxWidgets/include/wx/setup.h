@@ -1,4 +1,4 @@
-/* lib/wx/include/osx_cocoa-unicode-static-3.0/wx/setup.h.  Generated from setup.h.in by configure.  */
+/* lib/wx/include/osx_carbon-unicode-static-3.0/wx/setup.h.  Generated from setup.h.in by configure.  */
 /* This define (__WX_SETUP_H__) is used both to ensure setup.h is included
  * only once and to indicate that we are building using configure. */
 #ifndef __WX_SETUP_H__
@@ -19,7 +19,7 @@
 #define WXWIN_OS_DESCRIPTION "Darwin 10.8.0 i386"
 
 /* the installation location prefix from configure */
-#define wxINSTALL_PREFIX "/Volumes/Storage/Work/wxWidgets-install"
+#define wxINSTALL_PREFIX "/Volumes/Storage/Work/wxWidgets/__inst"
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 /* #undef gid_t */
