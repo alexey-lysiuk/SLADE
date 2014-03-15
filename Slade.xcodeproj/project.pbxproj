@@ -175,11 +175,9 @@
 		8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */; };
 		8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909718533A4600C1EF18 /* RunDialog.cpp */; };
 		8A73D16118CC72670099A1BB /* ShowItemDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D15F18CC72360099A1BB /* ShowItemDialog.cpp */; };
-		8A880C0618533C56005DE572 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */; };
 		8A880C0718533C56005DE572 /* ActionSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */; };
 		8A880C0818533C56005DE572 /* ActionSpecialDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */; };
 		8A880C0918533C56005DE572 /* ADatArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDB1778510400ADDE06 /* ADatArchive.cpp */; };
-		8A880C0A18533C56005DE572 /* AdvancedPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDD1778510400ADDE06 /* AdvancedPrefsPanel.cpp */; };
 		8A880C0B18533C56005DE572 /* AnimatedEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBDF1778510400ADDE06 /* AnimatedEntryPanel.cpp */; };
 		8A880C0C18533C56005DE572 /* AnimatedList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE11778510400ADDE06 /* AnimatedList.cpp */; };
 		8A880C0D18533C56005DE572 /* ANSICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBE31778510400ADDE06 /* ANSICanvas.cpp */; };
@@ -192,8 +190,6 @@
 		8A880C1418533C56005DE572 /* ArchiveOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF21778510400ADDE06 /* ArchiveOperations.cpp */; };
 		8A880C1518533C56005DE572 /* ArchivePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF41778510400ADDE06 /* ArchivePanel.cpp */; };
 		8A880C1618533C56005DE572 /* AudioEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBF81778510400ADDE06 /* AudioEntryPanel.cpp */; };
-		8A880C1718533C56005DE572 /* AudioPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFB1778510400ADDE06 /* AudioPrefsPanel.cpp */; };
-		8A880C1818533C56005DE572 /* BaseResourceArchivesPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFD1778510400ADDE06 /* BaseResourceArchivesPanel.cpp */; };
 		8A880C1918533C56005DE572 /* BaseResourceChooser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EBFF1778510400ADDE06 /* BaseResourceChooser.cpp */; };
 		8A880C1A18533C56005DE572 /* BrowserCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC021778510400ADDE06 /* BrowserCanvas.cpp */; };
 		8A880C1B18533C56005DE572 /* BrowserItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC041778510400ADDE06 /* BrowserItem.cpp */; };
@@ -203,10 +199,8 @@
 		8A880C1F18533C56005DE572 /* CIEDeltaEquations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0C1778510400ADDE06 /* CIEDeltaEquations.cpp */; };
 		8A880C2018533C56005DE572 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC0E1778510400ADDE06 /* Clipboard.cpp */; };
 		8A880C2118533C56005DE572 /* CodePages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC111778510400ADDE06 /* CodePages.cpp */; };
-		8A880C2218533C56005DE572 /* ColorimetryPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC131778510400ADDE06 /* ColorimetryPrefsPanel.cpp */; };
 		8A880C2318533C56005DE572 /* ColourBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC151778510400ADDE06 /* ColourBox.cpp */; };
 		8A880C2418533C56005DE572 /* ColourConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC171778510400ADDE06 /* ColourConfiguration.cpp */; };
-		8A880C2518533C56005DE572 /* ColourPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC191778510400ADDE06 /* ColourPrefsPanel.cpp */; };
 		8A880C2618533C56005DE572 /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1B1778510400ADDE06 /* Compression.cpp */; };
 		8A880C2718533C56005DE572 /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC1D1778510400ADDE06 /* Console.cpp */; };
 		8A880C2818533C56005DE572 /* ConsolePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC201778510400ADDE06 /* ConsolePanel.cpp */; };
@@ -219,7 +213,6 @@
 		8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC2F1778510400ADDE06 /* DiskArchive.cpp */; };
 		8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC311778510400ADDE06 /* DockPanel.cpp */; };
 		8A880C3118533C56005DE572 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC331778510400ADDE06 /* Drawing.cpp */; };
-		8A880C3218533C56005DE572 /* EditingPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC351778510400ADDE06 /* EditingPrefsPanel.cpp */; };
 		8A880C3318533C56005DE572 /* EntryDataFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */; };
 		8A880C3418533C56005DE572 /* EntryOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC391778510400ADDE06 /* EntryOperations.cpp */; };
 		8A880C3518533C56005DE572 /* EntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3B1778510400ADDE06 /* EntryPanel.cpp */; };
@@ -228,7 +221,6 @@
 		8A880C3818533C56005DE572 /* ExtMessageDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC3F1778510400ADDE06 /* ExtMessageDialog.cpp */; };
 		8A880C3918533C56005DE572 /* FileMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC411778510400ADDE06 /* FileMonitor.cpp */; };
 		8A880C3A18533C56005DE572 /* GameConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC431778510400ADDE06 /* GameConfiguration.cpp */; };
-		8A880C3B18533C56005DE572 /* GeneralPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC451778510400ADDE06 /* GeneralPrefsPanel.cpp */; };
 		8A880C3C18533C56005DE572 /* GenLineSpecial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC471778510400ADDE06 /* GenLineSpecial.cpp */; };
 		8A880C3D18533C56005DE572 /* GenLineSpecialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC491778510400ADDE06 /* GenLineSpecialPanel.cpp */; };
 		8A880C3E18533C56005DE572 /* GfxCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4B1778510400ADDE06 /* GfxCanvas.cpp */; };
@@ -236,7 +228,6 @@
 		8A880C4018533C56005DE572 /* GfxEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC4F1778510400ADDE06 /* GfxEntryPanel.cpp */; };
 		8A880C4118533C56005DE572 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC511778510400ADDE06 /* GLTexture.cpp */; };
 		8A880C4218533C56005DE572 /* GobArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC531778510400ADDE06 /* GobArchive.cpp */; };
-		8A880C4318533C56005DE572 /* GraphicsPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC551778510400ADDE06 /* GraphicsPrefsPanel.cpp */; };
 		8A880C4418533C56005DE572 /* GrpArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC571778510400ADDE06 /* GrpArchive.cpp */; };
 		8A880C4518533C56005DE572 /* GZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC591778510400ADDE06 /* GZipArchive.cpp */; };
 		8A880C4618533C56005DE572 /* HexEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5B1778510400ADDE06 /* HexEditorPanel.cpp */; };
@@ -244,8 +235,6 @@
 		8A880C4818533C56005DE572 /* HogArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC5F1778510400ADDE06 /* HogArchive.cpp */; };
 		8A880C4918533C56005DE572 /* Icons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC611778510400ADDE06 /* Icons.cpp */; };
 		8A880C4A18533C56005DE572 /* InfoOverlay3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC641778510400ADDE06 /* InfoOverlay3d.cpp */; };
-		8A880C4B18533C56005DE572 /* InputPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC661778510400ADDE06 /* InputPrefsPanel.cpp */; };
-		8A880C4C18533C56005DE572 /* InterfacePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC681778510400ADDE06 /* InterfacePrefsPanel.cpp */; };
 		8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6A1778510400ADDE06 /* KeyBind.cpp */; };
 		8A880C4E18533C56005DE572 /* LfdArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6C1778510400ADDE06 /* LfdArchive.cpp */; };
 		8A880C4F18533C56005DE572 /* LibArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC6E1778510400ADDE06 /* LibArchive.cpp */; };
@@ -256,13 +245,10 @@
 		8A880C5418533C56005DE572 /* Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC781778510400ADDE06 /* Lua.cpp */; };
 		8A880C5518533C56005DE572 /* MainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7C1778510400ADDE06 /* MainApp.cpp */; };
 		8A880C5618533C56005DE572 /* MainWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */; };
-		8A880C5718533C56005DE572 /* Map3DPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC801778510500ADDE06 /* Map3DPrefsPanel.cpp */; };
 		8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC821778510500ADDE06 /* MapCanvas.cpp */; };
 		8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60908D18533A3D00C1EF18 /* MapChecks.cpp */; };
-		8A880C5A18533C56005DE572 /* MapDisplayPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */; };
 		8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC861778510500ADDE06 /* MapEditor.cpp */; };
 		8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC881778510500ADDE06 /* MapEditorConfigDialog.cpp */; };
-		8A880C5D18533C56005DE572 /* MapEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8A1778510500ADDE06 /* MapEditorPrefsPanel.cpp */; };
 		8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8C1778510500ADDE06 /* MapEditorWindow.cpp */; };
 		8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC8E1778510500ADDE06 /* MapEntryPanel.cpp */; };
 		8A880C6018533C56005DE572 /* MapLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5EC901778510500ADDE06 /* MapLine.cpp */; };
@@ -287,7 +273,6 @@
 		8A880C7318533C56005DE572 /* ModifyOffsetsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB71778510500ADDE06 /* ModifyOffsetsDialog.cpp */; };
 		8A880C7418533C56005DE572 /* MOPGProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECB91778510500ADDE06 /* MOPGProperty.cpp */; };
 		8A880C7518533C56005DE572 /* NodeBuilders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */; };
-		8A880C7618533C56005DE572 /* NodesPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */; };
 		8A880C7718533C56005DE572 /* ObjectEdit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */; };
 		8A880C7818533C56005DE572 /* ObjectEditPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */; };
 		8A880C7918533C56005DE572 /* OGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECBF1778510500ADDE06 /* OGLCanvas.cpp */; };
@@ -305,9 +290,7 @@
 		8A880C8518533C56005DE572 /* PatchTablePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECD81778510500ADDE06 /* PatchTablePanel.cpp */; };
 		8A880C8618533C56005DE572 /* PnamesEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDA1778510500ADDE06 /* PnamesEntryPanel.cpp */; };
 		8A880C8718533C56005DE572 /* PnamesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDC1778510500ADDE06 /* PnamesList.cpp */; };
-		8A880C8818533C56005DE572 /* PNGPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECDE1778510500ADDE06 /* PNGPrefsPanel.cpp */; };
 		8A880C8918533C56005DE572 /* Polygon2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE01778510500ADDE06 /* Polygon2D.cpp */; };
-		8A880C8A18533C56005DE572 /* PreferencesDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE21778510500ADDE06 /* PreferencesDialog.cpp */; };
 		8A880C8B18533C56005DE572 /* Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE51778510500ADDE06 /* Property.cpp */; };
 		8A880C8C18533C56005DE572 /* PropertyEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE71778510500ADDE06 /* PropertyEditorPanel.cpp */; };
 		8A880C8D18533C56005DE572 /* PropertyList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ECE91778510500ADDE06 /* PropertyList.cpp */; };
@@ -337,11 +320,9 @@
 		8A880CA518533C56005DE572 /* SwitchesList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED1F1778510500ADDE06 /* SwitchesList.cpp */; };
 		8A880CA618533C56005DE572 /* TarArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED211778510500ADDE06 /* TarArchive.cpp */; };
 		8A880CA718533C56005DE572 /* TextEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED231778510500ADDE06 /* TextEditor.cpp */; };
-		8A880CA818533C56005DE572 /* TextEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED251778510500ADDE06 /* TextEditorPrefsPanel.cpp */; };
 		8A880CA918533C56005DE572 /* TextEntryPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED271778510500ADDE06 /* TextEntryPanel.cpp */; };
 		8A880CAA18533C56005DE572 /* TextLanguage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED291778510500ADDE06 /* TextLanguage.cpp */; };
 		8A880CAB18533C56005DE572 /* TextStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2B1778510500ADDE06 /* TextStyle.cpp */; };
-		8A880CAC18533C56005DE572 /* TextStylePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2D1778510500ADDE06 /* TextStylePrefsPanel.cpp */; };
 		8A880CAD18533C56005DE572 /* TextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED2F1778510500ADDE06 /* TextureEditorPanel.cpp */; };
 		8A880CAE18533C56005DE572 /* TextureXEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED311778510500ADDE06 /* TextureXEditor.cpp */; };
 		8A880CAF18533C56005DE572 /* TextureXList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED331778510500ADDE06 /* TextureXList.cpp */; };
@@ -404,6 +385,28 @@
 		8AE371EA154D581E00D88A7F /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371E9154D581E00D88A7F /* libFLAC.a */; };
 		8AE371EE154D585A00D88A7F /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371ED154D585A00D88A7F /* libvorbisenc.a */; };
 		8AE87B26154BF66400A41E61 /* liblzma_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CEA1154BEDA10079A63E /* liblzma_slade.a */; };
+		8AF53E6018D49A620017CD46 /* SDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E5E18D49A620017CD46 /* SDialog.cpp */; };
+		8AF53E8D18D49A820017CD46 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6218D49A820017CD46 /* ACSPrefsPanel.cpp */; };
+		8AF53E8E18D49A820017CD46 /* AdvancedPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6418D49A820017CD46 /* AdvancedPrefsPanel.cpp */; };
+		8AF53E8F18D49A820017CD46 /* AudioPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6618D49A820017CD46 /* AudioPrefsPanel.cpp */; };
+		8AF53E9018D49A820017CD46 /* BaseResourceArchivesPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6818D49A820017CD46 /* BaseResourceArchivesPanel.cpp */; };
+		8AF53E9118D49A820017CD46 /* ColorimetryPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6A18D49A820017CD46 /* ColorimetryPrefsPanel.cpp */; };
+		8AF53E9218D49A820017CD46 /* ColourPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6C18D49A820017CD46 /* ColourPrefsPanel.cpp */; };
+		8AF53E9318D49A820017CD46 /* EditingPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6E18D49A820017CD46 /* EditingPrefsPanel.cpp */; };
+		8AF53E9418D49A820017CD46 /* GeneralPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7018D49A820017CD46 /* GeneralPrefsPanel.cpp */; };
+		8AF53E9518D49A820017CD46 /* GraphicsPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7218D49A820017CD46 /* GraphicsPrefsPanel.cpp */; };
+		8AF53E9618D49A820017CD46 /* HudOffsetsPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7418D49A820017CD46 /* HudOffsetsPrefsPanel.cpp */; };
+		8AF53E9718D49A820017CD46 /* InputPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7618D49A820017CD46 /* InputPrefsPanel.cpp */; };
+		8AF53E9818D49A820017CD46 /* InterfacePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7818D49A820017CD46 /* InterfacePrefsPanel.cpp */; };
+		8AF53E9918D49A820017CD46 /* Map3DPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7A18D49A820017CD46 /* Map3DPrefsPanel.cpp */; };
+		8AF53E9A18D49A820017CD46 /* MapDisplayPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7C18D49A820017CD46 /* MapDisplayPrefsPanel.cpp */; };
+		8AF53E9B18D49A820017CD46 /* MapEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E7E18D49A820017CD46 /* MapEditorPrefsPanel.cpp */; };
+		8AF53E9C18D49A820017CD46 /* NodesPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8018D49A820017CD46 /* NodesPrefsPanel.cpp */; };
+		8AF53E9D18D49A820017CD46 /* OpenGLPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8218D49A820017CD46 /* OpenGLPrefsPanel.cpp */; };
+		8AF53E9E18D49A820017CD46 /* PNGPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8418D49A820017CD46 /* PNGPrefsPanel.cpp */; };
+		8AF53E9F18D49A820017CD46 /* PreferencesDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8618D49A820017CD46 /* PreferencesDialog.cpp */; };
+		8AF53EA018D49A820017CD46 /* TextEditorPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8918D49A820017CD46 /* TextEditorPrefsPanel.cpp */; };
+		8AF53EA118D49A820017CD46 /* TextStylePrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E8B18D49A820017CD46 /* TextStylePrefsPanel.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -703,16 +706,12 @@
 		8AD18F4F154A8A9B00AB9C07 /* m_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_alloc.h; sourceTree = "<group>"; };
 		8AD18F50154A8A9B00AB9C07 /* tarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tarray.h; sourceTree = "<group>"; };
 		8AD18F51154A8A9B00AB9C07 /* templates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = templates.h; sourceTree = "<group>"; };
-		8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACSPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EBD61778510400ADDE06 /* ACSPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACSPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActionSpecial.cpp; sourceTree = "<group>"; };
 		8AD5EBD81778510400ADDE06 /* ActionSpecial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSpecial.h; sourceTree = "<group>"; };
 		8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActionSpecialDialog.cpp; sourceTree = "<group>"; };
 		8AD5EBDA1778510400ADDE06 /* ActionSpecialDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSpecialDialog.h; sourceTree = "<group>"; };
 		8AD5EBDB1778510400ADDE06 /* ADatArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ADatArchive.cpp; sourceTree = "<group>"; };
 		8AD5EBDC1778510400ADDE06 /* ADatArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADatArchive.h; sourceTree = "<group>"; };
-		8AD5EBDD1778510400ADDE06 /* AdvancedPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EBDE1778510400ADDE06 /* AdvancedPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EBDF1778510400ADDE06 /* AnimatedEntryPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedEntryPanel.cpp; sourceTree = "<group>"; };
 		8AD5EBE01778510400ADDE06 /* AnimatedEntryPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedEntryPanel.h; sourceTree = "<group>"; };
 		8AD5EBE11778510400ADDE06 /* AnimatedList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatedList.cpp; sourceTree = "<group>"; };
@@ -741,10 +740,6 @@
 		8AD5EBF81778510400ADDE06 /* AudioEntryPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioEntryPanel.cpp; sourceTree = "<group>"; };
 		8AD5EBF91778510400ADDE06 /* AudioEntryPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEntryPanel.h; sourceTree = "<group>"; };
 		8AD5EBFA1778510400ADDE06 /* AudioFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFormats.h; sourceTree = "<group>"; };
-		8AD5EBFB1778510400ADDE06 /* AudioPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EBFC1778510400ADDE06 /* AudioPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPrefsPanel.h; sourceTree = "<group>"; };
-		8AD5EBFD1778510400ADDE06 /* BaseResourceArchivesPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseResourceArchivesPanel.cpp; sourceTree = "<group>"; };
-		8AD5EBFE1778510400ADDE06 /* BaseResourceArchivesPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseResourceArchivesPanel.h; sourceTree = "<group>"; };
 		8AD5EBFF1778510400ADDE06 /* BaseResourceChooser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseResourceChooser.cpp; sourceTree = "<group>"; };
 		8AD5EC001778510400ADDE06 /* BaseResourceChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseResourceChooser.h; sourceTree = "<group>"; };
 		8AD5EC011778510400ADDE06 /* BinaryControlLump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryControlLump.h; sourceTree = "<group>"; };
@@ -765,14 +760,10 @@
 		8AD5EC101778510400ADDE06 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		8AD5EC111778510400ADDE06 /* CodePages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodePages.cpp; sourceTree = "<group>"; };
 		8AD5EC121778510400ADDE06 /* CodePages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodePages.h; sourceTree = "<group>"; };
-		8AD5EC131778510400ADDE06 /* ColorimetryPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorimetryPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC141778510400ADDE06 /* ColorimetryPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorimetryPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC151778510400ADDE06 /* ColourBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourBox.cpp; sourceTree = "<group>"; };
 		8AD5EC161778510400ADDE06 /* ColourBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourBox.h; sourceTree = "<group>"; };
 		8AD5EC171778510400ADDE06 /* ColourConfiguration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourConfiguration.cpp; sourceTree = "<group>"; };
 		8AD5EC181778510400ADDE06 /* ColourConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourConfiguration.h; sourceTree = "<group>"; };
-		8AD5EC191778510400ADDE06 /* ColourPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC1A1778510400ADDE06 /* ColourPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC1B1778510400ADDE06 /* Compression.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Compression.cpp; sourceTree = "<group>"; };
 		8AD5EC1C1778510400ADDE06 /* Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compression.h; sourceTree = "<group>"; };
 		8AD5EC1D1778510400ADDE06 /* Console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
@@ -799,8 +790,6 @@
 		8AD5EC321778510400ADDE06 /* DockPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockPanel.h; sourceTree = "<group>"; };
 		8AD5EC331778510400ADDE06 /* Drawing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Drawing.cpp; sourceTree = "<group>"; };
 		8AD5EC341778510400ADDE06 /* Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawing.h; sourceTree = "<group>"; };
-		8AD5EC351778510400ADDE06 /* EditingPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EditingPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC361778510400ADDE06 /* EditingPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditingPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryDataFormat.cpp; sourceTree = "<group>"; };
 		8AD5EC381778510400ADDE06 /* EntryDataFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryDataFormat.h; sourceTree = "<group>"; };
 		8AD5EC391778510400ADDE06 /* EntryOperations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryOperations.cpp; sourceTree = "<group>"; };
@@ -815,8 +804,6 @@
 		8AD5EC421778510400ADDE06 /* FileMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileMonitor.h; sourceTree = "<group>"; };
 		8AD5EC431778510400ADDE06 /* GameConfiguration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameConfiguration.cpp; sourceTree = "<group>"; };
 		8AD5EC441778510400ADDE06 /* GameConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConfiguration.h; sourceTree = "<group>"; };
-		8AD5EC451778510400ADDE06 /* GeneralPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeneralPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC461778510400ADDE06 /* GeneralPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC471778510400ADDE06 /* GenLineSpecial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenLineSpecial.cpp; sourceTree = "<group>"; };
 		8AD5EC481778510400ADDE06 /* GenLineSpecial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenLineSpecial.h; sourceTree = "<group>"; };
 		8AD5EC491778510400ADDE06 /* GenLineSpecialPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenLineSpecialPanel.cpp; sourceTree = "<group>"; };
@@ -831,8 +818,6 @@
 		8AD5EC521778510400ADDE06 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		8AD5EC531778510400ADDE06 /* GobArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GobArchive.cpp; sourceTree = "<group>"; };
 		8AD5EC541778510400ADDE06 /* GobArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GobArchive.h; sourceTree = "<group>"; };
-		8AD5EC551778510400ADDE06 /* GraphicsPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC561778510400ADDE06 /* GraphicsPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC571778510400ADDE06 /* GrpArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrpArchive.cpp; sourceTree = "<group>"; };
 		8AD5EC581778510400ADDE06 /* GrpArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrpArchive.h; sourceTree = "<group>"; };
 		8AD5EC591778510400ADDE06 /* GZipArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GZipArchive.cpp; sourceTree = "<group>"; };
@@ -848,10 +833,6 @@
 		8AD5EC631778510400ADDE06 /* ImageFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFormats.h; sourceTree = "<group>"; };
 		8AD5EC641778510400ADDE06 /* InfoOverlay3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoOverlay3d.cpp; sourceTree = "<group>"; };
 		8AD5EC651778510400ADDE06 /* InfoOverlay3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoOverlay3d.h; sourceTree = "<group>"; };
-		8AD5EC661778510400ADDE06 /* InputPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC671778510400ADDE06 /* InputPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputPrefsPanel.h; sourceTree = "<group>"; };
-		8AD5EC681778510400ADDE06 /* InterfacePrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InterfacePrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC691778510400ADDE06 /* InterfacePrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfacePrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC6A1778510400ADDE06 /* KeyBind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyBind.cpp; sourceTree = "<group>"; };
 		8AD5EC6B1778510400ADDE06 /* KeyBind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBind.h; sourceTree = "<group>"; };
 		8AD5EC6C1778510400ADDE06 /* LfdArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LfdArchive.cpp; sourceTree = "<group>"; };
@@ -874,18 +855,12 @@
 		8AD5EC7D1778510400ADDE06 /* MainApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainApp.h; sourceTree = "<group>"; };
 		8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindow.cpp; sourceTree = "<group>"; };
 		8AD5EC7F1778510400ADDE06 /* MainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
-		8AD5EC801778510500ADDE06 /* Map3DPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Map3DPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC811778510500ADDE06 /* Map3DPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map3DPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC821778510500ADDE06 /* MapCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapCanvas.cpp; sourceTree = "<group>"; };
 		8AD5EC831778510500ADDE06 /* MapCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCanvas.h; sourceTree = "<group>"; };
-		8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapDisplayPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC851778510500ADDE06 /* MapDisplayPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDisplayPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC861778510500ADDE06 /* MapEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEditor.cpp; sourceTree = "<group>"; };
 		8AD5EC871778510500ADDE06 /* MapEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapEditor.h; sourceTree = "<group>"; };
 		8AD5EC881778510500ADDE06 /* MapEditorConfigDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEditorConfigDialog.cpp; sourceTree = "<group>"; };
 		8AD5EC891778510500ADDE06 /* MapEditorConfigDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapEditorConfigDialog.h; sourceTree = "<group>"; };
-		8AD5EC8A1778510500ADDE06 /* MapEditorPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEditorPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5EC8B1778510500ADDE06 /* MapEditorPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapEditorPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5EC8C1778510500ADDE06 /* MapEditorWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEditorWindow.cpp; sourceTree = "<group>"; };
 		8AD5EC8D1778510500ADDE06 /* MapEditorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapEditorWindow.h; sourceTree = "<group>"; };
 		8AD5EC8E1778510500ADDE06 /* MapEntryPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEntryPanel.cpp; sourceTree = "<group>"; };
@@ -935,8 +910,6 @@
 		8AD5ECBA1778510500ADDE06 /* MOPGProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOPGProperty.h; sourceTree = "<group>"; };
 		8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodeBuilders.cpp; sourceTree = "<group>"; };
 		8AD5ECBC1778510500ADDE06 /* NodeBuilders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeBuilders.h; sourceTree = "<group>"; };
-		8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodesPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5ECBE1778510500ADDE06 /* NodesPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodesPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5ECBF1778510500ADDE06 /* OGLCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OGLCanvas.cpp; sourceTree = "<group>"; };
 		8AD5ECC01778510500ADDE06 /* OGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLCanvas.h; sourceTree = "<group>"; };
 		8AD5ECC11778510500ADDE06 /* OpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGL.cpp; sourceTree = "<group>"; };
@@ -968,13 +941,8 @@
 		8AD5ECDB1778510500ADDE06 /* PnamesEntryPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PnamesEntryPanel.h; sourceTree = "<group>"; };
 		8AD5ECDC1778510500ADDE06 /* PnamesList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PnamesList.cpp; sourceTree = "<group>"; };
 		8AD5ECDD1778510500ADDE06 /* PnamesList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PnamesList.h; sourceTree = "<group>"; };
-		8AD5ECDE1778510500ADDE06 /* PNGPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PNGPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5ECDF1778510500ADDE06 /* PNGPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5ECE01778510500ADDE06 /* Polygon2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Polygon2D.cpp; sourceTree = "<group>"; };
 		8AD5ECE11778510500ADDE06 /* Polygon2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Polygon2D.h; sourceTree = "<group>"; };
-		8AD5ECE21778510500ADDE06 /* PreferencesDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PreferencesDialog.cpp; sourceTree = "<group>"; };
-		8AD5ECE31778510500ADDE06 /* PreferencesDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesDialog.h; sourceTree = "<group>"; };
-		8AD5ECE41778510500ADDE06 /* PrefsPanelBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefsPanelBase.h; sourceTree = "<group>"; };
 		8AD5ECE51778510500ADDE06 /* Property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Property.cpp; sourceTree = "<group>"; };
 		8AD5ECE61778510500ADDE06 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
 		8AD5ECE71778510500ADDE06 /* PropertyEditorPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyEditorPanel.cpp; sourceTree = "<group>"; };
@@ -1039,16 +1007,12 @@
 		8AD5ED221778510500ADDE06 /* TarArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TarArchive.h; sourceTree = "<group>"; };
 		8AD5ED231778510500ADDE06 /* TextEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEditor.cpp; sourceTree = "<group>"; };
 		8AD5ED241778510500ADDE06 /* TextEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditor.h; sourceTree = "<group>"; };
-		8AD5ED251778510500ADDE06 /* TextEditorPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEditorPrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5ED261778510500ADDE06 /* TextEditorPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditorPrefsPanel.h; sourceTree = "<group>"; };
 		8AD5ED271778510500ADDE06 /* TextEntryPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntryPanel.cpp; sourceTree = "<group>"; };
 		8AD5ED281778510500ADDE06 /* TextEntryPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEntryPanel.h; sourceTree = "<group>"; };
 		8AD5ED291778510500ADDE06 /* TextLanguage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextLanguage.cpp; sourceTree = "<group>"; };
 		8AD5ED2A1778510500ADDE06 /* TextLanguage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLanguage.h; sourceTree = "<group>"; };
 		8AD5ED2B1778510500ADDE06 /* TextStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextStyle.cpp; sourceTree = "<group>"; };
 		8AD5ED2C1778510500ADDE06 /* TextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextStyle.h; sourceTree = "<group>"; };
-		8AD5ED2D1778510500ADDE06 /* TextStylePrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextStylePrefsPanel.cpp; sourceTree = "<group>"; };
-		8AD5ED2E1778510500ADDE06 /* TextStylePrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextStylePrefsPanel.h; sourceTree = "<group>"; };
 		8AD5ED2F1778510500ADDE06 /* TextureEditorPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureEditorPanel.cpp; sourceTree = "<group>"; };
 		8AD5ED301778510500ADDE06 /* TextureEditorPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureEditorPanel.h; sourceTree = "<group>"; };
 		8AD5ED311778510500ADDE06 /* TextureXEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureXEditor.cpp; sourceTree = "<group>"; };
@@ -1103,6 +1067,51 @@
 		8AE371E7154D581400D88A7F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = thirdparty/ogg/lib/libogg.a; sourceTree = "<group>"; };
 		8AE371E9154D581E00D88A7F /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = thirdparty/flac/lib/libFLAC.a; sourceTree = "<group>"; };
 		8AE371ED154D585A00D88A7F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = thirdparty/vorbis/lib/libvorbisenc.a; sourceTree = "<group>"; };
+		8AF53E5E18D49A620017CD46 /* SDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDialog.cpp; sourceTree = "<group>"; };
+		8AF53E5F18D49A620017CD46 /* SDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDialog.h; sourceTree = "<group>"; };
+		8AF53E6218D49A820017CD46 /* ACSPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACSPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6318D49A820017CD46 /* ACSPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACSPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E6418D49A820017CD46 /* AdvancedPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6518D49A820017CD46 /* AdvancedPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E6618D49A820017CD46 /* AudioPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6718D49A820017CD46 /* AudioPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E6818D49A820017CD46 /* BaseResourceArchivesPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseResourceArchivesPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6918D49A820017CD46 /* BaseResourceArchivesPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseResourceArchivesPanel.h; sourceTree = "<group>"; };
+		8AF53E6A18D49A820017CD46 /* ColorimetryPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorimetryPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6B18D49A820017CD46 /* ColorimetryPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorimetryPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E6C18D49A820017CD46 /* ColourPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6D18D49A820017CD46 /* ColourPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E6E18D49A820017CD46 /* EditingPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EditingPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E6F18D49A820017CD46 /* EditingPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditingPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7018D49A820017CD46 /* GeneralPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeneralPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7118D49A820017CD46 /* GeneralPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7218D49A820017CD46 /* GraphicsPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7318D49A820017CD46 /* GraphicsPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7418D49A820017CD46 /* HudOffsetsPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HudOffsetsPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7518D49A820017CD46 /* HudOffsetsPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HudOffsetsPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7618D49A820017CD46 /* InputPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7718D49A820017CD46 /* InputPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7818D49A820017CD46 /* InterfacePrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InterfacePrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7918D49A820017CD46 /* InterfacePrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterfacePrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7A18D49A820017CD46 /* Map3DPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Map3DPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7B18D49A820017CD46 /* Map3DPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Map3DPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7C18D49A820017CD46 /* MapDisplayPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapDisplayPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7D18D49A820017CD46 /* MapDisplayPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDisplayPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E7E18D49A820017CD46 /* MapEditorPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapEditorPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E7F18D49A820017CD46 /* MapEditorPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapEditorPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E8018D49A820017CD46 /* NodesPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NodesPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E8118D49A820017CD46 /* NodesPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodesPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E8218D49A820017CD46 /* OpenGLPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E8318D49A820017CD46 /* OpenGLPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E8418D49A820017CD46 /* PNGPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PNGPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E8518D49A820017CD46 /* PNGPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E8618D49A820017CD46 /* PreferencesDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PreferencesDialog.cpp; sourceTree = "<group>"; };
+		8AF53E8718D49A820017CD46 /* PreferencesDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesDialog.h; sourceTree = "<group>"; };
+		8AF53E8818D49A820017CD46 /* PrefsPanelBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefsPanelBase.h; sourceTree = "<group>"; };
+		8AF53E8918D49A820017CD46 /* TextEditorPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEditorPrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E8A18D49A820017CD46 /* TextEditorPrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditorPrefsPanel.h; sourceTree = "<group>"; };
+		8AF53E8B18D49A820017CD46 /* TextStylePrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextStylePrefsPanel.cpp; sourceTree = "<group>"; };
+		8AF53E8C18D49A820017CD46 /* TextStylePrefsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextStylePrefsPanel.h; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Slade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1218,16 +1227,12 @@
 				8AD18E88154A8A9B00AB9C07 /* mus2mid */,
 				8AD18EC8154A8A9B00AB9C07 /* sfMod */,
 				8AD18F49154A8A9B00AB9C07 /* zreaders */,
-				8AD5EBD51778510400ADDE06 /* ACSPrefsPanel.cpp */,
-				8AD5EBD61778510400ADDE06 /* ACSPrefsPanel.h */,
 				8AD5EBD71778510400ADDE06 /* ActionSpecial.cpp */,
 				8AD5EBD81778510400ADDE06 /* ActionSpecial.h */,
 				8AD5EBD91778510400ADDE06 /* ActionSpecialDialog.cpp */,
 				8AD5EBDA1778510400ADDE06 /* ActionSpecialDialog.h */,
 				8AD5EBDB1778510400ADDE06 /* ADatArchive.cpp */,
 				8AD5EBDC1778510400ADDE06 /* ADatArchive.h */,
-				8AD5EBDD1778510400ADDE06 /* AdvancedPrefsPanel.cpp */,
-				8AD5EBDE1778510400ADDE06 /* AdvancedPrefsPanel.h */,
 				8AD5EBDF1778510400ADDE06 /* AnimatedEntryPanel.cpp */,
 				8AD5EBE01778510400ADDE06 /* AnimatedEntryPanel.h */,
 				8AD5EBE11778510400ADDE06 /* AnimatedList.cpp */,
@@ -1256,10 +1261,6 @@
 				8AD5EBF81778510400ADDE06 /* AudioEntryPanel.cpp */,
 				8AD5EBF91778510400ADDE06 /* AudioEntryPanel.h */,
 				8AD5EBFA1778510400ADDE06 /* AudioFormats.h */,
-				8AD5EBFB1778510400ADDE06 /* AudioPrefsPanel.cpp */,
-				8AD5EBFC1778510400ADDE06 /* AudioPrefsPanel.h */,
-				8AD5EBFD1778510400ADDE06 /* BaseResourceArchivesPanel.cpp */,
-				8AD5EBFE1778510400ADDE06 /* BaseResourceArchivesPanel.h */,
 				8AD5EBFF1778510400ADDE06 /* BaseResourceChooser.cpp */,
 				8AD5EC001778510400ADDE06 /* BaseResourceChooser.h */,
 				8AD5EC011778510400ADDE06 /* BinaryControlLump.h */,
@@ -1280,14 +1281,10 @@
 				8AD5EC101778510400ADDE06 /* CMakeLists.txt */,
 				8AD5EC111778510400ADDE06 /* CodePages.cpp */,
 				8AD5EC121778510400ADDE06 /* CodePages.h */,
-				8AD5EC131778510400ADDE06 /* ColorimetryPrefsPanel.cpp */,
-				8AD5EC141778510400ADDE06 /* ColorimetryPrefsPanel.h */,
 				8AD5EC151778510400ADDE06 /* ColourBox.cpp */,
 				8AD5EC161778510400ADDE06 /* ColourBox.h */,
 				8AD5EC171778510400ADDE06 /* ColourConfiguration.cpp */,
 				8AD5EC181778510400ADDE06 /* ColourConfiguration.h */,
-				8AD5EC191778510400ADDE06 /* ColourPrefsPanel.cpp */,
-				8AD5EC1A1778510400ADDE06 /* ColourPrefsPanel.h */,
 				8AD5EC1B1778510400ADDE06 /* Compression.cpp */,
 				8AD5EC1C1778510400ADDE06 /* Compression.h */,
 				8AD5EC1D1778510400ADDE06 /* Console.cpp */,
@@ -1316,8 +1313,6 @@
 				8AD5EC321778510400ADDE06 /* DockPanel.h */,
 				8AD5EC331778510400ADDE06 /* Drawing.cpp */,
 				8AD5EC341778510400ADDE06 /* Drawing.h */,
-				8AD5EC351778510400ADDE06 /* EditingPrefsPanel.cpp */,
-				8AD5EC361778510400ADDE06 /* EditingPrefsPanel.h */,
 				8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */,
 				8AD5EC381778510400ADDE06 /* EntryDataFormat.h */,
 				8AD5EC391778510400ADDE06 /* EntryOperations.cpp */,
@@ -1334,8 +1329,6 @@
 				8AD5EC421778510400ADDE06 /* FileMonitor.h */,
 				8AD5EC431778510400ADDE06 /* GameConfiguration.cpp */,
 				8AD5EC441778510400ADDE06 /* GameConfiguration.h */,
-				8AD5EC451778510400ADDE06 /* GeneralPrefsPanel.cpp */,
-				8AD5EC461778510400ADDE06 /* GeneralPrefsPanel.h */,
 				8AD5EC471778510400ADDE06 /* GenLineSpecial.cpp */,
 				8AD5EC481778510400ADDE06 /* GenLineSpecial.h */,
 				8AD5EC491778510400ADDE06 /* GenLineSpecialPanel.cpp */,
@@ -1350,8 +1343,6 @@
 				8AD5EC521778510400ADDE06 /* GLTexture.h */,
 				8AD5EC531778510400ADDE06 /* GobArchive.cpp */,
 				8AD5EC541778510400ADDE06 /* GobArchive.h */,
-				8AD5EC551778510400ADDE06 /* GraphicsPrefsPanel.cpp */,
-				8AD5EC561778510400ADDE06 /* GraphicsPrefsPanel.h */,
 				8AD5EC571778510400ADDE06 /* GrpArchive.cpp */,
 				8AD5EC581778510400ADDE06 /* GrpArchive.h */,
 				8AD5EC591778510400ADDE06 /* GZipArchive.cpp */,
@@ -1367,10 +1358,6 @@
 				8AD5EC631778510400ADDE06 /* ImageFormats.h */,
 				8AD5EC641778510400ADDE06 /* InfoOverlay3d.cpp */,
 				8AD5EC651778510400ADDE06 /* InfoOverlay3d.h */,
-				8AD5EC661778510400ADDE06 /* InputPrefsPanel.cpp */,
-				8AD5EC671778510400ADDE06 /* InputPrefsPanel.h */,
-				8AD5EC681778510400ADDE06 /* InterfacePrefsPanel.cpp */,
-				8AD5EC691778510400ADDE06 /* InterfacePrefsPanel.h */,
 				8AD5EC6A1778510400ADDE06 /* KeyBind.cpp */,
 				8AD5EC6B1778510400ADDE06 /* KeyBind.h */,
 				8AD5EC6C1778510400ADDE06 /* LfdArchive.cpp */,
@@ -1393,22 +1380,16 @@
 				8AD5EC7D1778510400ADDE06 /* MainApp.h */,
 				8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */,
 				8AD5EC7F1778510400ADDE06 /* MainWindow.h */,
-				8AD5EC801778510500ADDE06 /* Map3DPrefsPanel.cpp */,
-				8AD5EC811778510500ADDE06 /* Map3DPrefsPanel.h */,
 				8AD5EC821778510500ADDE06 /* MapCanvas.cpp */,
 				8AD5EC831778510500ADDE06 /* MapCanvas.h */,
 				8A60908D18533A3D00C1EF18 /* MapChecks.cpp */,
 				8A60908E18533A3D00C1EF18 /* MapChecks.h */,
 				8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */,
 				8A122A10185471A7009C4BBB /* MapChecksPanel.h */,
-				8AD5EC841778510500ADDE06 /* MapDisplayPrefsPanel.cpp */,
-				8AD5EC851778510500ADDE06 /* MapDisplayPrefsPanel.h */,
 				8AD5EC861778510500ADDE06 /* MapEditor.cpp */,
 				8AD5EC871778510500ADDE06 /* MapEditor.h */,
 				8AD5EC881778510500ADDE06 /* MapEditorConfigDialog.cpp */,
 				8AD5EC891778510500ADDE06 /* MapEditorConfigDialog.h */,
-				8AD5EC8A1778510500ADDE06 /* MapEditorPrefsPanel.cpp */,
-				8AD5EC8B1778510500ADDE06 /* MapEditorPrefsPanel.h */,
 				8AD5EC8C1778510500ADDE06 /* MapEditorWindow.cpp */,
 				8AD5EC8D1778510500ADDE06 /* MapEditorWindow.h */,
 				8AD5EC8E1778510500ADDE06 /* MapEntryPanel.cpp */,
@@ -1460,8 +1441,6 @@
 				8AD5ECBA1778510500ADDE06 /* MOPGProperty.h */,
 				8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */,
 				8AD5ECBC1778510500ADDE06 /* NodeBuilders.h */,
-				8AD5ECBD1778510500ADDE06 /* NodesPrefsPanel.cpp */,
-				8AD5ECBE1778510500ADDE06 /* NodesPrefsPanel.h */,
 				8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */,
 				8AAD20D5183931E800E1C89E /* ObjectEdit.h */,
 				8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */,
@@ -1497,13 +1476,8 @@
 				8AD5ECDB1778510500ADDE06 /* PnamesEntryPanel.h */,
 				8AD5ECDC1778510500ADDE06 /* PnamesList.cpp */,
 				8AD5ECDD1778510500ADDE06 /* PnamesList.h */,
-				8AD5ECDE1778510500ADDE06 /* PNGPrefsPanel.cpp */,
-				8AD5ECDF1778510500ADDE06 /* PNGPrefsPanel.h */,
 				8AD5ECE01778510500ADDE06 /* Polygon2D.cpp */,
 				8AD5ECE11778510500ADDE06 /* Polygon2D.h */,
-				8AD5ECE21778510500ADDE06 /* PreferencesDialog.cpp */,
-				8AD5ECE31778510500ADDE06 /* PreferencesDialog.h */,
-				8AD5ECE41778510500ADDE06 /* PrefsPanelBase.h */,
 				8AD5ECE51778510500ADDE06 /* Property.cpp */,
 				8AD5ECE61778510500ADDE06 /* Property.h */,
 				8AD5ECE71778510500ADDE06 /* PropertyEditorPanel.cpp */,
@@ -1522,6 +1496,8 @@
 				8AD5ECF21778510500ADDE06 /* RffArchive.h */,
 				8AD5ECF31778510500ADDE06 /* SAction.cpp */,
 				8AD5ECF41778510500ADDE06 /* SAction.h */,
+				8AF53E5E18D49A620017CD46 /* SDialog.cpp */,
+				8AF53E5F18D49A620017CD46 /* SDialog.h */,
 				8AD5ECF51778510500ADDE06 /* ScriptEditorPanel.cpp */,
 				8AD5ECF61778510500ADDE06 /* ScriptEditorPanel.h */,
 				8AD5ECF71778510500ADDE06 /* SectorBuilder.cpp */,
@@ -1572,16 +1548,12 @@
 				8AD5ED221778510500ADDE06 /* TarArchive.h */,
 				8AD5ED231778510500ADDE06 /* TextEditor.cpp */,
 				8AD5ED241778510500ADDE06 /* TextEditor.h */,
-				8AD5ED251778510500ADDE06 /* TextEditorPrefsPanel.cpp */,
-				8AD5ED261778510500ADDE06 /* TextEditorPrefsPanel.h */,
 				8AD5ED271778510500ADDE06 /* TextEntryPanel.cpp */,
 				8AD5ED281778510500ADDE06 /* TextEntryPanel.h */,
 				8AD5ED291778510500ADDE06 /* TextLanguage.cpp */,
 				8AD5ED2A1778510500ADDE06 /* TextLanguage.h */,
 				8AD5ED2B1778510500ADDE06 /* TextStyle.cpp */,
 				8AD5ED2C1778510500ADDE06 /* TextStyle.h */,
-				8AD5ED2D1778510500ADDE06 /* TextStylePrefsPanel.cpp */,
-				8AD5ED2E1778510500ADDE06 /* TextStylePrefsPanel.h */,
 				8AD5ED2F1778510500ADDE06 /* TextureEditorPanel.cpp */,
 				8AD5ED301778510500ADDE06 /* TextureEditorPanel.h */,
 				8AD5ED311778510500ADDE06 /* TextureXEditor.cpp */,
@@ -1767,6 +1739,7 @@
 		8A40785A1840F29300843BD8 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
+				8AF53E6118D49A820017CD46 /* Preferences */,
 				8A40785B1840F29300843BD8 /* SetupWizard */,
 				8A60909718533A4600C1EF18 /* RunDialog.cpp */,
 				8A60909818533A4600C1EF18 /* RunDialog.h */,
@@ -1983,6 +1956,56 @@
 				8AD18F51154A8A9B00AB9C07 /* templates.h */,
 			);
 			path = zreaders;
+			sourceTree = "<group>";
+		};
+		8AF53E6118D49A820017CD46 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				8AF53E6218D49A820017CD46 /* ACSPrefsPanel.cpp */,
+				8AF53E6318D49A820017CD46 /* ACSPrefsPanel.h */,
+				8AF53E6418D49A820017CD46 /* AdvancedPrefsPanel.cpp */,
+				8AF53E6518D49A820017CD46 /* AdvancedPrefsPanel.h */,
+				8AF53E6618D49A820017CD46 /* AudioPrefsPanel.cpp */,
+				8AF53E6718D49A820017CD46 /* AudioPrefsPanel.h */,
+				8AF53E6818D49A820017CD46 /* BaseResourceArchivesPanel.cpp */,
+				8AF53E6918D49A820017CD46 /* BaseResourceArchivesPanel.h */,
+				8AF53E6A18D49A820017CD46 /* ColorimetryPrefsPanel.cpp */,
+				8AF53E6B18D49A820017CD46 /* ColorimetryPrefsPanel.h */,
+				8AF53E6C18D49A820017CD46 /* ColourPrefsPanel.cpp */,
+				8AF53E6D18D49A820017CD46 /* ColourPrefsPanel.h */,
+				8AF53E6E18D49A820017CD46 /* EditingPrefsPanel.cpp */,
+				8AF53E6F18D49A820017CD46 /* EditingPrefsPanel.h */,
+				8AF53E7018D49A820017CD46 /* GeneralPrefsPanel.cpp */,
+				8AF53E7118D49A820017CD46 /* GeneralPrefsPanel.h */,
+				8AF53E7218D49A820017CD46 /* GraphicsPrefsPanel.cpp */,
+				8AF53E7318D49A820017CD46 /* GraphicsPrefsPanel.h */,
+				8AF53E7418D49A820017CD46 /* HudOffsetsPrefsPanel.cpp */,
+				8AF53E7518D49A820017CD46 /* HudOffsetsPrefsPanel.h */,
+				8AF53E7618D49A820017CD46 /* InputPrefsPanel.cpp */,
+				8AF53E7718D49A820017CD46 /* InputPrefsPanel.h */,
+				8AF53E7818D49A820017CD46 /* InterfacePrefsPanel.cpp */,
+				8AF53E7918D49A820017CD46 /* InterfacePrefsPanel.h */,
+				8AF53E7A18D49A820017CD46 /* Map3DPrefsPanel.cpp */,
+				8AF53E7B18D49A820017CD46 /* Map3DPrefsPanel.h */,
+				8AF53E7C18D49A820017CD46 /* MapDisplayPrefsPanel.cpp */,
+				8AF53E7D18D49A820017CD46 /* MapDisplayPrefsPanel.h */,
+				8AF53E7E18D49A820017CD46 /* MapEditorPrefsPanel.cpp */,
+				8AF53E7F18D49A820017CD46 /* MapEditorPrefsPanel.h */,
+				8AF53E8018D49A820017CD46 /* NodesPrefsPanel.cpp */,
+				8AF53E8118D49A820017CD46 /* NodesPrefsPanel.h */,
+				8AF53E8218D49A820017CD46 /* OpenGLPrefsPanel.cpp */,
+				8AF53E8318D49A820017CD46 /* OpenGLPrefsPanel.h */,
+				8AF53E8418D49A820017CD46 /* PNGPrefsPanel.cpp */,
+				8AF53E8518D49A820017CD46 /* PNGPrefsPanel.h */,
+				8AF53E8618D49A820017CD46 /* PreferencesDialog.cpp */,
+				8AF53E8718D49A820017CD46 /* PreferencesDialog.h */,
+				8AF53E8818D49A820017CD46 /* PrefsPanelBase.h */,
+				8AF53E8918D49A820017CD46 /* TextEditorPrefsPanel.cpp */,
+				8AF53E8A18D49A820017CD46 /* TextEditorPrefsPanel.h */,
+				8AF53E8B18D49A820017CD46 /* TextStylePrefsPanel.cpp */,
+				8AF53E8C18D49A820017CD46 /* TextStylePrefsPanel.h */,
+			);
+			path = Preferences;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2295,25 +2318,27 @@
 			files = (
 				8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */,
 				8A4078651840F29300843BD8 /* BaseResourceWizardPage.cpp in Sources */,
+				8AF53E9318D49A820017CD46 /* EditingPrefsPanel.cpp in Sources */,
+				8AF53E8F18D49A820017CD46 /* AudioPrefsPanel.cpp in Sources */,
 				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
 				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
 				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
 				8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */,
 				8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */,
 				8AD1900E154A8A9B00AB9C07 /* sfMod.cpp in Sources */,
+				8AF53E9818D49A820017CD46 /* InterfacePrefsPanel.cpp in Sources */,
 				8AD19050154A8A9B00AB9C07 /* ancientzip.cpp in Sources */,
 				8AD19051154A8A9B00AB9C07 /* files.cpp in Sources */,
 				8AD19052154A8A9B00AB9C07 /* m_alloc.cpp in Sources */,
-				8A880C0618533C56005DE572 /* ACSPrefsPanel.cpp in Sources */,
 				8A880C0718533C56005DE572 /* ActionSpecial.cpp in Sources */,
 				8A880C0818533C56005DE572 /* ActionSpecialDialog.cpp in Sources */,
 				8A880C0918533C56005DE572 /* ADatArchive.cpp in Sources */,
-				8A880C0A18533C56005DE572 /* AdvancedPrefsPanel.cpp in Sources */,
 				8A880C0B18533C56005DE572 /* AnimatedEntryPanel.cpp in Sources */,
 				8A880C0C18533C56005DE572 /* AnimatedList.cpp in Sources */,
 				8A880C0D18533C56005DE572 /* ANSICanvas.cpp in Sources */,
 				8A880C0E18533C56005DE572 /* ANSIEntryPanel.cpp in Sources */,
 				8A880C0F18533C56005DE572 /* Archive.cpp in Sources */,
+				8AF53E9D18D49A820017CD46 /* OpenGLPrefsPanel.cpp in Sources */,
 				8A880C1018533C56005DE572 /* ArchiveEntry.cpp in Sources */,
 				8A880C1118533C56005DE572 /* ArchiveEntryList.cpp in Sources */,
 				8A880C1218533C56005DE572 /* ArchiveManager.cpp in Sources */,
@@ -2321,8 +2346,6 @@
 				8A880C1418533C56005DE572 /* ArchiveOperations.cpp in Sources */,
 				8A880C1518533C56005DE572 /* ArchivePanel.cpp in Sources */,
 				8A880C1618533C56005DE572 /* AudioEntryPanel.cpp in Sources */,
-				8A880C1718533C56005DE572 /* AudioPrefsPanel.cpp in Sources */,
-				8A880C1818533C56005DE572 /* BaseResourceArchivesPanel.cpp in Sources */,
 				8A880C1918533C56005DE572 /* BaseResourceChooser.cpp in Sources */,
 				8A880C1A18533C56005DE572 /* BrowserCanvas.cpp in Sources */,
 				8A4F6DAF189E410900B01A19 /* music_midistream.cpp in Sources */,
@@ -2333,10 +2356,8 @@
 				8A880C1F18533C56005DE572 /* CIEDeltaEquations.cpp in Sources */,
 				8A880C2018533C56005DE572 /* Clipboard.cpp in Sources */,
 				8A880C2118533C56005DE572 /* CodePages.cpp in Sources */,
-				8A880C2218533C56005DE572 /* ColorimetryPrefsPanel.cpp in Sources */,
 				8A880C2318533C56005DE572 /* ColourBox.cpp in Sources */,
 				8A880C2418533C56005DE572 /* ColourConfiguration.cpp in Sources */,
-				8A880C2518533C56005DE572 /* ColourPrefsPanel.cpp in Sources */,
 				8A880C2618533C56005DE572 /* Compression.cpp in Sources */,
 				8A880C2718533C56005DE572 /* Console.cpp in Sources */,
 				8A880C2818533C56005DE572 /* ConsolePanel.cpp in Sources */,
@@ -2349,7 +2370,6 @@
 				8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */,
 				8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */,
 				8A880C3118533C56005DE572 /* Drawing.cpp in Sources */,
-				8A880C3218533C56005DE572 /* EditingPrefsPanel.cpp in Sources */,
 				8A880C3318533C56005DE572 /* EntryDataFormat.cpp in Sources */,
 				8A880C3418533C56005DE572 /* EntryOperations.cpp in Sources */,
 				8A880C3518533C56005DE572 /* EntryPanel.cpp in Sources */,
@@ -2358,7 +2378,6 @@
 				8A880C3818533C56005DE572 /* ExtMessageDialog.cpp in Sources */,
 				8A880C3918533C56005DE572 /* FileMonitor.cpp in Sources */,
 				8A880C3A18533C56005DE572 /* GameConfiguration.cpp in Sources */,
-				8A880C3B18533C56005DE572 /* GeneralPrefsPanel.cpp in Sources */,
 				8A880C3C18533C56005DE572 /* GenLineSpecial.cpp in Sources */,
 				8A880C3D18533C56005DE572 /* GenLineSpecialPanel.cpp in Sources */,
 				8A880C3E18533C56005DE572 /* GfxCanvas.cpp in Sources */,
@@ -2366,19 +2385,18 @@
 				8A880C4018533C56005DE572 /* GfxEntryPanel.cpp in Sources */,
 				8A880C4118533C56005DE572 /* GLTexture.cpp in Sources */,
 				8A880C4218533C56005DE572 /* GobArchive.cpp in Sources */,
-				8A880C4318533C56005DE572 /* GraphicsPrefsPanel.cpp in Sources */,
 				8A880C4418533C56005DE572 /* GrpArchive.cpp in Sources */,
 				8A880C4518533C56005DE572 /* GZipArchive.cpp in Sources */,
 				8A880C4618533C56005DE572 /* HexEditorPanel.cpp in Sources */,
 				8A880C4718533C56005DE572 /* HexEntryPanel.cpp in Sources */,
 				8A880C4818533C56005DE572 /* HogArchive.cpp in Sources */,
+				8AF53E6018D49A620017CD46 /* SDialog.cpp in Sources */,
 				8A880C4918533C56005DE572 /* Icons.cpp in Sources */,
 				8A880C4A18533C56005DE572 /* InfoOverlay3d.cpp in Sources */,
-				8A880C4B18533C56005DE572 /* InputPrefsPanel.cpp in Sources */,
-				8A880C4C18533C56005DE572 /* InterfacePrefsPanel.cpp in Sources */,
 				8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */,
 				8A880C4E18533C56005DE572 /* LfdArchive.cpp in Sources */,
 				8A4F6DAE189E410900B01A19 /* music_hmi_midiout.cpp in Sources */,
+				8AF53E9C18D49A820017CD46 /* NodesPrefsPanel.cpp in Sources */,
 				8A4F6DB1189E410900B01A19 /* music_smf_midiout.cpp in Sources */,
 				8A880C4F18533C56005DE572 /* LibArchive.cpp in Sources */,
 				8A880C5018533C56005DE572 /* LineInfoOverlay.cpp in Sources */,
@@ -2388,14 +2406,11 @@
 				8A880C5418533C56005DE572 /* Lua.cpp in Sources */,
 				8A880C5518533C56005DE572 /* MainApp.cpp in Sources */,
 				8A880C5618533C56005DE572 /* MainWindow.cpp in Sources */,
-				8A880C5718533C56005DE572 /* Map3DPrefsPanel.cpp in Sources */,
 				8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */,
 				8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */,
 				8A122A11185471A7009C4BBB /* MapChecksPanel.cpp in Sources */,
-				8A880C5A18533C56005DE572 /* MapDisplayPrefsPanel.cpp in Sources */,
 				8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */,
 				8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */,
-				8A880C5D18533C56005DE572 /* MapEditorPrefsPanel.cpp in Sources */,
 				8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */,
 				8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */,
 				8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */,
@@ -2407,10 +2422,12 @@
 				8A880C6418533C56005DE572 /* MapRenderer2D.cpp in Sources */,
 				8A880C6518533C56005DE572 /* MapRenderer3D.cpp in Sources */,
 				8A880C6618533C56005DE572 /* MapReplaceDialog.cpp in Sources */,
+				8AF53E9418D49A820017CD46 /* GeneralPrefsPanel.cpp in Sources */,
 				8A880C6718533C56005DE572 /* MapSector.cpp in Sources */,
 				8A880C6818533C56005DE572 /* MapSide.cpp in Sources */,
 				8A880C6918533C56005DE572 /* MapTextureBrowser.cpp in Sources */,
 				8A880C6A18533C56005DE572 /* MapTextureManager.cpp in Sources */,
+				8AF53E9918D49A820017CD46 /* Map3DPrefsPanel.cpp in Sources */,
 				8A880C6B18533C56005DE572 /* MapThing.cpp in Sources */,
 				8A880C6C18533C56005DE572 /* MapVertex.cpp in Sources */,
 				8A880C6D18533C56005DE572 /* MathStuff.cpp in Sources */,
@@ -2418,12 +2435,15 @@
 				8A880C6F18533C56005DE572 /* MemChunk.cpp in Sources */,
 				8A880C7018533C56005DE572 /* MIDIPlayer.cpp in Sources */,
 				8A880C7118533C56005DE572 /* Misc.cpp in Sources */,
+				8AF53E9A18D49A820017CD46 /* MapDisplayPrefsPanel.cpp in Sources */,
 				8A880C7218533C56005DE572 /* MobjPropertyList.cpp in Sources */,
 				8A880C7318533C56005DE572 /* ModifyOffsetsDialog.cpp in Sources */,
 				8A880C7418533C56005DE572 /* MOPGProperty.cpp in Sources */,
 				8A880C7518533C56005DE572 /* NodeBuilders.cpp in Sources */,
-				8A880C7618533C56005DE572 /* NodesPrefsPanel.cpp in Sources */,
+				8AF53E9F18D49A820017CD46 /* PreferencesDialog.cpp in Sources */,
 				8A880C7718533C56005DE572 /* ObjectEdit.cpp in Sources */,
+				8AF53E8E18D49A820017CD46 /* AdvancedPrefsPanel.cpp in Sources */,
+				8AF53E9018D49A820017CD46 /* BaseResourceArchivesPanel.cpp in Sources */,
 				8A880C7818533C56005DE572 /* ObjectEditPanel.cpp in Sources */,
 				8A880C7918533C56005DE572 /* OGLCanvas.cpp in Sources */,
 				8A880C7A18533C56005DE572 /* OpenGL.cpp in Sources */,
@@ -2438,31 +2458,36 @@
 				8A880C8218533C56005DE572 /* Parser.cpp in Sources */,
 				8A880C8318533C56005DE572 /* PatchBrowser.cpp in Sources */,
 				8A880C8418533C56005DE572 /* PatchTable.cpp in Sources */,
+				8AF53E8D18D49A820017CD46 /* ACSPrefsPanel.cpp in Sources */,
 				8A880C8518533C56005DE572 /* PatchTablePanel.cpp in Sources */,
 				8A4F6DB2189E410900B01A19 /* music_xmi_midiout.cpp in Sources */,
 				8A880C8618533C56005DE572 /* PnamesEntryPanel.cpp in Sources */,
 				8A880C8718533C56005DE572 /* PnamesList.cpp in Sources */,
-				8A880C8818533C56005DE572 /* PNGPrefsPanel.cpp in Sources */,
 				8A880C8918533C56005DE572 /* Polygon2D.cpp in Sources */,
-				8A880C8A18533C56005DE572 /* PreferencesDialog.cpp in Sources */,
 				8A880C8B18533C56005DE572 /* Property.cpp in Sources */,
 				8A880C8C18533C56005DE572 /* PropertyEditorPanel.cpp in Sources */,
 				8A880C8D18533C56005DE572 /* PropertyList.cpp in Sources */,
 				8A880C8E18533C56005DE572 /* QuickTextureOverlay3d.cpp in Sources */,
 				8A880C8F18533C56005DE572 /* ResArchive.cpp in Sources */,
+				8AF53E9618D49A820017CD46 /* HudOffsetsPrefsPanel.cpp in Sources */,
 				8A880C9018533C56005DE572 /* ResourceArchiveChooser.cpp in Sources */,
 				8A880C9118533C56005DE572 /* ResourceManager.cpp in Sources */,
 				8A880C9218533C56005DE572 /* RffArchive.cpp in Sources */,
+				8AF53E9518D49A820017CD46 /* GraphicsPrefsPanel.cpp in Sources */,
+				8AF53E9718D49A820017CD46 /* InputPrefsPanel.cpp in Sources */,
 				8A880C9318533C56005DE572 /* SAction.cpp in Sources */,
+				8AF53E9B18D49A820017CD46 /* MapEditorPrefsPanel.cpp in Sources */,
 				8A880C9418533C56005DE572 /* ScriptEditorPanel.cpp in Sources */,
 				8A880C9518533C56005DE572 /* SectorBuilder.cpp in Sources */,
 				8A880C9618533C56005DE572 /* SectorInfoOverlay.cpp in Sources */,
 				8A880C9718533C56005DE572 /* SectorSpecialDialog.cpp in Sources */,
+				8AF53E9E18D49A820017CD46 /* PNGPrefsPanel.cpp in Sources */,
 				8A880C9818533C56005DE572 /* SectorTextureOverlay.cpp in Sources */,
 				8A880C9918533C56005DE572 /* SFileDialog.cpp in Sources */,
 				8A880C9A18533C56005DE572 /* SFont.cpp in Sources */,
 				8A880C9B18533C56005DE572 /* ShapeDrawPanel.cpp in Sources */,
 				8A73D16118CC72670099A1BB /* ShowItemDialog.cpp in Sources */,
+				8AF53E9218D49A820017CD46 /* ColourPrefsPanel.cpp in Sources */,
 				8A880C9C18533C56005DE572 /* SIFormat.cpp in Sources */,
 				8A880C9D18533C56005DE572 /* SImage.cpp in Sources */,
 				8A880C9E18533C56005DE572 /* SImageFormats.cpp in Sources */,
@@ -2471,15 +2496,16 @@
 				8A880CA118533C56005DE572 /* SToolBar.cpp in Sources */,
 				8A880CA218533C56005DE572 /* SToolBarButton.cpp in Sources */,
 				8A880CA318533C56005DE572 /* STopWindow.cpp in Sources */,
+				8AF53EA018D49A820017CD46 /* TextEditorPrefsPanel.cpp in Sources */,
 				8A880CA418533C56005DE572 /* SwitchesEntryPanel.cpp in Sources */,
+				8AF53E9118D49A820017CD46 /* ColorimetryPrefsPanel.cpp in Sources */,
 				8A880CA518533C56005DE572 /* SwitchesList.cpp in Sources */,
 				8A880CA618533C56005DE572 /* TarArchive.cpp in Sources */,
 				8A880CA718533C56005DE572 /* TextEditor.cpp in Sources */,
-				8A880CA818533C56005DE572 /* TextEditorPrefsPanel.cpp in Sources */,
 				8A880CA918533C56005DE572 /* TextEntryPanel.cpp in Sources */,
 				8A880CAA18533C56005DE572 /* TextLanguage.cpp in Sources */,
+				8AF53EA118D49A820017CD46 /* TextStylePrefsPanel.cpp in Sources */,
 				8A880CAB18533C56005DE572 /* TextStyle.cpp in Sources */,
-				8A880CAC18533C56005DE572 /* TextStylePrefsPanel.cpp in Sources */,
 				8A880CAD18533C56005DE572 /* TextureEditorPanel.cpp in Sources */,
 				8A880CAE18533C56005DE572 /* TextureXEditor.cpp in Sources */,
 				8A880CAF18533C56005DE572 /* TextureXList.cpp in Sources */,

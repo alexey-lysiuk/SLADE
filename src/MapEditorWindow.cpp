@@ -33,8 +33,8 @@
 #include "MapEditorWindow.h"
 #include "MainApp.h"
 #include "ConsolePanel.h"
-#include "BaseResourceArchivesPanel.h"
-#include "PreferencesDialog.h"
+#include "Dialogs/Preferences/BaseResourceArchivesPanel.h"
+#include "Dialogs/Preferences/PreferencesDialog.h"
 #include "ArchiveManager.h"
 #include "MapObjectPropsPanel.h"
 #include "MainWindow.h"
@@ -57,10 +57,6 @@
  * VARIABLES
  *******************************************************************/
 MapEditorWindow* MapEditorWindow::instance = NULL;
-CVAR(Int, mew_width, 1024, CVAR_SAVE);
-CVAR(Int, mew_height, 768, CVAR_SAVE);
-CVAR(Int, mew_left, -1, CVAR_SAVE);
-CVAR(Int, mew_top, -1, CVAR_SAVE);
 CVAR(Bool, mew_maximized, true, CVAR_SAVE);
 CVAR(String, nodebuilder_id, "zdbsp", CVAR_SAVE);
 CVAR(String, nodebuilder_options, "", CVAR_SAVE);
@@ -81,7 +77,7 @@ EXTERN_CVAR(Int, flat_drawtype);
  * MapEditorWindow class constructor
  *******************************************************************/
 MapEditorWindow::MapEditorWindow()
-	: STopWindow("SLADE", mew_left, mew_top, mew_width, mew_height)
+	: STopWindow("SLADE", "map")
 {
 	if (mew_maximized) Maximize();
 	setupLayout();
@@ -96,7 +92,6 @@ MapEditorWindow::MapEditorWindow()
 
 	// Bind events
 	Bind(wxEVT_CLOSE_WINDOW, &MapEditorWindow::onClose, this);
-	Bind(wxEVT_MOVE, &MapEditorWindow::onMove, this);
 	Bind(wxEVT_SIZE, &MapEditorWindow::onSize, this);
 }
 
@@ -198,37 +193,37 @@ void MapEditorWindow::setupMenu()
 
 	// Map menu
 	wxMenu* menu_map = new wxMenu("");
-	theApp->getAction("mapw_save")->addToMenu(menu_map);
-	theApp->getAction("mapw_saveas")->addToMenu(menu_map);
-	theApp->getAction("mapw_rename")->addToMenu(menu_map);
+	theApp->getAction("mapw_save")->addToMenu(menu_map, true);
+	theApp->getAction("mapw_saveas")->addToMenu(menu_map, true);
+	theApp->getAction("mapw_rename")->addToMenu(menu_map, true);
 	menu_map->AppendSeparator();
-	theApp->getAction("mapw_run_map")->addToMenu(menu_map);
+	theApp->getAction("mapw_run_map")->addToMenu(menu_map, true);
 	menu->Append(menu_map, "&Map");
 
 	// Edit menu
 	wxMenu* menu_editor = new wxMenu("");
-	theApp->getAction("mapw_undo")->addToMenu(menu_editor);
-	theApp->getAction("mapw_redo")->addToMenu(menu_editor);
+	theApp->getAction("mapw_undo")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_redo")->addToMenu(menu_editor, true);
 	menu_editor->AppendSeparator();
-	theApp->getAction("mapw_draw_lines")->addToMenu(menu_editor);
-	theApp->getAction("mapw_draw_shape")->addToMenu(menu_editor);
-	theApp->getAction("mapw_edit_objects")->addToMenu(menu_editor);
+	theApp->getAction("mapw_draw_lines")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_draw_shape")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_edit_objects")->addToMenu(menu_editor, true);
 	menu_editor->AppendSeparator();
-	theApp->getAction("mapw_preferences")->addToMenu(menu_editor);
-	theApp->getAction("mapw_setbra")->addToMenu(menu_editor);
+	theApp->getAction("mapw_preferences")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_setbra")->addToMenu(menu_editor, true);
 	menu->Append(menu_editor, "&Edit");
 
 	// View menu
 	wxMenu* menu_view = new wxMenu("");
-	theApp->getAction("mapw_showproperties")->addToMenu(menu_view);
-	theApp->getAction("mapw_showconsole")->addToMenu(menu_view);
-	theApp->getAction("mapw_showundohistory")->addToMenu(menu_view);
-	theApp->getAction("mapw_showchecks")->addToMenu(menu_view);
-	theApp->getAction("mapw_showscripteditor")->addToMenu(menu_view);
+	theApp->getAction("mapw_showproperties")->addToMenu(menu_view, true);
+	theApp->getAction("mapw_showconsole")->addToMenu(menu_view, true);
+	theApp->getAction("mapw_showundohistory")->addToMenu(menu_view, true);
+	theApp->getAction("mapw_showchecks")->addToMenu(menu_view, true);
+	theApp->getAction("mapw_showscripteditor")->addToMenu(menu_view, true);
 	menu_view->AppendSeparator();
-	theApp->getAction("mapw_show_fullmap")->addToMenu(menu_view);
-	theApp->getAction("mapw_show_item")->addToMenu(menu_view);
-	//theApp->getAction("mapw_toggle_selection_numbers")->addToMenu(menu_view);
+	theApp->getAction("mapw_show_fullmap")->addToMenu(menu_view, true);
+	theApp->getAction("mapw_show_item")->addToMenu(menu_view, true);
+	//theApp->getAction("mapw_toggle_selection_numbers")->addToMenu(menu_view, true);
 	menu->Append(menu_view, "View");
 
 	SetMenuBar(menu);
@@ -547,7 +542,14 @@ void MapEditorWindow::loadMapScripts(Archive::mapdesc_t map)
 {
 	// Don't bother if no scripting language specified
 	if (theGameConfiguration->scriptLanguage().IsEmpty())
+	{
+		// Hide script editor
+		wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
+		wxAuiPaneInfo& p_inf = m_mgr->GetPane("script_editor");
+		p_inf.Show(false);
+		m_mgr->Update();
 		return;
+	}
 
 	// Don't bother if new map
 	if (!map.head)
@@ -1051,20 +1053,6 @@ bool MapEditorWindow::handleAction(string id)
 		return true;
 	}
 
-	//// View->Shape Draw Options
-	//else if (id == "mapw_showdrawoptions")
-	//{
-	//	wxAuiManager* m_mgr = wxAuiManager::GetManager(this);
-	//	wxAuiPaneInfo& p_inf = m_mgr->GetPane("shape_draw");
-
-	//	// Toggle window and focus
-	//	p_inf.Show(!p_inf.IsShown());
-	//	map_canvas->SetFocus();
-
-	//	m_mgr->Update();
-	//	return true;
-	//}
-
 	// View->Script Editor
 	else if (id == "mapw_showscripteditor")
 	{
@@ -1077,7 +1065,7 @@ bool MapEditorWindow::handleAction(string id)
 			p_inf.Show(false);
 			map_canvas->SetFocus();
 		}
-		else
+		else if (!theGameConfiguration->scriptLanguage().IsEmpty())
 		{
 			p_inf.Show(true);
 			p_inf.window->SetFocus();
@@ -1193,30 +1181,8 @@ void MapEditorWindow::onClose(wxCloseEvent& e)
  *******************************************************************/
 void MapEditorWindow::onSize(wxSizeEvent& e)
 {
-	// Update window size settings, but only if not maximized
-	if (!IsMaximized())
-	{
-		mew_width = GetSize().x;
-		mew_height = GetSize().y;
-	}
-
 	// Update maximized cvar
 	mew_maximized = IsMaximized();
-
-	e.Skip();
-}
-
-/* MapEditorWindow::onMove
- * Called when the window moves
- *******************************************************************/
-void MapEditorWindow::onMove(wxMoveEvent& e)
-{
-	// Update window position settings, but only if not maximized
-	if (!IsMaximized())
-	{
-		mew_left = GetPosition().x;
-		mew_top = GetPosition().y;
-	}
 
 	e.Skip();
 }

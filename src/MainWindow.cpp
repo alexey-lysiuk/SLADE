@@ -34,9 +34,9 @@
 #include "ArchiveManager.h"
 #include "Archive.h"
 #include "Icons.h"
-#include "BaseResourceArchivesPanel.h"
+#include "Dialogs/Preferences/BaseResourceArchivesPanel.h"
 #include "BaseResourceChooser.h"
-#include "PreferencesDialog.h"
+#include "Dialogs/Preferences/PreferencesDialog.h"
 #include "Tokenizer.h"
 #include "SplashWindow.h"
 #include "MapEditorWindow.h"
@@ -59,10 +59,6 @@ string main_window_layout = "";
 MainWindow* MainWindow::instance = NULL;
 CVAR(Bool, show_start_page, true, CVAR_SAVE);
 CVAR(String, global_palette, "", CVAR_SAVE);
-CVAR(Int, mw_width, 1024, CVAR_SAVE);
-CVAR(Int, mw_height, 768, CVAR_SAVE);
-CVAR(Int, mw_left, -1, CVAR_SAVE);
-CVAR(Int, mw_top, -1, CVAR_SAVE);
 CVAR(Bool, mw_maximized, true, CVAR_SAVE);
 CVAR(Int, tab_style, 1, CVAR_SAVE);
 
@@ -96,7 +92,7 @@ public:
  * MainWindow class constructor
  *******************************************************************/
 MainWindow::MainWindow()
-	: STopWindow("SLADE", mw_left, mw_top, mw_width, mw_height)
+	: STopWindow("SLADE", "main")
 {
 	lasttipindex = 0;
 	custom_menus_begin = 2;
@@ -266,45 +262,45 @@ void MainWindow::setupLayout()
 
 	// File menu
 	wxMenu* fileNewMenu = new wxMenu("");
-	theApp->getAction("aman_newwad")->addToMenu(fileNewMenu, "&Wad Archive");
-	theApp->getAction("aman_newzip")->addToMenu(fileNewMenu, "&Zip Archive");
-	theApp->getAction("aman_newmap")->addToMenu(fileNewMenu, "&Map");
+	theApp->getAction("aman_newwad")->addToMenu(fileNewMenu, true, "&Wad Archive");
+	theApp->getAction("aman_newzip")->addToMenu(fileNewMenu, true, "&Zip Archive");
+	theApp->getAction("aman_newmap")->addToMenu(fileNewMenu, true, "&Map");
 	wxMenu* fileMenu = new wxMenu("");
 	fileMenu->AppendSubMenu(fileNewMenu, "&New", "Create a new Archive");
-	theApp->getAction("aman_open")->addToMenu(fileMenu);
-	theApp->getAction("aman_opendir")->addToMenu(fileMenu);
+	theApp->getAction("aman_open")->addToMenu(fileMenu, true);
+	theApp->getAction("aman_opendir")->addToMenu(fileMenu, true);
 	fileMenu->AppendSeparator();
-	theApp->getAction("aman_save")->addToMenu(fileMenu);
-	theApp->getAction("aman_saveas")->addToMenu(fileMenu);
-	theApp->getAction("aman_saveall")->addToMenu(fileMenu);
+	theApp->getAction("aman_save")->addToMenu(fileMenu, true);
+	theApp->getAction("aman_saveas")->addToMenu(fileMenu, true);
+	theApp->getAction("aman_saveall")->addToMenu(fileMenu, true);
 	fileMenu->AppendSubMenu(panel_archivemanager->getRecentMenu(), "&Recent Files");
 	fileMenu->AppendSeparator();
-	theApp->getAction("aman_close")->addToMenu(fileMenu);
-	theApp->getAction("aman_closeall")->addToMenu(fileMenu);
+	theApp->getAction("aman_close")->addToMenu(fileMenu, true);
+	theApp->getAction("aman_closeall")->addToMenu(fileMenu, true);
 	fileMenu->AppendSeparator();
-	theApp->getAction("main_exit")->addToMenu(fileMenu);
+	theApp->getAction("main_exit")->addToMenu(fileMenu, true);
 	menu->Append(fileMenu, "&File");
 
 	// Edit menu
 	wxMenu* editorMenu = new wxMenu("");
-	theApp->getAction("main_undo")->addToMenu(editorMenu);
-	theApp->getAction("main_redo")->addToMenu(editorMenu);
+	theApp->getAction("main_undo")->addToMenu(editorMenu, true);
+	theApp->getAction("main_redo")->addToMenu(editorMenu, true);
 	editorMenu->AppendSeparator();
-	theApp->getAction("main_setbra")->addToMenu(editorMenu);
-	theApp->getAction("main_preferences")->addToMenu(editorMenu);
+	theApp->getAction("main_setbra")->addToMenu(editorMenu, true);
+	theApp->getAction("main_preferences")->addToMenu(editorMenu, true);
 	menu->Append(editorMenu, "E&dit");
 
 	// View menu
 	wxMenu* viewMenu = new wxMenu("");
-	theApp->getAction("main_showam")->addToMenu(viewMenu);
-	theApp->getAction("main_showconsole")->addToMenu(viewMenu);
-	theApp->getAction("main_showundohistory")->addToMenu(viewMenu);
+	theApp->getAction("main_showam")->addToMenu(viewMenu, true);
+	theApp->getAction("main_showconsole")->addToMenu(viewMenu, true);
+	theApp->getAction("main_showundohistory")->addToMenu(viewMenu, true);
 	menu->Append(viewMenu, "&View");
 
 	// Help menu
 	wxMenu* helpMenu = new wxMenu("");
-	theApp->getAction("main_onlinedocs")->addToMenu(helpMenu);
-	theApp->getAction("main_about")->addToMenu(helpMenu);
+	theApp->getAction("main_onlinedocs")->addToMenu(helpMenu, true);
+	theApp->getAction("main_about")->addToMenu(helpMenu, true);
 	menu->Append(helpMenu, "&Help");
 
 	// Set the menu
@@ -386,7 +382,6 @@ void MainWindow::setupLayout()
 	Bind(wxEVT_SIZE, &MainWindow::onSize, this);
 	Bind(wxEVT_CLOSE_WINDOW, &MainWindow::onClose, this);
 	Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED, &MainWindow::onTabChanged, this);
-	Bind(wxEVT_MOVE, &MainWindow::onMove, this);
 	Bind(wxEVT_STOOLBAR_LAYOUT_UPDATED, &MainWindow::onToolBarLayoutChanged, this, toolbar->GetId());
 }
 
@@ -734,8 +729,11 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 	string href = ev.GetURL();
 
 #ifdef __WXGTK__
-	href.Replace("file://", "");
+	if (!href.EndsWith("startpage.htm"))
+		href.Replace("file://", "");
 #endif
+
+	//LOG_MESSAGE(2, "URL %s", href);
 
 	if (href.EndsWith("/"))
 		href.RemoveLast(1);
@@ -755,6 +753,7 @@ void MainWindow::onHTMLLinkClicked(wxEvent& e)
 
 		panel_archivemanager->handleAction(S_FMT("aman_recent%lu", index));
 		createStartPage();
+		html_startpage->Reload();
 	}
 	else if (href.StartsWith("action://"))
 	{
@@ -828,13 +827,6 @@ void MainWindow::onTabChanged(wxAuiNotebookEvent& e)
  *******************************************************************/
 void MainWindow::onSize(wxSizeEvent& e)
 {
-	// Update window size settings, but only if not maximized
-	if (!IsMaximized())
-	{
-		mw_width = GetSize().x;
-		mw_height = GetSize().y;
-	}
-
 	// Update toolbar layout (if needed)
 	toolbar->updateLayout();
 #ifndef __WXMSW__
@@ -844,21 +836,6 @@ void MainWindow::onSize(wxSizeEvent& e)
 
 	// Update maximized cvar
 	mw_maximized = IsMaximized();
-
-	e.Skip();
-}
-
-/* MainWindow::onMove
- * Called when the window moves
- *******************************************************************/
-void MainWindow::onMove(wxMoveEvent& e)
-{
-	// Update window position settings, but only if not maximized
-	if (!IsMaximized())
-	{
-		mw_left = GetPosition().x;
-		mw_top = GetPosition().y;
-	}
 
 	e.Skip();
 }

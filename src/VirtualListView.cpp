@@ -44,7 +44,6 @@
  *******************************************************************/
 wxDEFINE_EVENT(EVT_VLV_SELECTION_CHANGED, wxCommandEvent);
 CVAR(Bool, list_font_monospace, false, CVAR_SAVE)
-CVAR(String, font_monospace, "Consolas,Lucida Console", CVAR_SAVE)
 
 
 /*******************************************************************
@@ -67,27 +66,11 @@ VirtualListView::VirtualListView(wxWindow* parent)
 	col_search = 0;
 	memset(cols_editable, 0, 100);
 
+	// Set monospace font if configured
+	font_normal = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+	font_monospace = new wxFont(getMonospaceFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)));
 	if (list_font_monospace)
-	{
-		// Get default font
-		wxFont lfont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-
-		// Set face from cvar
-		bool set = false;
-		wxArrayString split = wxSplit(font_monospace, ',');
-		for (unsigned a = 0; a < split.size(); a++)
-		{
-			if (lfont.SetFaceName(split[a]))
-			{
-				set = true;
-				break;
-			}
-		}
-		if (!set) lfont.SetFamily(wxFONTFAMILY_MODERN);
-
-		// Set item font
-		item_attr->SetFont(lfont);
-	}
+		item_attr->SetFont(*font_monospace);
 
 	// Bind events
 #ifndef __WXMSW__
@@ -106,6 +89,8 @@ VirtualListView::VirtualListView(wxWindow* parent)
 VirtualListView::~VirtualListView()
 {
 	delete item_attr;
+	delete font_monospace;
+	delete font_normal;
 }
 
 /* VirtualListView::sendSelectionChangedEvent
@@ -500,7 +485,7 @@ void VirtualListView::onKeyChar(wxKeyEvent& e)
 		}
 	}
 
-	if (isRealChar)
+	if (isRealChar && e.GetModifiers() == 0)
 	{
 		// Get currently focused item (or first if nothing is focused)
 		long focus = getFocus();
@@ -522,13 +507,16 @@ void VirtualListView::onKeyChar(wxKeyEvent& e)
 	else
 	{
 		search = "";
-
+#ifdef __WXGTK__
+		e.Skip();
+#else
 		// Only want to do default action on navigation key
 		if (e.GetKeyCode() == WXK_UP || e.GetKeyCode() == WXK_DOWN ||
 		        e.GetKeyCode() == WXK_PAGEUP || e.GetKeyCode() == WXK_PAGEDOWN ||
 		        e.GetKeyCode() == WXK_HOME || e.GetKeyCode() == WXK_END ||
 		        e.GetKeyCode() == WXK_TAB)
 			e.Skip();
+#endif
 	}
 }
 

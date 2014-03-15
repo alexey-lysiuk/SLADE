@@ -5,8 +5,9 @@
  *
  * Email:       sirjuddington@gmail.com
  * Web:         http://slade.mancubus.net
- * Filename:    NodeBuildersWizardPage.cpp
- * Description: Setup wizard page to set up node builders
+ * Filename:    SDialog.cpp
+ * Description: Simple base class for dialogs that handles saved
+ *              size and position info
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,55 +30,67 @@
  *******************************************************************/
 #include "Main.h"
 #include "WxStuff.h"
-#include "NodeBuildersWizardPage.h"
-#include "Dialogs/Preferences/NodesPrefsPanel.h"
+#include "SDialog.h"
+#include "Misc.h"
 
 
 /*******************************************************************
- * NODEBUILDERSWIZARDPAGE CLASS FUNCTIONS
+ * SDIALOG CLASS FUNCTIONS
  *******************************************************************/
 
-/* NodeBuildersWizardPage::NodeBuildersWizardPage
- * NodeBuildersWizardPage class constructor
+/* SDialog::SDialog
+ * SDialog class constructor
  *******************************************************************/
-NodeBuildersWizardPage::NodeBuildersWizardPage(wxWindow* parent) : WizardPageBase(parent)
+SDialog::SDialog(wxWindow* parent, string title, string id, int x, int y, int width, int height)
+: wxDialog(parent, -1, title, wxPoint(x, y), wxSize(width, height), wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
-	// Setup sizer
-	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-	SetSizer(sizer);
+	// Init size/pos
+	this->id = id;
+	Misc::winf_t info = Misc::getWindowInfo(id);
+	if (!info.id.IsEmpty())
+	{
+		SetSize(info.width, info.height);
+		SetPosition(wxPoint(info.left, info.top));
+	}
+	else
+		Misc::setWindowInfo(id, width, height, x, y);
 
-	// Add Base Resource Archive panel
-	panel_nodes = new NodesPrefsPanel(this, false);
-	sizer->Add(panel_nodes, 1, wxEXPAND);
+	// Bind events
+	if (id != "")
+	{
+		Bind(wxEVT_SIZE, &SDialog::onSize, this);
+		Bind(wxEVT_MOVE, &SDialog::onMove, this);
+	}
 }
 
-/* NodeBuildersWizardPage::~NodeBuildersWizardPage
- * NodeBuildersWizardPage class destructor
+/* SDialog::SDialog
+ * SDialog class destructor
  *******************************************************************/
-NodeBuildersWizardPage::~NodeBuildersWizardPage()
+SDialog::~SDialog()
 {
 }
 
-/* NodeBuildersWizardPage::canGoNext
- * Returns true if the wizard page is valid
+
+/*******************************************************************
+ * SDIALOG CLASS EVENTS
  *******************************************************************/
-bool NodeBuildersWizardPage::canGoNext()
+
+/* SDialog::onSize
+ * Called when the dialog is resized
+ *******************************************************************/
+void SDialog::onSize(wxSizeEvent& e)
 {
-	return true;
+	// Update window size settings
+	Misc::setWindowInfo(id, GetSize().x, GetSize().y, -2, -2);
+	e.Skip();
 }
 
-/* NodeBuildersWizardPage::applyChanges
- * Applies any changes set on the wizard page
+/* SDialog::onMove
+ * Called when the dialog is moved
  *******************************************************************/
-void NodeBuildersWizardPage::applyChanges()
+void SDialog::onMove(wxMoveEvent& e)
 {
-
-}
-
-/* NodeBuildersWizardPage::getDescription
- * Returns the description for the wizard page
- *******************************************************************/
-string NodeBuildersWizardPage::getDescription()
-{
-	return "If you plan to do any map editing, set up the paths to any node builders you have. You can also set up the build options for each node builder.";
+	// Update window position settings
+	Misc::setWindowInfo(id, -2, -2, GetPosition().x, GetPosition().y);
+	e.Skip();
 }

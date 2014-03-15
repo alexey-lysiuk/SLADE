@@ -68,6 +68,7 @@
 #include <wx/filename.h>
 #include <wx/gbsizer.h>
 
+
 /*******************************************************************
  * VARIABLES
  *******************************************************************/
@@ -300,6 +301,7 @@ ArchivePanel::ArchivePanel(wxWindow* parent, Archive* archive)
 {
 	// Init variables
 	undo_manager = new UndoManager();
+	ignore_focus_change = false;
 
 	// Set archive
 	this->archive = archive;
@@ -384,7 +386,9 @@ ArchivePanel::ArchivePanel(wxWindow* parent, Archive* archive)
 
 	// Bind events
 	entry_list->Bind(EVT_VLV_SELECTION_CHANGED, &ArchivePanel::onEntryListSelectionChange, this);
+#ifndef __WXGTK__
 	entry_list->Bind(wxEVT_LIST_ITEM_FOCUSED, &ArchivePanel::onEntryListFocusChange, this);
+#endif
 	entry_list->Bind(wxEVT_KEY_DOWN, &ArchivePanel::onEntryListKeyDown, this);
 	entry_list->Bind(wxEVT_LIST_ITEM_RIGHT_CLICK, &ArchivePanel::onEntryListRightClick, this);
 	entry_list->Bind(wxEVT_LIST_ITEM_ACTIVATED, &ArchivePanel::onEntryListActivated, this);
@@ -392,8 +396,6 @@ ArchivePanel::ArchivePanel(wxWindow* parent, Archive* archive)
 	choice_category->Bind(wxEVT_CHOICE, &ArchivePanel::onChoiceCategoryChanged, this);
 	Bind(EVT_AEL_DIR_CHANGED, &ArchivePanel::onDirChanged, this);
 	btn_updir->Bind(wxEVT_BUTTON, &ArchivePanel::onBtnUpDir, this);
-	//((DefaultEntryPanel*)default_area)->getEditTextButton()->Bind(wxEVT_BUTTON, &ArchivePanel::onDEPEditAsText, this);
-	//((DefaultEntryPanel*)default_area)->getViewHexButton()->Bind(wxEVT_BUTTON, &ArchivePanel::onDEPViewAsHex, this);
 
 	// Do a quick check to see if we need the path display
 	if (archive->getRoot()->nChildren() == 0)
@@ -450,47 +452,47 @@ void ArchivePanel::addMenus()
 	{
 		// Archive menu
 		wxMenu* menu_new = new wxMenu("");
-		theApp->getAction("arch_newentry")->addToMenu(menu_new, "&Entry");
-		theApp->getAction("arch_newdir")->addToMenu(menu_new, "&Directory");
-		theApp->getAction("arch_newpalette")->addToMenu(menu_new, "&PLAYPAL");
-		theApp->getAction("arch_newanimated")->addToMenu(menu_new, "&ANIMATED");
-		theApp->getAction("arch_newswitches")->addToMenu(menu_new, "&SWITCHES");
+		theApp->getAction("arch_newentry")->addToMenu(menu_new, true, "&Entry");
+		theApp->getAction("arch_newdir")->addToMenu(menu_new, true, "&Directory");
+		theApp->getAction("arch_newpalette")->addToMenu(menu_new, true, "&PLAYPAL");
+		theApp->getAction("arch_newanimated")->addToMenu(menu_new, true, "&ANIMATED");
+		theApp->getAction("arch_newswitches")->addToMenu(menu_new, true, "&SWITCHES");
 		menu_archive = new wxMenu();
 		menu_archive->AppendSubMenu(menu_new, "&New");
-		theApp->getAction("arch_importfiles")->addToMenu(menu_archive);
+		theApp->getAction("arch_importfiles")->addToMenu(menu_archive, true);
 		menu_archive->AppendSeparator();
-		theApp->getAction("arch_texeditor")->addToMenu(menu_archive);
-		theApp->getAction("arch_mapeditor")->addToMenu(menu_archive);
+		theApp->getAction("arch_texeditor")->addToMenu(menu_archive, true);
+		theApp->getAction("arch_mapeditor")->addToMenu(menu_archive, true);
 		wxMenu* menu_clean = new wxMenu("");
-		theApp->getAction("arch_clean_patches")->addToMenu(menu_clean);
-		theApp->getAction("arch_clean_textures")->addToMenu(menu_clean);
-		theApp->getAction("arch_clean_flats")->addToMenu(menu_clean);
-		theApp->getAction("arch_clean_iwaddupes")->addToMenu(menu_clean);
-		theApp->getAction("arch_check_duplicates")->addToMenu(menu_clean);
-		theApp->getAction("arch_check_duplicates2")->addToMenu(menu_clean);
-		theApp->getAction("arch_replace_maps")->addToMenu(menu_clean);
+		theApp->getAction("arch_clean_patches")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_clean_textures")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_clean_flats")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_clean_iwaddupes")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_check_duplicates")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_check_duplicates2")->addToMenu(menu_clean, true);
+		theApp->getAction("arch_replace_maps")->addToMenu(menu_clean, true);
 		menu_archive->AppendSubMenu(menu_clean, "&Maintenance");
 	}
 	if (!menu_entry)
 	{
 		// Entry menu
 		menu_entry = new wxMenu();
-		theApp->getAction("arch_entry_rename")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_delete")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_revert")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_rename")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_delete")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_revert")->addToMenu(menu_entry, true);
 		menu_entry->AppendSeparator();
-		theApp->getAction("arch_entry_cut")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_copy")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_paste")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_cut")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_copy")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_paste")->addToMenu(menu_entry, true);
 		menu_entry->AppendSeparator();
-		theApp->getAction("arch_entry_moveup")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_movedown")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_sort")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_moveup")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_movedown")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_sort")->addToMenu(menu_entry, true);
 		menu_entry->AppendSeparator();
-		theApp->getAction("arch_entry_import")->addToMenu(menu_entry);
-		theApp->getAction("arch_entry_export")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_import")->addToMenu(menu_entry, true);
+		theApp->getAction("arch_entry_export")->addToMenu(menu_entry, true);
 		menu_entry->AppendSeparator();
-		theApp->getAction("arch_entry_bookmark")->addToMenu(menu_entry);
+		theApp->getAction("arch_entry_bookmark")->addToMenu(menu_entry, true);
 	}
 
 	// Add them to the main window menubar
@@ -1040,6 +1042,7 @@ bool ArchivePanel::moveUp()
 {
 	// Get selection
 	vector<long> selection = entry_list->getSelection();
+	long focus = entry_list->getFocus();
 
 	// If nothing is selected, do nothing
 	if (selection.size() == 0)
@@ -1060,9 +1063,11 @@ bool ArchivePanel::moveUp()
 	entry_list->clearSelection();
 	for (unsigned a = 0; a < selection.size(); a++)
 		entry_list->selectItem(selection[a] - 1);
+	ignore_focus_change = true;
+	entry_list->focusItem(focus - 1);
 
 	// Ensure top-most entry is visible
-	entry_list->EnsureVisible(entry_list->getEntryIndex(selection[0]) - 4);
+	entry_list->EnsureVisible(entry_list->getEntryIndex(selection[0]));
 
 	// Return success
 	return true;
@@ -1075,6 +1080,7 @@ bool ArchivePanel::moveDown()
 {
 	// Get selection
 	vector<long> selection = entry_list->getSelection();
+	long focus = entry_list->getFocus();
 
 	// If nothing is selected, do nothing
 	if (selection.size() == 0)
@@ -1095,9 +1101,11 @@ bool ArchivePanel::moveDown()
 	entry_list->clearSelection();
 	for (unsigned a = 0; a < selection.size(); a++)
 		entry_list->selectItem(selection[a] + 1);
+	ignore_focus_change = true;
+	entry_list->focusItem(focus + 1);
 
 	// Ensure bottom-most entry is visible
-	entry_list->EnsureVisible(entry_list->getEntryIndex(selection[selection.size() - 1]) + 4);
+	entry_list->EnsureVisible(entry_list->getEntryIndex(selection[selection.size() - 1]));
 
 	// Return success
 	return true;
@@ -1578,7 +1586,7 @@ bool ArchivePanel::pasteEntry()
 bool ArchivePanel::gfxConvert()
 {
 	// Create gfx conversion dialog
-	GfxConvDialog gcd;
+	GfxConvDialog gcd(theMainWindow);
 
 	// Send selection to the gcd
 	vector<ArchiveEntry*> selection = entry_list->getSelectedEntries();
@@ -2914,6 +2922,13 @@ void ArchivePanel::onEntryListFocusChange(wxListEvent& e)
 	// Do nothing if not shown
 	if (!IsShown())
 		return;
+
+	// Ignore if needed (once)
+	if (ignore_focus_change)
+	{
+		ignore_focus_change = false;
+		return;
+	}
 
 	// Get selected entries
 	vector<ArchiveEntry*> selection = entry_list->getSelectedEntries();
