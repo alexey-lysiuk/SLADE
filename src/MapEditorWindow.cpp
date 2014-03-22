@@ -208,6 +208,8 @@ void MapEditorWindow::setupMenu()
 	theApp->getAction("mapw_draw_lines")->addToMenu(menu_editor, true);
 	theApp->getAction("mapw_draw_shape")->addToMenu(menu_editor, true);
 	theApp->getAction("mapw_edit_objects")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_mirror_x")->addToMenu(menu_editor, true);
+	theApp->getAction("mapw_mirror_y")->addToMenu(menu_editor, true);
 	menu_editor->AppendSeparator();
 	theApp->getAction("mapw_preferences")->addToMenu(menu_editor, true);
 	theApp->getAction("mapw_setbra")->addToMenu(menu_editor, true);
@@ -284,6 +286,8 @@ void MapEditorWindow::setupLayout()
 	tbg_edit->addActionButton("mapw_draw_lines");
 	tbg_edit->addActionButton("mapw_draw_shape");
 	tbg_edit->addActionButton("mapw_edit_objects");
+	tbg_edit->addActionButton("mapw_mirror_x");
+	tbg_edit->addActionButton("mapw_mirror_y");
 	toolbar->addGroup(tbg_edit);
 
 	// Extra toolbar
@@ -332,6 +336,21 @@ void MapEditorWindow::setupLayout()
 	m_mgr->AddPane(panel_obj_props, p_inf);
 
 
+	// --- Script Editor Panel ---
+	panel_script_editor = new ScriptEditorPanel(this);
+
+	// Setup panel info & add panel
+	p_inf.Float();
+	p_inf.BestSize(300, 300);
+	p_inf.FloatingSize(500, 400);
+	p_inf.FloatingPosition(150, 150);
+	p_inf.MinSize(300, 300);
+	p_inf.Show(false);
+	p_inf.Caption("Script Editor");
+	p_inf.Name("script_editor");
+	m_mgr->AddPane(panel_script_editor, p_inf);
+
+
 	// --- Shape Draw Options Panel ---
 	ShapeDrawPanel* panel_shapedraw = new ShapeDrawPanel(this);
 
@@ -352,21 +371,6 @@ void MapEditorWindow::setupLayout()
 	p_inf.Caption("Shape Drawing");
 	p_inf.Name("shape_draw");
 	m_mgr->AddPane(panel_shapedraw, p_inf);
-
-
-	// --- Script Editor Panel ---
-	panel_script_editor = new ScriptEditorPanel(this);
-
-	// Setup panel info & add panel
-	p_inf.Float();
-	p_inf.BestSize(300, 300);
-	p_inf.FloatingSize(500, 400);
-	p_inf.FloatingPosition(150, 150);
-	p_inf.MinSize(300, 300);
-	p_inf.Show(false);
-	p_inf.Caption("Script Editor");
-	p_inf.Name("script_editor");
-	m_mgr->AddPane(panel_script_editor, p_inf);
 
 
 	// --- Object Edit Panel ---

@@ -988,13 +988,13 @@ void MapCanvas::drawObjectEdit()
 	// Map objects
 	renderer_2d->renderObjectEditGroup(group);
 
-	// Line lengths
-	vector<ObjectEditGroup::line_t> lines;
-	group->getLinesToDraw(lines);
-	setOverlayCoords(true);
-	for (unsigned a = 0; a < lines.size(); a++)
-		drawLineLength(lines[a].v1->position, lines[a].v2->position, col);
-	setOverlayCoords(false);
+	//// Line lengths
+	//vector<ObjectEditGroup::line_t> lines;
+	//group->getLinesToDraw(lines);
+	//setOverlayCoords(true);
+	//for (unsigned a = 0; a < lines.size(); a++)
+	//	drawLineLength(lines[a].v1->position, lines[a].v2->position, col);
+	//setOverlayCoords(false);
 
 	// Bounding box
 	OpenGL::setColour(COL_WHITE);
@@ -3065,6 +3065,12 @@ void MapCanvas::keyBinds2d(string name)
 				editor->addEditorMessage("Selection numbers disabled");
 		}
 
+		// Mirror
+		else if (name == "me2d_mirror_x")
+			editor->mirror(true);
+		else if (name == "me2d_mirror_y")
+			editor->mirror(false);
+
 
 		// --- Lines edit mode ---
 		if (editor->editMode() == MapEditor::MODE_LINES)
@@ -3480,6 +3486,21 @@ bool MapCanvas::handleAction(string id)
 		return true;
 	}
 
+	// Mirror Y
+	else if (id == "mapw_mirror_y")
+	{
+		editor->mirror(false);
+		return true;
+	}
+
+	// Mirror X
+	else if (id == "mapw_mirror_x")
+	{
+		editor->mirror(true);
+		return true;
+	}
+
+
 	// --- Context menu ---
 
 	// Move 3d mode camera
@@ -3802,7 +3823,9 @@ void MapCanvas::onKeyUp(wxKeyEvent& e)
  *******************************************************************/
 void MapCanvas::onMouseDown(wxMouseEvent& e)
 {
-	editor->updateHilight(mouse_pos_m);
+	// Update hilight
+	if (mouse_state == MSTATE_NORMAL)
+		editor->updateHilight(mouse_pos_m);
 
 	// Update mouse variables
 	mouse_downpos.set(e.GetX(), e.GetY());
@@ -3887,7 +3910,8 @@ void MapCanvas::onMouseDown(wxMouseEvent& e)
 		{
 			fpoint2_t pos(editor->snapToGrid(mouse_pos_m.x), editor->snapToGrid(mouse_pos_m.y));
 			editor->paste(pos);
-			mouse_state = MSTATE_NORMAL;
+			if (!e.ShiftDown())
+				mouse_state = MSTATE_NORMAL;
 		}
 
 		// Sector tagging state
@@ -4068,9 +4092,18 @@ void MapCanvas::onMouseUp(wxMouseEvent& e)
 				theApp->getAction("mapw_sector_create")->addToMenu(&menu_context);
 			}
 
-			// Properties
 			if (object_selected)
+			{
+				// General edit
+				menu_context.AppendSeparator();
+				theApp->getAction("mapw_edit_objects")->addToMenu(&menu_context);
+				theApp->getAction("mapw_mirror_x")->addToMenu(&menu_context);
+				theApp->getAction("mapw_mirror_y")->addToMenu(&menu_context);
+
+				// Properties
+				menu_context.AppendSeparator();
 				theApp->getAction("mapw_item_properties")->addToMenu(&menu_context);
+			}
 
 			PopupMenu(&menu_context);
 		}

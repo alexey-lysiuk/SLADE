@@ -49,7 +49,8 @@
  * VARIABLES
  *******************************************************************/
 double grid_sizes[] = { 0.05, 0.1, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536 };
-CVAR(Bool, map_merge_undo_step, true, CVAR_SAVE);
+CVAR(Bool, map_merge_undo_step, true, CVAR_SAVE)
+CVAR(Bool, map_remove_invalid_lines, false, CVAR_SAVE)
 
 
 /*******************************************************************
@@ -708,7 +709,10 @@ bool MapEditor::updateHilight(fpoint2_t mouse_pos, double dist_scale)
 
 	// Update tagged lists if the hilight changed
 	if (current != hilight_item)
+	{
+		LOG_MESSAGE(3, "updateHilight");
 		updateTagged();
+	}
 
 	// Update map object properties panel if the hilight changed
 	if (current != hilight_item && selection.empty())
@@ -828,6 +832,8 @@ void MapEditor::updateThingLists()
  *******************************************************************/
 void MapEditor::updateTagged()
 {
+	LOG_MESSAGE(3, "updateTagged");
+
 	// Clear tagged lists
 	tagged_sectors.clear();
 	tagged_lines.clear();
@@ -2226,6 +2232,100 @@ void MapEditor::thingQuickAngle(fpoint2_t mouse_pos)
 	}
 }
 
+/* MapEditor::mirror
+ * Mirror selected objects horizontally or vertically depending on
+ * [x_axis]
+ *******************************************************************/
+void MapEditor::mirror(bool x_axis)
+{
+	// Mirror things
+	if (edit_mode == MODE_THINGS)
+	{
+		// Get things to mirror
+		vector<MapThing*> things;
+		getSelectedThings(things);
+
+		// Get midpoint
+		bbox_t bbox;
+		for (unsigned a = 0; a < things.size(); a++)
+			bbox.extend(things[a]->xPos(), things[a]->yPos());
+
+		// Mirror
+		for (unsigned a = 0; a < things.size(); a++)
+		{
+			// Position
+			if (x_axis)
+				map.moveThing(things[a]->getIndex(), bbox.mid_x() - (things[a]->xPos() - bbox.mid_x()), things[a]->yPos());
+			else
+				map.moveThing(things[a]->getIndex(), things[a]->xPos(), bbox.mid_y() - (things[a]->yPos() - bbox.mid_y()));
+
+			// Direction
+			int angle = things[a]->getAngle();
+			if (x_axis)
+			{
+				angle += 90;
+				angle = 360 - angle;
+				angle -= 90;
+			}
+			else
+				angle = 360 - angle;
+			while (angle < 0)
+				angle += 360;
+			things[a]->setIntProperty("angle", angle);
+		}
+	}
+
+	// Mirror map architecture
+	else if (edit_mode != MODE_3D)
+	{
+		// Get vertices to mirror
+		vector<MapVertex*> vertices;
+		vector<MapLine*> lines;
+		if (edit_mode == MODE_VERTICES)
+			getSelectedVertices(vertices);
+		else if (edit_mode == MODE_LINES)
+		{
+			vector<MapLine*> sel;
+			getSelectedLines(sel);
+			for (unsigned a = 0; a < sel.size(); a++)
+			{
+				VECTOR_ADD_UNIQUE(vertices, sel[a]->v1());
+				VECTOR_ADD_UNIQUE(vertices, sel[a]->v2());
+				lines.push_back(sel[a]);
+			}
+		}
+		else if (edit_mode == MODE_SECTORS)
+		{
+			vector<MapSector*> sectors;
+			getSelectedSectors(sectors);
+			for (unsigned a = 0; a < sectors.size(); a++)
+			{
+				sectors[a]->getVertices(vertices);
+				sectors[a]->getLines(lines);
+			}
+		}
+
+		// Get midpoint
+		bbox_t bbox;
+		for (unsigned a = 0; a < vertices.size(); a++)
+			bbox.extend(vertices[a]->xPos(), vertices[a]->yPos());
+
+		// Mirror vertices
+		for (unsigned a = 0; a < vertices.size(); a++)
+		{
+			// Position
+			if (x_axis)
+				map.moveVertex(vertices[a]->getIndex(), bbox.mid_x() - (vertices[a]->xPos() - bbox.mid_x()), vertices[a]->yPos());
+			else
+				map.moveVertex(vertices[a]->getIndex(), vertices[a]->xPos(), bbox.mid_y() - (vertices[a]->yPos() - bbox.mid_y()));
+		}
+
+		// Flip lines (just swap vertices)
+		for (unsigned a = 0; a < lines.size(); a++)
+			lines[a]->flip(false);
+	}
+}
+
 #pragma endregion
 
 #pragma region TAG EDIT
@@ -2339,6 +2439,8 @@ void MapEditor::endTagEdit(bool accept)
 	}
 	else
 		addEditorMessage("Tag edit cancelled");
+
+	updateTagged();
 }
 
 #pragma endregion
@@ -2608,10 +2710,6 @@ void MapEditor::deleteObject()
 			map.removeSector(sectors[a]);
 		}
 
-		// Backup connected line properties
-		//for (unsigned a = 0; a < connected_lines.size(); a++)
-		//	undo_manager->recordUndoStep(new PropertyChangeUS(connected_lines[a]));
-
 		// Remove all connected sides
 		for (unsigned a = 0; a < connected_sides.size(); a++)
 		{
@@ -2621,6 +2719,16 @@ void MapEditor::deleteObject()
 				line->flip();
 
 			map.removeSide(connected_sides[a]);
+		}
+
+		// Remove resulting invalid lines
+		if (map_remove_invalid_lines)
+		{
+			for (unsigned a = 0; a < connected_lines.size(); a++)
+			{
+				if (!connected_lines[a]->s1() && !connected_lines[a]->s2())
+					map.removeLine(connected_lines[a]);
+			}
 		}
 
 		// Editor message
