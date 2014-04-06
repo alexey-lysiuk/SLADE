@@ -298,6 +298,18 @@ bool BrowserWindow::selectItem(string name, BrowserTreeNode* node)
 	if (!node)
 		node = items_root;
 
+	// Check global items
+	for (unsigned a = 0; a < items_global.size(); a++)
+	{
+		if (S_CMPNOCASE(name, items_global[a]->getName()))
+		{
+			openTree(node);
+			canvas->selectItem(items_global[a]);
+			canvas->showSelectedItem();
+			return true;
+		}
+	}
+
 	// Go through all items in this node
 	for (unsigned a = 0;  a < node->nItems(); a++)
 	{
@@ -451,7 +463,7 @@ int expandtree(wxTreeListCtrl* tree, wxTreeListItem& item, bool expand, int dept
  * Populates the wxTreeCtrl with the contents of the browser item
  * category tree
  *******************************************************************/
-void BrowserWindow::populateItemTree()
+void BrowserWindow::populateItemTree(bool collapse_all)
 {
 	// Clear current tree
 	tree_items->DeleteAllItems();
@@ -473,7 +485,8 @@ void BrowserWindow::populateItemTree()
 #endif
 	tree_items->SetMinSize(wxSize(colwidth + 16, -1));
 	Layout();
-	expandtree(tree_items, item, false, 0);
+	if (collapse_all)
+		expandtree(tree_items, item, false, 0);
 }
 
 /* BrowserWindow::addItemTree

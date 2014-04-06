@@ -180,11 +180,10 @@ MapTextureBrowser::MapTextureBrowser(wxWindow* parent, int type, string texture,
 		}
 	}
 
-	populateItemTree();
+	populateItemTree(false);
 
 	// Select initial texture (if any)
-	if (!texture.IsEmpty())
-		selectItem(texture);
+	selectItem(texture);
 }
 
 /* MapTextureBrowser::~MapTextureBrowser
