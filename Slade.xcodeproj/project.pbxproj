@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A08522A190277CA0092BEF2 /* SectorPropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A0852281902773E0092BEF2 /* SectorPropsPanel.cpp */; };
+		8A08522B190277D90092BEF2 /* NumberTextCtrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A0852261902773E0092BEF2 /* NumberTextCtrl.cpp */; };
 		8A122A11185471A7009C4BBB /* MapChecksPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */; };
 		8A17BAC51764C2E500C5D768 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A17BAC41764C2E500C5D768 /* libGLEW.a */; };
 		8A17E7DA154C3435008FD77E /* libftgl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A17E7D9154C3435008FD77E /* libftgl.a */; };
@@ -438,6 +440,10 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		8A0852261902773E0092BEF2 /* NumberTextCtrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NumberTextCtrl.cpp; sourceTree = "<group>"; };
+		8A0852271902773E0092BEF2 /* NumberTextCtrl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NumberTextCtrl.h; sourceTree = "<group>"; };
+		8A0852281902773E0092BEF2 /* SectorPropsPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SectorPropsPanel.cpp; sourceTree = "<group>"; };
+		8A0852291902773E0092BEF2 /* SectorPropsPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SectorPropsPanel.h; sourceTree = "<group>"; };
 		8A103248154AF4BE00D4393F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A122A0F185471A7009C4BBB /* MapChecksPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapChecksPanel.cpp; sourceTree = "<group>"; };
 		8A122A10185471A7009C4BBB /* MapChecksPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapChecksPanel.h; sourceTree = "<group>"; };
@@ -1449,6 +1455,8 @@
 				8AD5ECBA1778510500ADDE06 /* MOPGProperty.h */,
 				8AD5ECBB1778510500ADDE06 /* NodeBuilders.cpp */,
 				8AD5ECBC1778510500ADDE06 /* NodeBuilders.h */,
+				8A0852261902773E0092BEF2 /* NumberTextCtrl.cpp */,
+				8A0852271902773E0092BEF2 /* NumberTextCtrl.h */,
 				8AAD20D4183931E800E1C89E /* ObjectEdit.cpp */,
 				8AAD20D5183931E800E1C89E /* ObjectEdit.h */,
 				8AAD20D6183931E800E1C89E /* ObjectEditPanel.cpp */,
@@ -1504,14 +1512,16 @@
 				8AD5ECF21778510500ADDE06 /* RffArchive.h */,
 				8AD5ECF31778510500ADDE06 /* SAction.cpp */,
 				8AD5ECF41778510500ADDE06 /* SAction.h */,
-				8AF53E5E18D49A620017CD46 /* SDialog.cpp */,
-				8AF53E5F18D49A620017CD46 /* SDialog.h */,
 				8AD5ECF51778510500ADDE06 /* ScriptEditorPanel.cpp */,
 				8AD5ECF61778510500ADDE06 /* ScriptEditorPanel.h */,
+				8AF53E5E18D49A620017CD46 /* SDialog.cpp */,
+				8AF53E5F18D49A620017CD46 /* SDialog.h */,
 				8AD5ECF71778510500ADDE06 /* SectorBuilder.cpp */,
 				8AD5ECF81778510500ADDE06 /* SectorBuilder.h */,
 				8AD5ECF91778510500ADDE06 /* SectorInfoOverlay.cpp */,
 				8AD5ECFA1778510500ADDE06 /* SectorInfoOverlay.h */,
+				8A0852281902773E0092BEF2 /* SectorPropsPanel.cpp */,
+				8A0852291902773E0092BEF2 /* SectorPropsPanel.h */,
 				8AD5ECFB1778510500ADDE06 /* SectorSpecialDialog.cpp */,
 				8AD5ECFC1778510500ADDE06 /* SectorSpecialDialog.h */,
 				8AD5ECFD1778510500ADDE06 /* SectorTextureOverlay.cpp */,
@@ -2327,7 +2337,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AD18F79154A8A9B00AB9C07 /* cl_aui_notebook_art.cpp in Sources */,
-				8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */,
 				8AF53E8D18D49A820017CD46 /* ACSPrefsPanel.cpp in Sources */,
 				8AF53E8E18D49A820017CD46 /* AdvancedPrefsPanel.cpp in Sources */,
 				8AF53E8F18D49A820017CD46 /* AudioPrefsPanel.cpp in Sources */,
@@ -2353,6 +2362,7 @@
 				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
 				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
 				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
+				8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */,
 				8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */,
 				8AD1900E154A8A9B00AB9C07 /* sfMod.cpp in Sources */,
 				8AD19050154A8A9B00AB9C07 /* ancientzip.cpp in Sources */,
@@ -2422,7 +2432,6 @@
 				8A880C4618533C56005DE572 /* HexEditorPanel.cpp in Sources */,
 				8A880C4718533C56005DE572 /* HexEntryPanel.cpp in Sources */,
 				8A880C4818533C56005DE572 /* HogArchive.cpp in Sources */,
-				8AF53E6018D49A620017CD46 /* SDialog.cpp in Sources */,
 				8A880C4918533C56005DE572 /* Icons.cpp in Sources */,
 				8A880C4A18533C56005DE572 /* InfoOverlay3d.cpp in Sources */,
 				8A880C4D18533C56005DE572 /* KeyBind.cpp in Sources */,
@@ -2466,6 +2475,7 @@
 				8A880C7318533C56005DE572 /* ModifyOffsetsDialog.cpp in Sources */,
 				8A880C7418533C56005DE572 /* MOPGProperty.cpp in Sources */,
 				8A880C7518533C56005DE572 /* NodeBuilders.cpp in Sources */,
+				8A08522B190277D90092BEF2 /* NumberTextCtrl.cpp in Sources */,
 				8A880C7718533C56005DE572 /* ObjectEdit.cpp in Sources */,
 				8A880C7818533C56005DE572 /* ObjectEditPanel.cpp in Sources */,
 				8A880C7918533C56005DE572 /* OGLCanvas.cpp in Sources */,
@@ -2494,8 +2504,10 @@
 				8A880C9218533C56005DE572 /* RffArchive.cpp in Sources */,
 				8A880C9318533C56005DE572 /* SAction.cpp in Sources */,
 				8A880C9418533C56005DE572 /* ScriptEditorPanel.cpp in Sources */,
+				8AF53E6018D49A620017CD46 /* SDialog.cpp in Sources */,
 				8A880C9518533C56005DE572 /* SectorBuilder.cpp in Sources */,
 				8A880C9618533C56005DE572 /* SectorInfoOverlay.cpp in Sources */,
+				8A08522A190277CA0092BEF2 /* SectorPropsPanel.cpp in Sources */,
 				8A880C9718533C56005DE572 /* SectorSpecialDialog.cpp in Sources */,
 				8A880C9818533C56005DE572 /* SectorTextureOverlay.cpp in Sources */,
 				8A880C9918533C56005DE572 /* SFileDialog.cpp in Sources */,
