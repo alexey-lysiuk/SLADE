@@ -176,6 +176,7 @@
 		8A569327154EE501000DF3CE /* tables.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A5692FD154EE501000DF3CE /* tables.h */; };
 		8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */; };
 		8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909718533A4600C1EF18 /* RunDialog.cpp */; };
+		8A6325B7190BA3E4009C2D31 /* ThingPropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A6325B5190BA3E4009C2D31 /* ThingPropsPanel.cpp */; };
 		8A73D16118CC72670099A1BB /* ShowItemDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D15F18CC72360099A1BB /* ShowItemDialog.cpp */; };
 		8A81D3AE18F93B56002B1E37 /* LinePropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A81D3AA18F93A1A002B1E37 /* LinePropsPanel.cpp */; };
 		8A81D3AF18F93B7C002B1E37 /* SidePropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A81D3AC18F93A1A002B1E37 /* SidePropsPanel.cpp */; };
@@ -599,6 +600,8 @@
 		8A60909218533A3D00C1EF18 /* ResourceArchiveChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceArchiveChooser.h; sourceTree = "<group>"; };
 		8A60909718533A4600C1EF18 /* RunDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RunDialog.cpp; sourceTree = "<group>"; };
 		8A60909818533A4600C1EF18 /* RunDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunDialog.h; sourceTree = "<group>"; };
+		8A6325B5190BA3E4009C2D31 /* ThingPropsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThingPropsPanel.cpp; sourceTree = "<group>"; };
+		8A6325B6190BA3E4009C2D31 /* ThingPropsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThingPropsPanel.h; sourceTree = "<group>"; };
 		8A73D15F18CC72360099A1BB /* ShowItemDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShowItemDialog.cpp; sourceTree = "<group>"; };
 		8A73D16018CC72360099A1BB /* ShowItemDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowItemDialog.h; sourceTree = "<group>"; };
 		8A81D3AA18F93A1A002B1E37 /* LinePropsPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinePropsPanel.cpp; sourceTree = "<group>"; };
@@ -1584,6 +1587,8 @@
 				8AD5ED361778510500ADDE06 /* TextureXPanel.h */,
 				8AD5ED371778510500ADDE06 /* ThingInfoOverlay.cpp */,
 				8AD5ED381778510500ADDE06 /* ThingInfoOverlay.h */,
+				8A6325B5190BA3E4009C2D31 /* ThingPropsPanel.cpp */,
+				8A6325B6190BA3E4009C2D31 /* ThingPropsPanel.h */,
 				8AD5ED391778510500ADDE06 /* ThingType.cpp */,
 				8AD5ED3A1778510500ADDE06 /* ThingType.h */,
 				8AD5ED3B1778510500ADDE06 /* ThingTypeBrowser.cpp */,
@@ -2535,6 +2540,7 @@
 				8A880CAF18533C56005DE572 /* TextureXList.cpp in Sources */,
 				8A880CB018533C56005DE572 /* TextureXPanel.cpp in Sources */,
 				8A880CB118533C56005DE572 /* ThingInfoOverlay.cpp in Sources */,
+				8A6325B7190BA3E4009C2D31 /* ThingPropsPanel.cpp in Sources */,
 				8A880CB218533C56005DE572 /* ThingType.cpp in Sources */,
 				8A880CB318533C56005DE572 /* ThingTypeBrowser.cpp in Sources */,
 				8A880CB418533C56005DE572 /* ThingTypeTreeView.cpp in Sources */,
