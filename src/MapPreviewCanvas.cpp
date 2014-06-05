@@ -47,6 +47,7 @@
  * VARIABLES
  *******************************************************************/
 CVAR(Float, map_image_thickness, 1.5, CVAR_SAVE)
+CVAR(Bool, map_view_things, true, CVAR_SAVE)
 
 
 /*******************************************************************
@@ -64,6 +65,8 @@ MapPreviewCanvas::MapPreviewCanvas(wxWindow* parent) : OGLCanvas(parent, -1)
 	temp_archive = NULL;
 	tex_thing = NULL;
 	tex_loaded = false;
+	n_sides = 0;
+	n_sectors = 0;
 }
 
 /* MapPreviewCanvas::~MapPreviewCanvas
@@ -289,7 +292,13 @@ bool MapPreviewCanvas::openMap(Archive::mapdesc_t map)
 			}
 			else
 			{
-				// map preview ignores things, sidedefs, sectors, comments,
+				// Check for side or sector definition (increase counts)
+				if (S_CMPNOCASE(token, "sidedef"))
+					n_sides++;
+				else if (S_CMPNOCASE(token, "sector"))
+					n_sectors++;
+
+				// map preview ignores sidedefs, sectors, comments,
 				// unknown fields, etc. so skip to end of block
 				do { token = tz.getToken(); }
 				while (token.Cmp("}"));
@@ -299,23 +308,55 @@ bool MapPreviewCanvas::openMap(Archive::mapdesc_t map)
 		}
 	}
 
-	// Read vertices (required)
+	// Non-UDMF map
 	if (map.format != MAP_UDMF)
 	{
+		// Read vertices (required)
 		if (!readVertices(map.head, map.end, map.format))
 			return false;
-	}
 
-	// Read linedefs (required)
-	if (map.format != MAP_UDMF)
-	{
+		// Read linedefs (required)
 		if (!readLines(map.head, map.end, map.format))
 			return false;
-	}
 
-	// Read things
-	if (map.format != MAP_UDMF)
-		readThings(map.head, map.end, map.format);
+		// Read things
+		if (map.format != MAP_UDMF)
+			readThings(map.head, map.end, map.format);
+
+		// Read sides & sectors (count only)
+		ArchiveEntry* sidedefs = NULL;
+		ArchiveEntry* sectors = NULL;
+		while (map.head)
+		{
+			// Check entry type
+			if (map.head->getType() == EntryType::getType("map_sidedefs"))
+				sidedefs = map.head;
+			if (map.head->getType() == EntryType::getType("map_sectors"))
+				sectors = map.head;
+
+			// Exit loop if we've reached the end of the map entries
+			if (map.head == map.end)
+				break;
+			else
+				map.head = map.head->nextEntry();
+		}
+		if (sidedefs && sectors)
+		{
+			// Doom64 map
+			if (map.format != MAP_DOOM64)
+			{
+				n_sides = sidedefs->getSize() / 30;
+				n_sectors = sectors->getSize() / 26;
+			}
+
+			// Doom/Hexen map
+			else
+			{
+				n_sides = sidedefs->getSize() / 12;
+				n_sectors = sectors->getSize() / 16;
+			}
+		}
+	}
 
 	// Clean up
 	if (map_archive)
@@ -691,33 +732,36 @@ void MapPreviewCanvas::draw()
 	}
 
 	// Draw things
-	OpenGL::setColour(col_view_thing);
-	if (tex_thing)
+	if (map_view_things)
 	{
-		double radius = 20;
-		glEnable(GL_TEXTURE_2D);
-		tex_thing->bind();
-		for (unsigned a = 0; a < things.size(); a++)
+		OpenGL::setColour(col_view_thing);
+		if (tex_thing)
 		{
-			glPushMatrix();
-			glTranslated(things[a].x, things[a].y, 0);
-			glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);	glVertex2d(-radius, -radius);
-			glTexCoord2f(0.0f, 1.0f);	glVertex2d(-radius, radius);
-			glTexCoord2f(1.0f, 1.0f);	glVertex2d(radius, radius);
-			glTexCoord2f(1.0f, 0.0f);	glVertex2d(radius, -radius);
-			glEnd();
-			glPopMatrix();
+			double radius = 20;
+			glEnable(GL_TEXTURE_2D);
+			tex_thing->bind();
+			for (unsigned a = 0; a < things.size(); a++)
+			{
+				glPushMatrix();
+				glTranslated(things[a].x, things[a].y, 0);
+				glBegin(GL_QUADS);
+				glTexCoord2f(0.0f, 0.0f);	glVertex2d(-radius, -radius);
+				glTexCoord2f(0.0f, 1.0f);	glVertex2d(-radius, radius);
+				glTexCoord2f(1.0f, 1.0f);	glVertex2d(radius, radius);
+				glTexCoord2f(1.0f, 0.0f);	glVertex2d(radius, -radius);
+				glEnd();
+				glPopMatrix();
+			}
 		}
-	}
-	else
-	{
-		glEnable(GL_POINT_SMOOTH);
-		glPointSize(8.0f);
-		glBegin(GL_POINTS);
-		for (unsigned a = 0; a < things.size(); a++)
-			glVertex2d(things[a].x, things[a].y);
-		glEnd();
+		else
+		{
+			glEnable(GL_POINT_SMOOTH);
+			glPointSize(8.0f);
+			glBegin(GL_POINTS);
+			for (unsigned a = 0; a < things.size(); a++)
+				glVertex2d(things[a].x, things[a].y);
+			glEnd();
+		}
 	}
 
 	glLineWidth(1.0f);
@@ -877,4 +921,100 @@ void MapPreviewCanvas::createImage(ArchiveEntry& ae, int width, int height)
 	MemChunk mc;
 	SIFormat::getFormat("png")->saveImage(img, mc);
 	ae.importMemChunk(mc);
+}
+
+/* MapPreviewCanvas::nVertices
+ * Returns the number of (attached) vertices in the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::nVertices()
+{
+	// Get list of used vertices
+	vector<bool> v_used;
+	for (unsigned a = 0; a < verts.size(); a++)
+		v_used.push_back(false);
+	for (unsigned a = 0; a < lines.size(); a++)
+	{
+		v_used[lines[a].v1] = true;
+		v_used[lines[a].v2] = true;
+	}
+
+	// Get count of used vertices
+	unsigned count = 0;
+	for (unsigned a = 0; a < v_used.size(); a++)
+	{
+		if (v_used[a])
+			count++;
+	}
+
+	return count;
+}
+
+/* MapPreviewCanvas::nSides
+ * Returns the number of sides in the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::nSides()
+{
+	return n_sides;
+}
+
+/* MapPreviewCanvas::nLines
+ * Returns the number of lines in the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::nLines()
+{
+	return lines.size();
+}
+
+/* MapPreviewCanvas::nSectors
+ * Returns the number of sectors in the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::nSectors()
+{
+	return n_sectors;
+}
+
+/* MapPreviewCanvas::nThings
+ * Returns the number of things in the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::nThings()
+{
+	return things.size();
+}
+
+/* MapPreviewCanvas::getWidth
+ * Returns the width (in map units) of the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::getWidth()
+{
+	int min_x = wxINT32_MAX;
+	int max_x = wxINT32_MIN;
+
+	for (unsigned a = 0; a < verts.size(); a++)
+	{
+		if (verts[a].x < min_x)
+			min_x = verts[a].x;
+		if (verts[a].x > max_x)
+			max_x = verts[a].x;
+	}
+
+	return max_x - min_x;
+}
+
+/* MapPreviewCanvas::getHeight
+ * Returns the height (in map units) of the map
+ *******************************************************************/
+unsigned MapPreviewCanvas::getHeight()
+{
+	int min_y = wxINT32_MAX;
+	int max_y = wxINT32_MIN;
+
+	for (unsigned a = 0; a < verts.size(); a++)
+	{
+		if (verts[a].y < min_y)
+			min_y = verts[a].y;
+		if (verts[a].y > max_y)
+			max_y = verts[a].y;
+	}
+
+	return max_y - min_y;
 }

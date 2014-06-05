@@ -192,6 +192,7 @@
 		8A56932A154EE51E000DF3CE /* libmodplug_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5692CD154EE4AC000DF3CE /* libmodplug_slade.a */; };
 		8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A60909718533A4600C1EF18 /* RunDialog.cpp */; };
 		8A6325B7190BA3E4009C2D31 /* ThingPropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A6325B5190BA3E4009C2D31 /* ThingPropsPanel.cpp */; };
+		8A6BFB931940D1FF004EBCAC /* VersionCheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A6BFB911940D1FF004EBCAC /* VersionCheck.cpp */; };
 		8A73D16118CC72670099A1BB /* ShowItemDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D15F18CC72360099A1BB /* ShowItemDialog.cpp */; };
 		8A81D3AE18F93B56002B1E37 /* LinePropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A81D3AA18F93A1A002B1E37 /* LinePropsPanel.cpp */; };
 		8A81D3AF18F93B7C002B1E37 /* SidePropsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A81D3AC18F93A1A002B1E37 /* SidePropsPanel.cpp */; };
@@ -624,6 +625,8 @@
 		8A60909818533A4600C1EF18 /* RunDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunDialog.h; sourceTree = "<group>"; };
 		8A6325B5190BA3E4009C2D31 /* ThingPropsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThingPropsPanel.cpp; sourceTree = "<group>"; };
 		8A6325B6190BA3E4009C2D31 /* ThingPropsPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThingPropsPanel.h; sourceTree = "<group>"; };
+		8A6BFB911940D1FF004EBCAC /* VersionCheck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionCheck.cpp; sourceTree = "<group>"; };
+		8A6BFB921940D1FF004EBCAC /* VersionCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionCheck.h; sourceTree = "<group>"; };
 		8A73D15F18CC72360099A1BB /* ShowItemDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShowItemDialog.cpp; sourceTree = "<group>"; };
 		8A73D16018CC72360099A1BB /* ShowItemDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowItemDialog.h; sourceTree = "<group>"; };
 		8A81D3AA18F93A1A002B1E37 /* LinePropsPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinePropsPanel.cpp; sourceTree = "<group>"; };
@@ -1631,6 +1634,8 @@
 				8AD5ED4A1778510500ADDE06 /* UndoManagerHistoryPanel.h */,
 				8AD5ED4B1778510500ADDE06 /* UndoRedo.cpp */,
 				8AD5ED4C1778510500ADDE06 /* UndoRedo.h */,
+				8A6BFB911940D1FF004EBCAC /* VersionCheck.cpp */,
+				8A6BFB921940D1FF004EBCAC /* VersionCheck.h */,
 				8AD5ED4D1778510500ADDE06 /* VertexInfoOverlay.cpp */,
 				8AD5ED4E1778510500ADDE06 /* VertexInfoOverlay.h */,
 				8AD5ED4F1778510500ADDE06 /* VirtualListView.cpp */,
@@ -2588,6 +2593,7 @@
 				8A880CB918533C56005DE572 /* UDMFProperty.cpp in Sources */,
 				8A880CBA18533C56005DE572 /* UndoManagerHistoryPanel.cpp in Sources */,
 				8A880CBB18533C56005DE572 /* UndoRedo.cpp in Sources */,
+				8A6BFB931940D1FF004EBCAC /* VersionCheck.cpp in Sources */,
 				8A880CBC18533C56005DE572 /* VertexInfoOverlay.cpp in Sources */,
 				8A880CBD18533C56005DE572 /* VirtualListView.cpp in Sources */,
 				8A880CBE18533C56005DE572 /* Wad2Archive.cpp in Sources */,
