@@ -73,7 +73,7 @@ namespace Global
 {
 	string error = "";
 
-	string version = "3.1.0 beta 5"
+	string version = "3.1.0 beta 6"
 #ifdef GIT_DESCRIPTION
 	                 " (" GIT_DESCRIPTION ")"
 #endif
@@ -1116,15 +1116,18 @@ void MainApp::onMenu(wxCommandEvent& e)
 	{
 		current_action = action;
 		handled = doAction(action);
-		current_action = "";
 
 		// Check if triggering object is a menu item
-		if (e.GetEventObject() && e.GetEventObject()->IsKindOf(wxCLASSINFO(wxMenuItem)))
+		if (s_action && s_action->type == SAction::CHECK)
 		{
-			wxMenuItem* item = (wxMenuItem*)e.GetEventObject();
-			if (s_action->type == SAction::CHECK)
+			if (e.GetEventObject() && e.GetEventObject()->IsKindOf(wxCLASSINFO(wxMenuItem)))
+			{
+				wxMenuItem* item = (wxMenuItem*)e.GetEventObject();
 				item->Check(s_action->toggled);
+			}
 		}
+
+		current_action = "";
 	}
 
 	// If not handled, let something else handle it

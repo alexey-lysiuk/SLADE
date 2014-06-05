@@ -442,27 +442,34 @@ void MainWindow::createStartPage()
 
 	// Generate recent files string
 	string recent;
-	for (unsigned a = 0; a < 10; a++)
+	recent += "<table class=\"box\">";
+	if (theArchiveManager->numRecentFiles() > 0)
 	{
-		if (a >= theArchiveManager->numRecentFiles())
-			break;	// No more recent files
+		for (unsigned a = 0; a < 12; a++)
+		{
+			if (a >= theArchiveManager->numRecentFiles())
+				break;	// No more recent files
 
-		// Add line break if needed
-		if (a > 0) recent += "<br/>\n";
+			recent += "<tr><td valign=\"middle\" class=\"box\">";
 
-		// Determine icon
-		string fn = theArchiveManager->recentFile(a);
-		string icon = "e_archive";
-		if (fn.EndsWith(".wad"))
-			icon = "e_wad";
-		else if (fn.EndsWith(".zip") || fn.EndsWith(".pk3") || fn.EndsWith(".pke"))
-			icon = "e_zip";
-		else if (wxDirExists(fn))
-			icon = "e_folder";
+			// Determine icon
+			string fn = theArchiveManager->recentFile(a);
+			string icon = "e_archive";
+			if (fn.EndsWith(".wad"))
+				icon = "e_wad";
+			else if (fn.EndsWith(".zip") || fn.EndsWith(".pk3") || fn.EndsWith(".pke"))
+				icon = "e_zip";
+			else if (wxDirExists(fn))
+				icon = "e_folder";
 
-		// Add recent file link
-		recent += S_FMT("<a href=\"recent://%d\"><img src=\"%s.png\"> %s</a>", a, icon, fn);
+			// Add recent file link
+			recent += S_FMT("<img src=\"%s.png\"></td><td valign=\"top\" class=\"box\">", icon);
+			recent += S_FMT("<a href=\"recent://%d\">%s</a></td></tr>", a, fn);
+		}
 	}
+	else
+		recent += "<tr><td valign=\"top\" class=\"box\">No recently opened files</td></tr>";
+	recent += "</table>";
 
 	// Insert tip and recent files into html
 	html.Replace("#recent#", recent);
