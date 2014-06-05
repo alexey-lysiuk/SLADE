@@ -2248,7 +2248,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\ncd \"${SRCROOT}\"\n\nSOURCE_BUNDLE_NAME=Slade.app\n\nDEPLOY_IMAGE_DIR=.deploy_image\nBUNDLE_EXECUTABLE_DIR=${DEPLOY_IMAGE_DIR}/${SOURCE_BUNDLE_NAME}/Contents/MacOS\n\necho \"Preparing directories...\"\nrm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null\nmkdir ${DEPLOY_IMAGE_DIR}\nln -s /Applications ${DEPLOY_IMAGE_DIR}/Applications\n\necho \"Copying files...\"\ncp -R ${BUILD_DIR}/${CONFIGURATION}/${SOURCE_BUNDLE_NAME} ${DEPLOY_IMAGE_DIR}\ncp gpl-2.0.txt ${DEPLOY_IMAGE_DIR}\nrm ${BUNDLE_EXECUTABLE_DIR}/*.log 2>/dev/null\n\necho \"Stripping executable...\"\nstrip ${BUNDLE_EXECUTABLE_DIR}/Slade\n\necho \"Building image...\"\nhdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname Slade ${DEPLOY_IMAGE_DIR}/Slade.dmg\n";
+			shellScript = "\ncd \"${SRCROOT}\"\n\nSOURCE_BUNDLE_NAME=Slade.app\nTEMP_STORAGE_DIR=/Volumes/ramdisk/\n\nif [ -e \"${TEMP_STORAGE_DIR}\" ]; then\n    DEPLOY_IMAGE_DIR=${TEMP_STORAGE_DIR}\nfi\n\nDEPLOY_IMAGE_DIR=${DEPLOY_IMAGE_DIR}.deploy_image\nBUNDLE_EXECUTABLE_DIR=${DEPLOY_IMAGE_DIR}/${SOURCE_BUNDLE_NAME}/Contents/MacOS\n\necho \"Preparing directories...\"\nrm -r ${DEPLOY_IMAGE_DIR} 2>/dev/null\nmkdir ${DEPLOY_IMAGE_DIR}\nln -s /Applications ${DEPLOY_IMAGE_DIR}/Applications\n\necho \"Copying files...\"\ncp -R ${BUILD_DIR}/${CONFIGURATION}/${SOURCE_BUNDLE_NAME} ${DEPLOY_IMAGE_DIR}\ncp gpl-2.0.txt ${DEPLOY_IMAGE_DIR}\nrm ${BUNDLE_EXECUTABLE_DIR}/*.log 2>/dev/null\n\necho \"Stripping executable...\"\nstrip ${BUNDLE_EXECUTABLE_DIR}/Slade\n\necho \"Building image...\"\nhdiutil create -srcfolder ${DEPLOY_IMAGE_DIR} -volname Slade ${DEPLOY_IMAGE_DIR}/Slade.dmg\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2918,6 +2918,7 @@
 				8AACD666193095CC00654E63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Slade" */ = {
 			isa = XCConfigurationList;
