@@ -368,6 +368,8 @@
 		8A880CC218533C56005DE572 /* WxStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED591778510600ADDE06 /* WxStuff.cpp */; };
 		8A880CC318533C56005DE572 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5B1778510600ADDE06 /* ZipArchive.cpp */; };
 		8A880CC418533C56005DE572 /* ZTextureEditorPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD5ED5D1778510600ADDE06 /* ZTextureEditorPanel.cpp */; };
+		8A906CBF19556E020017F0E4 /* MapBackupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A906CBB19556E020017F0E4 /* MapBackupManager.cpp */; };
+		8A906CC019556E020017F0E4 /* MapBackupPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A906CBD19556E020017F0E4 /* MapBackupPanel.cpp */; };
 		8AAD20691839282A00E1C89E /* libwx_baseu_net-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */; };
 		8AAD206A1839282A00E1C89E /* libwx_baseu_xml-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */; };
 		8AAD206B1839282A00E1C89E /* libwx_baseu-3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */; };
@@ -633,6 +635,10 @@
 		8A81D3AB18F93A1A002B1E37 /* LinePropsPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinePropsPanel.h; sourceTree = "<group>"; };
 		8A81D3AC18F93A1A002B1E37 /* SidePropsPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SidePropsPanel.cpp; sourceTree = "<group>"; };
 		8A81D3AD18F93A1A002B1E37 /* SidePropsPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SidePropsPanel.h; sourceTree = "<group>"; };
+		8A906CBB19556E020017F0E4 /* MapBackupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapBackupManager.cpp; sourceTree = "<group>"; };
+		8A906CBC19556E020017F0E4 /* MapBackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapBackupManager.h; sourceTree = "<group>"; };
+		8A906CBD19556E020017F0E4 /* MapBackupPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapBackupPanel.cpp; sourceTree = "<group>"; };
+		8A906CBE19556E020017F0E4 /* MapBackupPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapBackupPanel.h; sourceTree = "<group>"; };
 		8AAD20541839282A00E1C89E /* libwx_baseu_net-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_net-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_net-3.0.a"; sourceTree = "<group>"; };
 		8AAD20551839282A00E1C89E /* libwx_baseu_xml-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu_xml-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu_xml-3.0.a"; sourceTree = "<group>"; };
 		8AAD20561839282A00E1C89E /* libwx_baseu-3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_baseu-3.0.a"; path = "thirdparty/wxWidgets/lib/libwx_baseu-3.0.a"; sourceTree = "<group>"; };
@@ -1422,6 +1428,10 @@
 				8AD5EC7D1778510400ADDE06 /* MainApp.h */,
 				8AD5EC7E1778510400ADDE06 /* MainWindow.cpp */,
 				8AD5EC7F1778510400ADDE06 /* MainWindow.h */,
+				8A906CBB19556E020017F0E4 /* MapBackupManager.cpp */,
+				8A906CBC19556E020017F0E4 /* MapBackupManager.h */,
+				8A906CBD19556E020017F0E4 /* MapBackupPanel.cpp */,
+				8A906CBE19556E020017F0E4 /* MapBackupPanel.h */,
 				8AD5EC821778510500ADDE06 /* MapCanvas.cpp */,
 				8AD5EC831778510500ADDE06 /* MapCanvas.h */,
 				8A60908D18533A3D00C1EF18 /* MapChecks.cpp */,
@@ -2456,6 +2466,7 @@
 				8A880C2C18533C56005DE572 /* CVar.cpp in Sources */,
 				8A880C2D18533C56005DE572 /* DatArchive.cpp in Sources */,
 				8A880C2E18533C56005DE572 /* DefaultEntryPanel.cpp in Sources */,
+				8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */,
 				8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */,
 				8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */,
 				8A880C3118533C56005DE572 /* Drawing.cpp in Sources */,
@@ -2492,13 +2503,14 @@
 				8A880C5418533C56005DE572 /* Lua.cpp in Sources */,
 				8A880C5518533C56005DE572 /* MainApp.cpp in Sources */,
 				8A880C5618533C56005DE572 /* MainWindow.cpp in Sources */,
+				8A906CC019556E020017F0E4 /* MapBackupPanel.cpp in Sources */,
+				8A906CBF19556E020017F0E4 /* MapBackupManager.cpp in Sources */,
 				8A880C5818533C56005DE572 /* MapCanvas.cpp in Sources */,
 				8A880C5918533C56005DE572 /* MapChecks.cpp in Sources */,
 				8A122A11185471A7009C4BBB /* MapChecksPanel.cpp in Sources */,
 				8A880C5B18533C56005DE572 /* MapEditor.cpp in Sources */,
 				8A880C5C18533C56005DE572 /* MapEditorConfigDialog.cpp in Sources */,
 				8A880C5E18533C56005DE572 /* MapEditorWindow.cpp in Sources */,
-				8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */,
 				8A880C5F18533C56005DE572 /* MapEntryPanel.cpp in Sources */,
 				8A880C6018533C56005DE572 /* MapLine.cpp in Sources */,
 				8A880C6118533C56005DE572 /* MapObject.cpp in Sources */,

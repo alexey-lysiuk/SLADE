@@ -75,7 +75,7 @@ namespace Global
 {
 	string error = "";
 
-	string version = "3.1.0 beta 6"
+	string version = "3.1.0"
 #ifdef GIT_DESCRIPTION
 	                 " (" GIT_DESCRIPTION ")"
 #endif
@@ -83,7 +83,7 @@ namespace Global
 
 	int log_verbosity = 1;
 	int version_num = 3100;
-	int beta_num = 6;
+	int beta_num = 0;
 
 #ifdef DEBUG
 	bool debug = true;
@@ -593,6 +593,7 @@ void MainApp::initActions()
 	new SAction("mapw_saveas", "Save Map &As...", "t_saveas", "Save the map to a new wad archive", "Ctrl+Shift+S");
 	new SAction("mapw_rename", "&Rename Map", "t_rename", "Rename the current map");
 	new SAction("mapw_convert", "Con&vert Map...", "t_convert", "Convert the current map to a different format");
+	new SAction("mapw_backup", "Restore Backup...", "t_undo", "Restore a previous backup of the current map");
 	new SAction("mapw_undo", "Undo", "t_undo", "Undo", "Ctrl+Z");
 	new SAction("mapw_redo", "Redo", "t_redo", "Redo", "Ctrl+Y");
 	new SAction("mapw_setbra", "Set &Base Resource Archive", "e_archive", "Set the Base Resource Archive, to act as the program 'IWAD'");
