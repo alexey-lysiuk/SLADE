@@ -231,7 +231,8 @@ decorate : cstyle {
 		RGF_VOODOO,
 		RSF_FOG, RSF_KEEPTARGET, RSF_TELEFRAG,
 		RTF_AFFECTSOURCE, RTF_NOIMPACTDAMAGE, RTF_NOTMISSILE,
-		SF_NORANDOM, SF_NOUSEAMMO, SF_NOUSEAMMOMISS, SF_RANDOMLIGHTBOTH, SF_RANDOMLIGHTHIT, SF_RANDOMLIGHTMISS,
+		SF_NOPULLIN, SF_NORANDOM, SF_NOTURN, SF_NOUSEAMMO, SF_NOUSEAMMOMISS, SF_RANDOMLIGHTBOTH,
+		SF_RANDOMLIGHTHIT, SF_RANDOMLIGHTMISS,
 		SMF_CURSPEED, SMF_LOOK, SMF_PRECISE,
 		SPF_FORCECLAMP, SPF_INTERPOLATE,
 		SXF_ABSOLUTEANGLE, SXF_ABSOLUTEMOMENTUM, SXF_ABSOLUTEPOSITION, SXF_ABSOLUTEVELOCITY, SXF_CLIENTSIDE,
@@ -703,6 +704,7 @@ decorate : cstyle {
 		Ceiling_CrushAndRaiseA = "int tag, int downspeed, int upspeed, int damage, [int crushmode]";
 		Ceiling_CrushAndRaiseDist = "int tag, int dist, int speed, int damage, [int crushmode]";
 		Ceiling_CrushAndRaiseSilentA = "int tag, int downspeed, int upspeed, int damage, [int crushmode]";
+		Ceiling_CrushAndRaiseSilentDist = "int tag, int dist, int speed, int damage, [int crushmode]";
 		Ceiling_CrushRaiseAndStay = "int tag, int speed, int damage, [int crushmode]";
 		Ceiling_CrushRaiseAndStayA = "int tag, int downspeed, int upspeed, int damage, [int crushmode]";
 		Ceiling_CrushRaiseAndStaySilA = "int tag, int downspeed, int upspeed, int damage, [int crushmode]";
