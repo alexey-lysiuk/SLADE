@@ -580,7 +580,7 @@ void GameConfiguration::buildConfig(string filename, string& out)
 	while (!file.Eof())
 	{
 		// Check for #include
-		if (line.Trim().StartsWith("#include"))
+		if (line.Lower().Trim().StartsWith("#include"))
 		{
 			// Get filename to include
 			Tokenizer tz;
@@ -624,7 +624,7 @@ void GameConfiguration::buildConfig(ArchiveEntry* entry, string& out, bool use_r
 	while (!file.Eof())
 	{
 		// Check for #include
-		if (line.Trim().StartsWith("#include"))
+		if (line.Lower().Trim().StartsWith("#include"))
 		{
 			// Get name of entry to include
 			Tokenizer tz;
@@ -943,6 +943,10 @@ void GameConfiguration::readGameSection(ParseTreeNode* node_game, bool port_sect
 		// Light levels interval
 		else if (S_CMPNOCASE(node->getName(), "light_level_interval"))
 			setLightLevelInterval(node->getIntValue());
+
+		// Long names
+		else if (S_CMPNOCASE(node->getName(), "long_names"))
+			allow_long_names = node->getBoolValue();
 
 		// Defaults section
 		else if (S_CMPNOCASE(node->getName(), "defaults"))
