@@ -400,7 +400,6 @@
 		8AD19050154A8A9B00AB9C07 /* ancientzip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4A154A8A9B00AB9C07 /* ancientzip.cpp */; };
 		8AD19051154A8A9B00AB9C07 /* files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4C154A8A9B00AB9C07 /* files.cpp */; };
 		8AD19052154A8A9B00AB9C07 /* m_alloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AD18F4E154A8A9B00AB9C07 /* m_alloc.cpp */; };
-		8AD5ED7A1778510600ADDE06 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8AD5EC101778510400ADDE06 /* CMakeLists.txt */; };
 		8AE37010154D53AE00D88A7F /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE3700F154D53AE00D88A7F /* libsndfile.a */; };
 		8AE371E0154D56D100D88A7F /* libintl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371DF154D56D100D88A7F /* libintl.a */; };
 		8AE371E6154D580600D88A7F /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371E5154D580600D88A7F /* libvorbis.a */; };
@@ -408,6 +407,8 @@
 		8AE371EA154D581E00D88A7F /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371E9154D581E00D88A7F /* libFLAC.a */; };
 		8AE371EE154D585A00D88A7F /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE371ED154D585A00D88A7F /* libvorbisenc.a */; };
 		8AE87B26154BF66400A41E61 /* liblzma_slade.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A26CEA1154BEDA10079A63E /* liblzma_slade.a */; };
+		8AF115B81B07457C00BEF6B1 /* DirArchiveUpdateDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF115B61B07454C00BEF6B1 /* DirArchiveUpdateDialog.cpp */; };
+		8AF115BB1B0745B800BEF6B1 /* DocsPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF115B91B07458C00BEF6B1 /* DocsPage.cpp */; };
 		8AF53E6018D49A620017CD46 /* SDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E5E18D49A620017CD46 /* SDialog.cpp */; };
 		8AF53E8D18D49A820017CD46 /* ACSPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6218D49A820017CD46 /* ACSPrefsPanel.cpp */; };
 		8AF53E8E18D49A820017CD46 /* AdvancedPrefsPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8AF53E6418D49A820017CD46 /* AdvancedPrefsPanel.cpp */; };
@@ -803,7 +804,6 @@
 		8AD5EC0D1778510400ADDE06 /* CIEDeltaEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIEDeltaEquations.h; sourceTree = "<group>"; };
 		8AD5EC0E1778510400ADDE06 /* Clipboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
 		8AD5EC0F1778510400ADDE06 /* Clipboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clipboard.h; sourceTree = "<group>"; };
-		8AD5EC101778510400ADDE06 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		8AD5EC111778510400ADDE06 /* CodePages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodePages.cpp; sourceTree = "<group>"; };
 		8AD5EC121778510400ADDE06 /* CodePages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodePages.h; sourceTree = "<group>"; };
 		8AD5EC151778510400ADDE06 /* ColourBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourBox.cpp; sourceTree = "<group>"; };
@@ -1113,6 +1113,10 @@
 		8AE371E7154D581400D88A7F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = thirdparty/ogg/lib/libogg.a; sourceTree = "<group>"; };
 		8AE371E9154D581E00D88A7F /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = thirdparty/flac/lib/libFLAC.a; sourceTree = "<group>"; };
 		8AE371ED154D585A00D88A7F /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = thirdparty/vorbis/lib/libvorbisenc.a; sourceTree = "<group>"; };
+		8AF115B61B07454C00BEF6B1 /* DirArchiveUpdateDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirArchiveUpdateDialog.cpp; sourceTree = "<group>"; };
+		8AF115B71B07454C00BEF6B1 /* DirArchiveUpdateDialog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DirArchiveUpdateDialog.h; sourceTree = "<group>"; };
+		8AF115B91B07458C00BEF6B1 /* DocsPage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DocsPage.cpp; sourceTree = "<group>"; };
+		8AF115BA1B07458C00BEF6B1 /* DocsPage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DocsPage.h; sourceTree = "<group>"; };
 		8AF53E5E18D49A620017CD46 /* SDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDialog.cpp; sourceTree = "<group>"; };
 		8AF53E5F18D49A620017CD46 /* SDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDialog.h; sourceTree = "<group>"; };
 		8AF53E6218D49A820017CD46 /* ACSPrefsPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ACSPrefsPanel.cpp; sourceTree = "<group>"; };
@@ -1324,7 +1328,6 @@
 				8AD5EC0D1778510400ADDE06 /* CIEDeltaEquations.h */,
 				8AD5EC0E1778510400ADDE06 /* Clipboard.cpp */,
 				8AD5EC0F1778510400ADDE06 /* Clipboard.h */,
-				8AD5EC101778510400ADDE06 /* CMakeLists.txt */,
 				8AD5EC111778510400ADDE06 /* CodePages.cpp */,
 				8AD5EC121778510400ADDE06 /* CodePages.h */,
 				8AD5EC151778510400ADDE06 /* ColourBox.cpp */,
@@ -1357,6 +1360,8 @@
 				8AD5EC301778510400ADDE06 /* DiskArchive.h */,
 				8AD5EC311778510400ADDE06 /* DockPanel.cpp */,
 				8AD5EC321778510400ADDE06 /* DockPanel.h */,
+				8AF115B91B07458C00BEF6B1 /* DocsPage.cpp */,
+				8AF115BA1B07458C00BEF6B1 /* DocsPage.h */,
 				8AD5EC331778510400ADDE06 /* Drawing.cpp */,
 				8AD5EC341778510400ADDE06 /* Drawing.h */,
 				8AD5EC371778510400ADDE06 /* EntryDataFormat.cpp */,
@@ -1803,6 +1808,8 @@
 			children = (
 				8AF53E6118D49A820017CD46 /* Preferences */,
 				8A40785B1840F29300843BD8 /* SetupWizard */,
+				8AF115B61B07454C00BEF6B1 /* DirArchiveUpdateDialog.cpp */,
+				8AF115B71B07454C00BEF6B1 /* DirArchiveUpdateDialog.h */,
 				8A60909718533A4600C1EF18 /* RunDialog.cpp */,
 				8A60909818533A4600C1EF18 /* RunDialog.h */,
 			);
@@ -2230,7 +2237,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AD18A56154A8A7000AB9C07 /* SLADE-osx.icns in Resources */,
-				8AD5ED7A1778510600ADDE06 /* CMakeLists.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2419,6 +2425,7 @@
 				8A4078661840F29300843BD8 /* NodeBuildersWizardPage.cpp in Sources */,
 				8A4078671840F29300843BD8 /* SetupWizardDialog.cpp in Sources */,
 				8A4078681840F29300843BD8 /* TempFolderWizardPage.cpp in Sources */,
+				8AF115B81B07457C00BEF6B1 /* DirArchiveUpdateDialog.cpp in Sources */,
 				8A60909918533A4600C1EF18 /* RunDialog.cpp in Sources */,
 				8AD18FEF154A8A9B00AB9C07 /* mus2mid.cpp in Sources */,
 				8AD1900E154A8A9B00AB9C07 /* sfMod.cpp in Sources */,
@@ -2469,6 +2476,7 @@
 				8A4F6DB5189E418000B01A19 /* DirArchive.cpp in Sources */,
 				8A880C2F18533C56005DE572 /* DiskArchive.cpp in Sources */,
 				8A880C3018533C56005DE572 /* DockPanel.cpp in Sources */,
+				8AF115BB1B0745B800BEF6B1 /* DocsPage.cpp in Sources */,
 				8A880C3118533C56005DE572 /* Drawing.cpp in Sources */,
 				8A880C3318533C56005DE572 /* EntryDataFormat.cpp in Sources */,
 				8A880C3418533C56005DE572 /* EntryOperations.cpp in Sources */,
