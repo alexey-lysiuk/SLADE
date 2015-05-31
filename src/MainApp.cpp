@@ -51,6 +51,7 @@
 #include "Executables.h"
 #include "Misc.h"
 #include "VersionCheck.h"
+#include "dumb/dumb.h"
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 #include <wx/ffile.h>
@@ -75,14 +76,14 @@ namespace Global
 {
 	string error = "";
 
-	string version = "3.1.0.2"
+	string version = "3.1.0.3"
 #ifdef GIT_DESCRIPTION
 	                 " (" GIT_DESCRIPTION ")"
 #endif
 	                 "";
 
 	int log_verbosity = 1;
-	int version_num = 3102;
+	int version_num = 3103;
 	int beta_num = 0;
 
 #ifdef DEBUG
@@ -862,6 +863,9 @@ int MainApp::OnExit()
 
 	// Close lua
 	Lua::close();
+
+	// Close DUMB
+	dumb_exit();
 
 	return 0;
 }
