@@ -59,6 +59,9 @@ DirArchive::DirArchive() : Archive(ARCHIVE_FOLDER)
 #else
 	separator = "/";
 #endif
+	// Init variables
+	desc.names_extensions = true;
+	desc.supports_dirs = true;
 }
 
 /* DirArchive::~DirArchive
