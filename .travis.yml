@@ -1,0 +1,51 @@
+language: c++
+dist: trusty
+
+branches:
+  except:
+    - /^appveyor.*$/
+
+git:
+  depth: 10
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+
+    - os: linux
+      compiler: gcc
+      env:
+        - CMAKE_OPTIONS="-DNO_WEBVIEW=YES"
+      addons:
+        apt:
+          packages:
+            - libgtk2.0-dev 
+            - libglew1.6-dev
+            - libfreeimage-dev
+            - libftgl-dev
+            - libfluidsynth-dev
+            - libsfml-dev
+            - libgstreamer0.10-dev
+            - libgstreamer-plugins-base0.10-dev 
+            - libgconf2-dev
+            - freeglut3-dev
+            - libmodplug-dev
+            - libwebkit-dev
+            - libwxgtk3.0-dev
+            - libwxgtk-media3.0-dev
+            - libcurl4-openssl-dev 
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; brew install glew freeimage ftgl fluidsynth sfml wxwidgets; fi
+  - $CC --version
+  - $CXX --version
+
+script:
+  - echo ${TRAVIS_BUILD_DIR}
+  - mkdir release
+  - cd release
+  - cmake --build ${CMAKE_OPTIONS} ..
+
+notifications:
+  email: false
