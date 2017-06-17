@@ -45,7 +45,8 @@ script:
   - echo ${TRAVIS_BUILD_DIR}
   - mkdir release
   - cd release
-  - cmake --build ${CMAKE_OPTIONS} ..
+  - cmake ${CMAKE_OPTIONS} ..
+  - make -j2
 
 notifications:
   email: false
